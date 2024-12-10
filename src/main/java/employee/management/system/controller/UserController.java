@@ -2,7 +2,11 @@ package employee.management.system.controller;
 
 import employee.management.system.entity.User;
 import employee.management.system.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,8 +39,27 @@ public class UserController {
                                @RequestParam String password){
 
         if(userService.processLogin(username, password)){
-            return "redirect:/home-page";
+            return "redirect:/leader-panel";
         }
         return "login-page";
     }
+
+    @GetMapping("/logout")
+    public String processLogout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        if(authentication != null){
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/login";
+    }
+
+    @GetMapping("/leader-panel")
+    public String showLeaderPanelPage(){
+        return "leader-panel-page";
+    }
+
+    @GetMapping("/supervisor-panel")
+    public String showSupervisorPanelPage(){
+        return "supervisor-panel-page";
+    }
+
 }
