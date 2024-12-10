@@ -52,14 +52,7 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/leader-panel")
-    public String showLeaderPanelPage(){
-        return "leader-panel-page";
-    }
 
-    @GetMapping("/supervisor-panel")
-    public String showSupervisorPanelPage(){
-        return "supervisor-panel-page";
-    }
+
 
 }
