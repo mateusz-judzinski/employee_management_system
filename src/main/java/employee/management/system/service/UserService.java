@@ -11,4 +11,5 @@ public interface UserService {
     void addUser(User user);
     void updateUser(User user);
     void deleteUserById(int id);
+    boolean processLogin(String username, String password);
 }

@@ -3,6 +3,7 @@ package employee.management.system.service;
 import employee.management.system.entity.User;
 import employee.management.system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,10 +12,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -43,5 +46,14 @@ public class UserServiceImpl implements UserService{
         if(!userRepository.existsById(id)){
             throw new RuntimeException("User with id: " + id + " not found");
         }
+    }
+
+    @Override
+    public boolean processLogin(String username, String password) {
+        User user = userRepository.findUserByUsername(username);
+        if(user != null){
+            return passwordEncoder.matches(password, user.getPassword());
+        }
+        return false;
     }
 }
