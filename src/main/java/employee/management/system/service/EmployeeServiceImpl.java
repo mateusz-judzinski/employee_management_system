@@ -1,20 +1,26 @@
 package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Shift;
 import employee.management.system.repository.EmployeeRepository;
+import employee.management.system.repository.ShiftRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
+    private final ShiftRepository shiftRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ShiftRepository shiftRepository) {
         this.employeeRepository = employeeRepository;
+        this.shiftRepository = shiftRepository;
     }
 
     @Override
@@ -47,5 +53,18 @@ public class EmployeeServiceImpl implements EmployeeService{
             throw new RuntimeException("Employee with id: " + id + " not found");
         }
         employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Employee> getShiftEmployees(LocalDate localDate) {
+
+        List<Shift> shifts = shiftRepository.findShiftsByWorkDate(localDate);
+        List<Employee> employees = new ArrayList<>();
+
+        for (Shift shift:shifts) {
+            employees.add(shift.getEmployee());
+        }
+
+        return employees;
     }
 }

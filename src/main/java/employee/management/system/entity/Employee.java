@@ -2,8 +2,11 @@ package employee.management.system.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "Employee")
+@Table(name = "employee")
 public class Employee {
 
     @Id
@@ -18,6 +21,11 @@ public class Employee {
     private String email;
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "employee",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Shift> shifts;
 
     public Employee() {
     }
@@ -69,6 +77,14 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
+    public List<Shift> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<Shift> shifts) {
+        this.shifts = shifts;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -78,5 +94,14 @@ public class Employee {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    public void addShift(Shift shift){
+
+        if(shifts == null){
+            shifts = new ArrayList<>();
+        }
+        shifts.add(shift);
+        shift.setEmployee(this);
     }
 }

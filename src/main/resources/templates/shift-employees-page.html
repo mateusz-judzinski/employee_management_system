@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Today's Shift Employees</title>
 </head>
 <body>
 <h1>Today's Employees Innit?</h1>
+<tr th:each="employee : ${employees}">
+    <td th:text="${employee.id}">Id</td>
+    <td th:text="${employee.firstName}">First name</td>
+    <td th:text="${employee.lastName}">Last name</td>
+    <td th:text="${employee.email}">Email</td>
+</tr>
 </body>
 </html>

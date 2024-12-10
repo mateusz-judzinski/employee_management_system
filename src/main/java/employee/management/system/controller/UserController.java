@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {

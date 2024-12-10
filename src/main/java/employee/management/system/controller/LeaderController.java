@@ -2,13 +2,13 @@ package employee.management.system.controller;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.service.EmployeeService;
-import employee.management.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -29,7 +29,9 @@ public class LeaderController {
 
     @GetMapping("/employees")
     public String showShiftEmployeesPage(Model model){
-        List<Employee> employees = employeeService.getAllEmployees();
+
+        LocalDate workDate = LocalDate.now();
+        List<Employee> employees = employeeService.getShiftEmployees(workDate);
         model.addAttribute("employees", employees);
 
         return "shift-employees-page";
