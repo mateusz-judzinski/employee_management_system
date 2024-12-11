@@ -21,7 +21,9 @@ public class Employee {
     private String email;
     @Column(name = "phone_number")
     private String phoneNumber;
-
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    private Position position;
     @OneToMany(mappedBy = "employee",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
@@ -75,6 +77,14 @@ public class Employee {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public List<Shift> getShifts() {

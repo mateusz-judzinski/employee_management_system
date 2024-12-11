@@ -1,7 +1,9 @@
 package employee.management.system.controller;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Position;
 import employee.management.system.service.EmployeeService;
+import employee.management.system.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +18,12 @@ import java.util.List;
 public class LeaderController {
 
     private final EmployeeService employeeService;
+    private final PositionService positionService;
 
     @Autowired
-    public LeaderController(EmployeeService employeeService) {
+    public LeaderController(EmployeeService employeeService, PositionService positionService) {
         this.employeeService = employeeService;
+        this.positionService = positionService;
     }
 
     @GetMapping()
@@ -35,5 +39,15 @@ public class LeaderController {
         model.addAttribute("employees", employees);
 
         return "shift-employees-page";
+    }
+
+    @GetMapping("/positions")
+    public String showPositionsPage(Model model){
+
+        List<Position> positions = positionService.findAllPositions();
+        model.addAttribute("positions", positions);
+
+        return "positions-page";
+
     }
 }
