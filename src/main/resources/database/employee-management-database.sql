@@ -7,7 +7,8 @@ DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS shift;
 DROP TABLE IF EXISTS postion;
-
+DROP TABLE IF EXISTS skill;
+DROP TABLE IF EXISTS employee_skill;
 
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,7 +67,37 @@ CREATE TABLE shift (
 
 INSERT INTO shift (employee_id, work_date, shift_name, start_time, end_time) 
 VALUES 
-(1, '2024-12-10', "Zmiana poranna", '06:00:00', '14:00:00'),
+(1, '2024-12-11', "Zmiana poranna", '06:00:00', '14:00:00'),
 (1, '2024-12-09', "Zmiana poranna", '06:00:00', '14:00:00'),
-(2, '2024-12-09', "Zmiana popołudniowa", '10:00:00', '18:00:00');
+(2, '2024-12-11', "Zmiana popołudniowa", '10:00:00', '18:00:00');
+
+
+CREATE TABLE skill (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    skill_name VARCHAR(50) NOT NULL,
+    description TEXT
+);
+
+INSERT INTO skill (skill_name, description)
+VALUES 
+("ciąg", "obsługa ciągu"),
+("skan", "obsługa skanu");
+
+
+CREATE TABLE employee_skill (
+    employee_id INT NOT NULL,
+    skill_id INT NOT NULL,
+    proficiency_level VARCHAR(50) NOT NULL,
+	PRIMARY KEY (employee_id, skill_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(id),
+    FOREIGN KEY (skill_id) REFERENCES skill(id)
+);
+
+INSERT INTO employee_skill (employee_id, skill_id, proficiency_level)
+VALUES 
+(1, 1, "BEGINNER"),
+(1, 2, "BEGINNER"),
+(2, 1, "BEGINNER");
+
+
 

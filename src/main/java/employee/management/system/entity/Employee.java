@@ -28,6 +28,14 @@ public class Employee {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
     private List<Shift> shifts;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "employee_skill",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills;
 
     public Employee() {
     }
@@ -95,6 +103,14 @@ public class Employee {
         this.shifts = shifts;
     }
 
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -103,6 +119,9 @@ public class Employee {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", position=" + position +
+                ", shifts=" + shifts +
+                ", skills=" + skills +
                 '}';
     }
 
@@ -113,5 +132,13 @@ public class Employee {
         }
         shifts.add(shift);
         shift.setEmployee(this);
+    }
+
+    public void addSkill(Skill skill){
+
+        if(skills == null){
+            skills = new ArrayList<>();
+        }
+        skills.add(skill);
     }
 }
