@@ -1,13 +1,17 @@
-package employee.management.system.repository;
+package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Skill;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SkillRepository extends JpaRepository<Skill, Integer> {
+public interface SkillService {
+    Skill findSkillById(int id);
     Skill findSkillBySkillName(String skillName);
+    List<Skill> findAllSkills();
+    void addSkill(Skill skill);
+    void updateSkill(Skill skill);
+    void deleteSkillById(int id);
     List<Skill> findSkillsByEmployeeId(int employeeId);
     List<Employee> findEmployeesBySkillId(int skillId);
 }
