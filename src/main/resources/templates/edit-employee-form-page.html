@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee</title>
+</head>
+<body>
+
+<h2>Edit user</h2>
+
+<form th:action="@{/supervisor-panel/employees/update}" th:object="${employee}" method="post">
+    <input type="hidden" id="id" th:field="*{id}">
+    <input type="hidden" id="position" th:field="*{position}">
+    <input type="hidden" id="shifts" th:field="*{shifts}">
+
+    <br>
+    <label>First name:</label>
+    <input type="text" id="firstName" th:field="*{firstName}">
+    <br>
+    <label>Last name:</label>
+    <input type="text" id="lastName" th:field="*{lastName}">
+    <br>
+    <label>Email:</label>
+    <input type="email" id="email" th:field="*{email}">
+    <br>
+    <label>Phone number:</label>
+    <input type="tel" id="phoneNumber" th:field="*{phoneNumber}">
+    <br>
+    <button type="submit">Create</button>
+
+</form>
+
+</body>
+</html>
