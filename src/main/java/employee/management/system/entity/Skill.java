@@ -81,6 +81,7 @@ public class Skill {
             employees = new ArrayList<>();
         }
         employees.add(employee);
+        employee.getSkills().add(this);
 
     }
 }

@@ -140,5 +140,6 @@ public class Employee {
             skills = new ArrayList<>();
         }
         skills.add(skill);
+        skill.getEmployees().add(this);
     }
 }

@@ -50,13 +50,6 @@ public class SkillServiceImpl implements SkillService{
 
     @Override
     public List<Skill> findSkillsByEmployeeId(int employeeId) {
-        //tutaj żeby zaimplementować to trzeba chyba dodać jakie SQL Query do SkillRepository (in progress)
-        return null;
-    }
-
-    @Override
-    public List<Employee> findEmployeesBySkillId(int skillId) {
-        //tutaj żeby zaimplementować to trzeba chyba dodać jakie SQL Query do SkillRepository (in progress)
-        return null;
+        return skillRepository.findSkillsByEmployeeId(employeeId);
     }
 }

@@ -67,4 +67,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         return employees;
     }
+
+    @Override
+    public List<Employee> findEmployeesBySkillId(int skillId) {
+        return employeeRepository.findEmployeesBySkillId(skillId);
+    }
 }

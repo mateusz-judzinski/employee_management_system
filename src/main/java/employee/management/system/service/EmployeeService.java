@@ -1,6 +1,7 @@
 package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Skill;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -13,5 +14,6 @@ public interface EmployeeService {
     void updateEmployee(Employee employee);
     void deleteEmployeeById(int id);
     List<Employee> getShiftEmployees(LocalDate localDate);
+    List<Employee> findEmployeesBySkillId(int skillId);
 
 }
