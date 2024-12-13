@@ -21,6 +21,8 @@ public class Employee {
     private String email;
     @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "id_card_number")
+    private Integer idCardNumber;
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
@@ -45,6 +47,7 @@ public class Employee {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        idCardNumber = null;
     }
 
     public int getId() {
@@ -87,6 +90,14 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
+    public Integer getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(Integer idCardNumber) {
+        this.idCardNumber = idCardNumber;
+    }
+
     public Position getPosition() {
         return position;
     }
@@ -119,9 +130,7 @@ public class Employee {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", position=" + position +
-                ", shifts=" + shifts +
-                ", skills=" + skills +
+                ", idCardNumber=" + idCardNumber +
                 '}';
     }
 

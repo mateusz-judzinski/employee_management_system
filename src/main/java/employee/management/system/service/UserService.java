@@ -11,4 +11,5 @@ public interface UserService {
     void updateUser(User user);
     void deleteUserById(int id);
     boolean processLogin(String username, String password);
+    List<User> findByRole(String role);
 }

@@ -10,6 +10,7 @@
     <td th:text="${employee.firstName}">First name</td>
     <td th:text="${employee.lastName}">Last name</td>
     <td th:text="${employee.email}">Email</td>
+    <td th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}">ID Card Number</td>
     <br>
     <ul>
         <li th:each="skill : ${employee.skills}" th:text="${skill.skillName}">Skills:</li>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Leader</title>
+</head>
+<body>
+
+<h2>Edit user</h2>
+
+<form th:action="@{/supervisor-panel/leaders/update}" th:object="${leader}" method="post">
+    <input type="hidden" id="id" th:field="*{id}">
+    <input type="hidden" id="role" th:field="*{role}">
+    <input type="hidden" id="password" th:field="*{password}">
+
+
+    <label>Username:</label>
+    <input type="text" id="username" th:field="*{username}">
+    <label>Password:</label>
+    <input type="password" id="newPassword" th:field="*{newPassword}">
+    <br>
+    <label>First name:</label>
+    <input type="text" id="firstName" th:field="*{firstName}">
+    <br>
+    <label>Last name:</label>
+    <input type="text" id="lastName" th:field="*{lastName}">
+    <br>
+    <label>Email:</label>
+    <input type="email" id="email" th:field="*{email}">
+    <br>
+    <label>Phone number:</label>
+    <input type="tel" id="phoneNumber" th:field="*{phoneNumber}">
+    <br>
+
+    <button type="submit">Update</button>
+
+</form>
+
+</body>
+</html>

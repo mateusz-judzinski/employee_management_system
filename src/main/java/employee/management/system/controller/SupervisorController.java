@@ -1,6 +1,7 @@
 package employee.management.system.controller;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.User;
 import employee.management.system.service.EmployeeService;
 import employee.management.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,4 +75,43 @@ public class SupervisorController {
         return "redirect:/supervisor-panel/employees";
     }
 
+    @GetMapping("/leaders")
+    public String showLeadersPage(Model model){
+        List<User> leaders = userService.findByRole("ROLE_LEADER");
+        model.addAttribute("leaders", leaders);
+
+        return "all-leaders-page";
+    }
+
+    @GetMapping("/leaders/new")
+    public String addNewLeader(Model model){
+        model.addAttribute("leader", new User());
+        return "add-leader-form-page";
+    }
+
+    @PostMapping("/leaders")
+    public String saveNewLeader(@ModelAttribute("leader") User leader){
+        userService.addUser(leader);
+        return "redirect:/supervisor-panel/leaders";
+    }
+
+    @GetMapping("/leaders/edit/{leaderId}")
+    public String editLeader(@PathVariable("leaderId") int leaderId, Model model){
+        User leader = userService.findUserById(leaderId);
+        model.addAttribute("leader", leader);
+
+        return "edit-leader-form-page";
+    }
+
+    @PostMapping("/leaders/update")
+    public String saveLeader(@ModelAttribute("leader") User leader){
+        userService.updateUser(leader);
+        return "redirect:/supervisor-panel/leaders";
+    }
+
+    @GetMapping("/leaders/delete/{leaderId}")
+    public String deleteLeader(@PathVariable("leaderId") int leaderId){
+        userService.deleteUserById(leaderId);
+        return "redirect:/supervisor-panel/leaders";
+    }
 }

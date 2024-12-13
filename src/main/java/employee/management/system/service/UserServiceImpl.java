@@ -35,12 +35,20 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public void addUser(User user) {
+        String password = user.getPassword();
+        password = passwordEncoder.encode(password);
+        user.setPassword(password);
+        user.setRole("ROLE_LEADER");
         userRepository.save(user);
     }
 
     @Transactional
     @Override
     public void updateUser(User user) {
+        if(!user.getNewPassword().isBlank() || !user.getNewPassword().isEmpty()){
+            user.setPassword(passwordEncoder.encode(user.getNewPassword()));
+            user.setNewPassword("");
+        }
         userRepository.save(user);
     }
 
@@ -50,6 +58,7 @@ public class UserServiceImpl implements UserService{
         if(!userRepository.existsById(id)){
             throw new RuntimeException("User with id: " + id + " not found");
         }
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -59,5 +68,10 @@ public class UserServiceImpl implements UserService{
             return passwordEncoder.matches(password, user.getPassword());
         }
         return false;
+    }
+
+    @Override
+    public List<User> findByRole(String role) {
+        return userRepository.findByRole(role);
     }
 }
