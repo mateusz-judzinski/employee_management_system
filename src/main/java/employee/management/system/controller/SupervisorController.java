@@ -140,22 +140,14 @@ public class SupervisorController {
     }
 
     @GetMapping("/day-schedule")
-    public String getScheduleForThisDay(Model model){
-        int day = LocalDate.now().getDayOfMonth();
+    public String getScheduleForThisDay(@RequestParam(value = "day", required = false) Integer day, Model model) {
+        int dayToUse = (day != null) ? day : LocalDate.now().getDayOfMonth();
 
-        List<Shift> shifts = shiftService.getScheduleForDay(day);
+        List<Shift> shifts = shiftService.getScheduleForDay(dayToUse);
         model.addAttribute("shifts", shifts);
+        model.addAttribute("day", dayToUse);
 
         return "employee-day-schedule-page";
     }
-
-    @GetMapping("/day-schedule/{day}")
-    public String getScheduleForProvidedDay(@RequestParam("day") int day, Model model){
-        List<Shift> shifts = shiftService.getScheduleForDay(day);
-        model.addAttribute("shifts", shifts);
-
-        return "redirect:/supervisor-panel/day-schedule";
-    }
-
 
 }

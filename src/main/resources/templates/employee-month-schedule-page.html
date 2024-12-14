@@ -1,12 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Month Schedule</title>
+    <title>Schedule for the Month</title>
 </head>
 <body>
+<h1>Schedule for <span th:text="${monthName}">Month</span> <span th:text="${year}">Year</span></h1>
+
+<form th:action="@{/month-schedule}" method="GET">
+    <label for="month">Select month:</label>
+    <select id="month" name="month">
+        <option th:value="1" th:text="'January'">January</option>
+        <option th:value="2" th:text="'February'">February</option>
+        <option th:value="3" th:text="'March'">March</option>
+        <option th:value="4" th:text="'April'">April</option>
+        <option th:value="5" th:text="'May'">May</option>
+        <option th:value="6" th:text="'June'">June</option>
+        <option th:value="7" th:text="'July'">July</option>
+        <option th:value="8" th:text="'August'">August</option>
+        <option th:value="9" th:text="'September'">September</option>
+        <option th:value="10" th:text="'October'">October</option>
+        <option th:value="11" th:text="'November'">November</option>
+        <option th:value="12" th:text="'December'">December</option>
+    </select>
+
+    <label for="year">Select year:</label>
+    <input type="number" id="year" name="year" th:value="${year}" min="2020" max="2100">
+
+    <button type="submit">Change Month</button>
+</form>
 
 
+<table>
+    <thead>
+    <tr>
+        <th>Day</th>
+        <th>Employee</th>
+        <th>Shift Start</th>
+        <th>Shift End</th>
+    </tr>
+    </thead>
+    <tbody>
 
+    <tr th:each="day : ${#dates.daysOfMonth()}">
+        <td th:text="${day}">01</td>
+        <td th:each="shift : ${shifts}" th:if="${shift.workDate == day}">
+            <span th:text="${shift.employee.lastName}">Employee</span>
+        </td>
+        <td th:each="shift : ${shifts}" th:if="${shift.workDate == day}">
+            <span th:text="${shift.startTime}">Start time</span>
+        </td>
+        <td th:each="shift : ${shifts}" th:if="${shift.workDate == day}">
+            <span th:text="${shift.endTime}">End time</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
