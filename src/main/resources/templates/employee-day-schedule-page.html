@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Day Page</title>
+</head>
+<body>
+
+<form th:action="@{/supervisor-panel/day-schedule}" method="GET">
+    <label for="day">Switch day</label>
+    <input type="number" id="day" name="day" placeholder="1-31" min="1" max="31" required>
+    <button type="submit">Submit</button>
+</form>
+
+
+<tr th:each="shift : ${shifts}">
+    <td th:text="${shift.employee.lastName}">Employee Lastname</td>
+    <br>
+    <td th:text="${shift.startTime}">Start time</td>
+    <td th:text="${shift.endTime}">End time</td>
+    <br>
+    <br>
+</tr>
+
+</body>
+</html>

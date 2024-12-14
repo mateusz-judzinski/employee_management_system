@@ -4,6 +4,7 @@ import employee.management.system.entity.Shift;
 import employee.management.system.repository.ShiftRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -51,5 +52,16 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public List<Shift> findShiftsByWorkDate(LocalDate workDate) {
         return shiftRepository.findShiftsByWorkDate(workDate);
+    }
+
+    @Override
+    public List<Shift> getScheduleForMonth(int month) {
+        return shiftRepository.getScheduleForMonth(month);
+    }
+
+    @Override
+    public List<Shift> getScheduleForDay(int day) {
+        int month = LocalDate.now().getMonthValue();
+        return shiftRepository.getScheduleForDay(day, month);
     }
 }

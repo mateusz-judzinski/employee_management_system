@@ -1,15 +1,19 @@
 package employee.management.system.controller;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Shift;
 import employee.management.system.entity.User;
 import employee.management.system.service.EmployeeService;
+import employee.management.system.service.ShiftService;
 import employee.management.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.config.Task;
+import org.springframework.boot.Banner;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -18,11 +22,13 @@ public class SupervisorController {
 
     private final UserService userService;
     private final EmployeeService employeeService;
+    private final ShiftService shiftService;
 
     @Autowired
-    public SupervisorController(UserService userService, EmployeeService employeeService) {
+    public SupervisorController(UserService userService, EmployeeService employeeService, ShiftService shiftService) {
         this.userService = userService;
         this.employeeService = employeeService;
+        this.shiftService = shiftService;
     }
 
     @GetMapping()
@@ -114,4 +120,42 @@ public class SupervisorController {
         userService.deleteUserById(leaderId);
         return "redirect:/supervisor-panel/leaders";
     }
+
+    @GetMapping("/month-schedule")
+    public String getScheduleForThisMonth(Model model){
+        int month = LocalDate.now().getMonthValue();
+
+        List<Shift> shifts = shiftService.getScheduleForMonth(month);
+        model.addAttribute("shifts", shifts);
+
+        return "employee-month-schedule-page";
+    }
+
+    @GetMapping("/month-schedule/{month}")
+    public String getScheduleForProvidedMonth(@PathVariable("month") int month, Model model){
+        List<Shift> shifts = shiftService.getScheduleForMonth(month);
+        model.addAttribute("shifts", shifts);
+
+        return "employee-month-schedule-page";
+    }
+
+    @GetMapping("/day-schedule")
+    public String getScheduleForThisDay(Model model){
+        int day = LocalDate.now().getDayOfMonth();
+
+        List<Shift> shifts = shiftService.getScheduleForDay(day);
+        model.addAttribute("shifts", shifts);
+
+        return "employee-day-schedule-page";
+    }
+
+    @GetMapping("/day-schedule/{day}")
+    public String getScheduleForProvidedDay(@RequestParam("day") int day, Model model){
+        List<Shift> shifts = shiftService.getScheduleForDay(day);
+        model.addAttribute("shifts", shifts);
+
+        return "redirect:/supervisor-panel/day-schedule";
+    }
+
+
 }

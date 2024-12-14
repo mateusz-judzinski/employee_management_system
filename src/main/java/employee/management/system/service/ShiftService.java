@@ -12,4 +12,6 @@ public interface ShiftService {
     void updateShift(Shift shift);
     void deleteShiftById(int id);
     List<Shift> findShiftsByWorkDate(LocalDate workDate);
+    List<Shift> getScheduleForMonth(int month);
+    List<Shift> getScheduleForDay(int day);
 }
