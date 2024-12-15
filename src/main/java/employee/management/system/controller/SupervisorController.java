@@ -14,7 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Controller
 @RequestMapping("/supervisor-panel")
@@ -122,23 +126,23 @@ public class SupervisorController {
     }
 
     @GetMapping("/month-schedule")
-    public String getScheduleForThisMonth(Model model){
-        int month = LocalDate.now().getMonthValue();
+    public String getScheduleForThisMonth(@RequestParam(value = "month", required = false) Integer month, Model model){
+        int monthToUse = (month != null) ? month : LocalDate.now().getMonthValue();
 
-        List<Shift> shifts = shiftService.getScheduleForMonth(month);
-        model.addAttribute("shifts", shifts);
+        List<Shift> shifts = shiftService.getScheduleForMonth(monthToUse);
+        Map<String, List<String>> dailySchedule = new TreeMap<>();
+
+        for (Shift shift : shifts) {
+            String date = shift.getWorkDate().format(DateTimeFormatter.ofPattern("dd.MM"));
+            String employeeName = shift.getEmployee().getLastName() + " " + shift.getEmployee().getFirstName();
+
+            dailySchedule.computeIfAbsent(date, k -> new ArrayList<>()).add(employeeName);
+        }
+
+        model.addAttribute("dailySchedule", dailySchedule);
 
         return "employee-month-schedule-page";
     }
-
-    @GetMapping("/month-schedule/{month}")
-    public String getScheduleForProvidedMonth(@PathVariable("month") int month, Model model){
-        List<Shift> shifts = shiftService.getScheduleForMonth(month);
-        model.addAttribute("shifts", shifts);
-
-        return "employee-month-schedule-page";
-    }
-
     @GetMapping("/day-schedule")
     public String getScheduleForThisDay(@RequestParam(value = "day", required = false) Integer day, Model model) {
         int dayToUse = (day != null) ? day : LocalDate.now().getDayOfMonth();
