@@ -4,6 +4,7 @@ import employee.management.system.entity.Shift;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface ShiftService {
     Shift findShiftById(int id);
@@ -12,6 +13,6 @@ public interface ShiftService {
     void updateShift(Shift shift);
     void deleteShiftById(int id);
     List<Shift> findShiftsByWorkDate(LocalDate workDate);
-    List<Shift> getScheduleForMonth(int month);
-    List<Shift> getScheduleForDay(int day);
+    Map<String, List<String>> getScheduleForMonth(Integer month);
+    List<Shift> getScheduleForDay(Integer day);
 }

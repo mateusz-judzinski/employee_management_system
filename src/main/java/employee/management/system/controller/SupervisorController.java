@@ -127,29 +127,16 @@ public class SupervisorController {
 
     @GetMapping("/month-schedule")
     public String getScheduleForThisMonth(@RequestParam(value = "month", required = false) Integer month, Model model){
-        int monthToUse = (month != null) ? month : LocalDate.now().getMonthValue();
-
-        List<Shift> shifts = shiftService.getScheduleForMonth(monthToUse);
-        Map<String, List<String>> dailySchedule = new TreeMap<>();
-
-        for (Shift shift : shifts) {
-            String date = shift.getWorkDate().format(DateTimeFormatter.ofPattern("dd.MM"));
-            String employeeName = shift.getEmployee().getLastName() + " " + shift.getEmployee().getFirstName();
-
-            dailySchedule.computeIfAbsent(date, k -> new ArrayList<>()).add(employeeName);
-        }
-
+        Map<String, List<String>> dailySchedule = shiftService.getScheduleForMonth(month);
         model.addAttribute("dailySchedule", dailySchedule);
 
         return "employee-month-schedule-page";
     }
     @GetMapping("/day-schedule")
     public String getScheduleForThisDay(@RequestParam(value = "day", required = false) Integer day, Model model) {
-        int dayToUse = (day != null) ? day : LocalDate.now().getDayOfMonth();
-
-        List<Shift> shifts = shiftService.getScheduleForDay(dayToUse);
+        List<Shift> shifts = shiftService.getScheduleForDay(day);
         model.addAttribute("shifts", shifts);
-        model.addAttribute("day", dayToUse);
+        model.addAttribute("day", day);
 
         return "employee-day-schedule-page";
     }

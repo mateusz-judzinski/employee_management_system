@@ -8,7 +8,11 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Service
 public class ShiftServiceImpl implements ShiftService {
@@ -55,13 +59,32 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public List<Shift> getScheduleForMonth(int month) {
-        return shiftRepository.getScheduleForMonth(month);
+    public Map<String, List<String>> getScheduleForMonth(Integer month) {
+        int monthToUse = (month != null) ? month : LocalDate.now().getMonthValue();
+        List<Shift> shifts = shiftRepository.getScheduleForMonth(monthToUse);
+
+        return splitMonthScheduleOnDays(shifts);
     }
 
     @Override
-    public List<Shift> getScheduleForDay(int day) {
+    public List<Shift> getScheduleForDay(Integer day) {
+        int dayToUse = (day != null) ? day : LocalDate.now().getDayOfMonth();
         int month = LocalDate.now().getMonthValue();
-        return shiftRepository.getScheduleForDay(day, month);
+
+        return shiftRepository.getScheduleForDay(dayToUse, month);
+    }
+
+    private Map<String, List<String>> splitMonthScheduleOnDays(List<Shift> shifts){
+
+        Map<String, List<String>> dailySchedule = new TreeMap<>();
+
+        for (Shift shift : shifts) {
+            String date = shift.getWorkDate().format(DateTimeFormatter.ofPattern("dd.MM"));
+            String employeeName = shift.getEmployee().getLastName() + " " + shift.getEmployee().getFirstName();
+
+            dailySchedule.computeIfAbsent(date, k -> new ArrayList<>()).add(employeeName);
+        }
+
+        return dailySchedule;
     }
 }
