@@ -75,7 +75,7 @@ CREATE TABLE shift (
 INSERT INTO shift (employee_id, work_date, shift_name, start_time, end_time) 
 VALUES 
 (1, '2024-12-11', "Zmiana poranna", '06:00:00', '14:00:00'),
-(1, '2024-12-14', "Zmiana poranna", '06:00:00', '14:00:00'),
+(1, '2024-12-15', "Zmiana poranna", '06:00:00', '14:00:00'),
 (2, '2024-12-11', "Zmiana popołudniowa", '10:00:00', '18:00:00'),
 (3, '2024-12-14', "Zmiana nocna", '22:00:00', '06:00:00'),
 (4, '2024-12-12', "Zmiana dzienna", '08:00:00', '16:00:00'),

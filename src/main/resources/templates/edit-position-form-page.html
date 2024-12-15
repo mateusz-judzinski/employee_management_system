@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Position Form</title>
+</head>
+<body>
+
+<h2>Edit Position</h2>
+
+<form th:action="@{/supervisor-panel/positions/update}" th:object="${position}" method="post">
+    <input type="hidden" id="id" th:field="*{id}">
+
+    <br>
+    <label>Position name:</label>
+    <input type="text" id="positionName" th:field="*{positionName}">
+    <br>
+    <label>Description:</label>
+    <input type="text" id="description" th:field="*{description}">
+    <br>
+    <label>Is active?:</label>
+    <input type="checkbox" id="isActive" th:field="*{isActive}" th:value="true">
+    <br>
+
+    <button type="submit">Update</button>
+
+</form>
+
+</body>
+</html>

@@ -1,24 +1,17 @@
 package employee.management.system.controller;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Position;
 import employee.management.system.entity.Shift;
 import employee.management.system.entity.User;
-import employee.management.system.service.EmployeeService;
-import employee.management.system.service.ShiftService;
-import employee.management.system.service.UserService;
+import employee.management.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 @Controller
 @RequestMapping("/supervisor-panel")
@@ -27,12 +20,16 @@ public class SupervisorController {
     private final UserService userService;
     private final EmployeeService employeeService;
     private final ShiftService shiftService;
+    private final PositionService positionService;
+    private final SkillService skillService;
 
     @Autowired
-    public SupervisorController(UserService userService, EmployeeService employeeService, ShiftService shiftService) {
+    public SupervisorController(UserService userService, EmployeeService employeeService, ShiftService shiftService, PositionService positionService, SkillService skillService) {
         this.userService = userService;
         this.employeeService = employeeService;
         this.shiftService = shiftService;
+        this.positionService = positionService;
+        this.skillService = skillService;
     }
 
     @GetMapping()
@@ -141,4 +138,47 @@ public class SupervisorController {
         return "employee-day-schedule-page";
     }
 
+    @GetMapping("/positions")
+    public String getPositionsList(Model model){
+        List<Position> positions = positionService.findAllPositions();
+        model.addAttribute("positions", positions);
+
+        return "positions-management-page";
+    }
+
+    @GetMapping("/positions/new")
+    public String addNewPosition(Model model){
+        model.addAttribute("position", new Position());
+
+        return "new-position-form-page";
+    }
+
+    @PostMapping("/positions")
+    public String saveNewPosition(@ModelAttribute("position") Position position){
+        positionService.addPosition(position);
+
+        return "redirect:/supervisor-panel/positions";
+    }
+
+    @GetMapping("/positions/edit/{positionId}")
+    public String editPosition(@PathVariable("positionId") int positionId, Model model){
+        Position position = positionService.findPositionById(positionId);
+        model.addAttribute("position", position);
+
+        return "edit-position-form-page";
+    }
+
+    @PostMapping("/positions/update")
+    public String savePosition(@ModelAttribute("position") Position position){
+        positionService.updatePosition(position);
+
+        return "redirect:/supervisor-panel/positions";
+    }
+
+    @GetMapping("/positions/delete/{positionId}")
+    public String deletePosition(@PathVariable("positionId") int positionId){
+        positionService.deletePositionById(positionId);
+
+        return "redirect:/supervisor-panel/positions";
+    }
 }
