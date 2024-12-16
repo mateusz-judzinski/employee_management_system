@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Skills Page</title>
+</head>
+<body>
+
+<table>
+<thead>
+<tr>
+    <th>Id</th>
+    <th>Position Name</th>
+    <th>Description</th>
+    <th>Is Active?</th>
+    <th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="skill : ${skills}">
+    <td th:text="${skill.id}">Id</td>
+    <td th:text="${skill.skillName}">Skill name</td>
+    <td th:text="${skill.description}">Description</td>
+    <td>
+        <a th:href="@{/supervisor-panel/skills/edit/{skillId}(skillId=${skill.id})}">Edit</a>
+        <a th:href="@{/supervisor-panel/skills/delete/{skillId}(skillId=${skill.id})}">Delete</a>
+    </td>
+</tr>
+</tbody>
+</table>
+
+<a href="/supervisor-panel/skills/new">Add new position</a>
+
+
+</body>
+</html>

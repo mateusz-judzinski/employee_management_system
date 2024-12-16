@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Skill</title>
+</head>
+<body>
+
+<h2>Edit Position</h2>
+
+<form th:action="@{/supervisor-panel/skills/update}" th:object="${skill}" method="post">
+    <input type="hidden" id="id" th:field="*{id}">
+    <input type="hidden" id="employees" th:field="*{employees}">
+
+    <br>
+    <label>Skill name:</label>
+    <input type="text" id="skillName" th:field="*{skillName}">
+    <br>
+    <label>Description:</label>
+    <input type="text" id="description" th:field="*{description}">
+    <br>
+
+    <button type="submit">Update</button>
+
+</form>
+
+</body>
+</html>

@@ -1,9 +1,6 @@
 package employee.management.system.controller;
 
-import employee.management.system.entity.Employee;
-import employee.management.system.entity.Position;
-import employee.management.system.entity.Shift;
-import employee.management.system.entity.User;
+import employee.management.system.entity.*;
 import employee.management.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -180,5 +177,48 @@ public class SupervisorController {
         positionService.deletePositionById(positionId);
 
         return "redirect:/supervisor-panel/positions";
+    }
+
+
+    @GetMapping("/skills")
+    public String getSkillsList(Model model){
+        List<Skill> skills = skillService.findAllSkills();
+        model.addAttribute("skills", skills);
+
+        return "skills-page";
+    }
+
+    @GetMapping("/skills/new")
+    public String addNewSkill(Model model){
+        model.addAttribute("skill", new Skill());
+
+        return "new-skill-form-page";
+    }
+
+    @PostMapping("/skills")
+    public String saveNewSKill(@ModelAttribute("skill") Skill skill){
+        skillService.addSkill(skill);
+
+        return "redirect:/supervisor-panel/skills";
+    }
+
+    @GetMapping("/skills/edit/{skillId}")
+    public String editSkill(@PathVariable("skillId") int skillId, Model model){
+        Skill skill = skillService.findSkillById(skillId);
+        model.addAttribute("skill", skill);
+
+        return "edit-skill-form-page";
+    }
+
+    @PostMapping("/skills/update")
+    public String updateSkill(@ModelAttribute("skill") Skill skill){
+        skillService.updateSkill(skill);
+        return "redirect:/supervisor-panel/skills";
+    }
+
+    @GetMapping("/skills/delete/{skillId}")
+    public String deleteSkill(@PathVariable("skillId") int skillId){
+        skillService.deleteSkillById(skillId);
+        return "redirect:/supervisor-panel/skills";
     }
 }
