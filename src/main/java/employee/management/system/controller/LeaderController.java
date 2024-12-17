@@ -27,27 +27,27 @@ public class LeaderController {
     }
 
     @GetMapping()
-    public String showLeaderPanelPage(){
-        return "leader-panel-page";
+    public String getLeaderPanel(){
+        return "leader/panel";
     }
 
     @GetMapping("/employees")
-    public String showShiftEmployeesPage(Model model){
+    public String getShiftEmployeesForToday(Model model){
 
         LocalDate workDate = LocalDate.now();
         List<Employee> employees = employeeService.getShiftEmployees(workDate);
         model.addAttribute("employees", employees);
 
-        return "shift-employees-page";
+        return "leader/todays-employees";
     }
 
     @GetMapping("/positions")
-    public String showPositionsPage(Model model){
+    public String getAllPositions(Model model){
 
         List<Position> positions = positionService.findAllPositions();
         model.addAttribute("positions", positions);
 
-        return "positions-page";
+        return "leader/todays-positions";
 
     }
 }

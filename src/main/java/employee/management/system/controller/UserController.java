@@ -24,28 +24,18 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String showHomePage(){
-        return "home-page";
+    public String getHomePage(){
+        return "user/home";
     }
 
     @GetMapping("/login")
-    public String showLoginPage(Model model){
+    public String getLoginPage(Model model){
         model.addAttribute("user", new User());
-        return "login-page";
-    }
-
-    @PostMapping("/process-login")
-    public String processLogin(@RequestParam String username,
-                               @RequestParam String password){
-
-        if(userService.processLogin(username, password)){
-            return "redirect:/leader-panel";
-        }
-        return "login-page";
+        return "user/login";
     }
 
     @GetMapping("/logout")
-    public String processLogout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+    public String handleLogout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         if(authentication != null){
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }

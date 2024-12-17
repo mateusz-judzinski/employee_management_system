@@ -30,39 +30,39 @@ public class SupervisorController {
     }
 
     @GetMapping()
-    public String showSupervisorPanelPage(){
-        return "supervisor-panel-page";
+    public String getSupervisorPanel(){
+        return "supervisor/panel";
     }
 
     @GetMapping("/employees")
-    public String showEmployeesPage(Model model){
+    public String getAllEmployees(Model model){
         List<Employee> employees = employeeService.getAllEmployees();
         model.addAttribute("employees", employees);
 
-        return "all-employees-page";
+        return "supervisor/employee/list";
     }
 
     @GetMapping("/employees/new")
-    public String addNewEmployeePage(Model model){
+    public String showAddEmployeeForm(Model model){
         model.addAttribute("employee", new Employee());
 
-        return "add-employee-form-page";
+        return "supervisor/employee/form";
     }
 
     @PostMapping("/employees")
-    public String saveNewEmployee(@ModelAttribute("employee") Employee employee){
+    public String saveEmployee(@ModelAttribute("employee") Employee employee){
         employeeService.addEmployee(employee);
 
         return "redirect:/supervisor-panel/employees";
     }
 
     @GetMapping("/employees/edit/{employeeId}")
-    public String editEmployee(@PathVariable("employeeId") int employeeId, Model model){
+    public String showEditEmployeeForm(@PathVariable("employeeId") int employeeId, Model model){
 
         Employee employee = employeeService.findEmployeeById(employeeId);
         model.addAttribute("employee", employee);
 
-        return "edit-employee-form-page";
+        return "supervisor/employee/edit";
     }
 
     @PostMapping("/employees/update")
@@ -80,35 +80,35 @@ public class SupervisorController {
     }
 
     @GetMapping("/leaders")
-    public String showLeadersPage(Model model){
+    public String getAllLeaders(Model model){
         List<User> leaders = userService.findByRole("ROLE_LEADER");
         model.addAttribute("leaders", leaders);
 
-        return "all-leaders-page";
+        return "supervisor/leader/list";
     }
 
     @GetMapping("/leaders/new")
-    public String addNewLeader(Model model){
+    public String showAddLeaderForm(Model model){
         model.addAttribute("leader", new User());
-        return "add-leader-form-page";
+        return "supervisor/leader/form";
     }
 
     @PostMapping("/leaders")
-    public String saveNewLeader(@ModelAttribute("leader") User leader){
+    public String saveLeader(@ModelAttribute("leader") User leader){
         userService.addUser(leader);
         return "redirect:/supervisor-panel/leaders";
     }
 
     @GetMapping("/leaders/edit/{leaderId}")
-    public String editLeader(@PathVariable("leaderId") int leaderId, Model model){
+    public String showEditLeaderForm(@PathVariable("leaderId") int leaderId, Model model){
         User leader = userService.findUserById(leaderId);
         model.addAttribute("leader", leader);
 
-        return "edit-leader-form-page";
+        return "supervisor/leader/edit";
     }
 
     @PostMapping("/leaders/update")
-    public String saveLeader(@ModelAttribute("leader") User leader){
+    public String updateLeader(@ModelAttribute("leader") User leader){
         userService.updateUser(leader);
         return "redirect:/supervisor-panel/leaders";
     }
@@ -120,53 +120,53 @@ public class SupervisorController {
     }
 
     @GetMapping("/month-schedule")
-    public String getScheduleForThisMonth(@RequestParam(value = "month", required = false) Integer month, Model model){
+    public String getMonthlySchedule(@RequestParam(value = "month", required = false) Integer month, Model model){
         Map<String, List<String>> dailySchedule = shiftService.getScheduleForMonth(month);
         model.addAttribute("dailySchedule", dailySchedule);
 
-        return "employee-month-schedule-page";
+        return "supervisor/schedule/month-schedule";
     }
     @GetMapping("/day-schedule")
-    public String getScheduleForThisDay(@RequestParam(value = "day", required = false) Integer day, Model model) {
+    public String getDailySchedule(@RequestParam(value = "day", required = false) Integer day, Model model) {
         List<Shift> shifts = shiftService.getScheduleForDay(day);
         model.addAttribute("shifts", shifts);
         model.addAttribute("day", day);
 
-        return "employee-day-schedule-page";
+        return "supervisor/schedule/day-schedule";
     }
 
     @GetMapping("/positions")
-    public String getPositionsList(Model model){
+    public String getAllPositions(Model model){
         List<Position> positions = positionService.findAllPositions();
         model.addAttribute("positions", positions);
 
-        return "positions-management-page";
+        return "supervisor/position/list";
     }
 
     @GetMapping("/positions/new")
-    public String addNewPosition(Model model){
+    public String showAddPositionForm(Model model){
         model.addAttribute("position", new Position());
 
-        return "new-position-form-page";
+        return "supervisor/position/form";
     }
 
     @PostMapping("/positions")
-    public String saveNewPosition(@ModelAttribute("position") Position position){
+    public String savePosition(@ModelAttribute("position") Position position){
         positionService.addPosition(position);
 
         return "redirect:/supervisor-panel/positions";
     }
 
     @GetMapping("/positions/edit/{positionId}")
-    public String editPosition(@PathVariable("positionId") int positionId, Model model){
+    public String showEditPositionForm(@PathVariable("positionId") int positionId, Model model){
         Position position = positionService.findPositionById(positionId);
         model.addAttribute("position", position);
 
-        return "edit-position-form-page";
+        return "supervisor/position/edit";
     }
 
     @PostMapping("/positions/update")
-    public String savePosition(@ModelAttribute("position") Position position){
+    public String updatePosition(@ModelAttribute("position") Position position){
         positionService.updatePosition(position);
 
         return "redirect:/supervisor-panel/positions";
@@ -181,33 +181,33 @@ public class SupervisorController {
 
 
     @GetMapping("/skills")
-    public String getSkillsList(Model model){
+    public String getAllSkills(Model model){
         List<Skill> skills = skillService.findAllSkills();
         model.addAttribute("skills", skills);
 
-        return "skills-page";
+        return "supervisor/skill/list";
     }
 
     @GetMapping("/skills/new")
-    public String addNewSkill(Model model){
+    public String showAddSkillForm(Model model){
         model.addAttribute("skill", new Skill());
 
-        return "new-skill-form-page";
+        return "supervisor/skill/form";
     }
 
     @PostMapping("/skills")
-    public String saveNewSKill(@ModelAttribute("skill") Skill skill){
+    public String saveSkill(@ModelAttribute("skill") Skill skill){
         skillService.addSkill(skill);
 
         return "redirect:/supervisor-panel/skills";
     }
 
     @GetMapping("/skills/edit/{skillId}")
-    public String editSkill(@PathVariable("skillId") int skillId, Model model){
+    public String showEditSkillForm(@PathVariable("skillId") int skillId, Model model){
         Skill skill = skillService.findSkillById(skillId);
         model.addAttribute("skill", skill);
 
-        return "edit-skill-form-page";
+        return "supervisor/skill/edit";
     }
 
     @PostMapping("/skills/update")
