@@ -50,6 +50,9 @@ public class ShiftServiceImpl implements ShiftService {
     @Transactional
     @Override
     public void deleteShiftById(int id) {
+        if(!shiftRepository.existsById(id)){
+            throw new RuntimeException("Shift with id: " + id + " not found");
+        }
         shiftRepository.deleteById(id);
     }
 

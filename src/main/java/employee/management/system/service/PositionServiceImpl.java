@@ -44,6 +44,9 @@ public class PositionServiceImpl implements PositionService{
     @Transactional
     @Override
     public void deletePositionById(int id) {
+        if(!positionRepository.existsById(id)){
+            throw new RuntimeException("Position with id: " + id + " not found");
+        }
         positionRepository.deleteById(id);
     }
 

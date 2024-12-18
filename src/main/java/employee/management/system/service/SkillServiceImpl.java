@@ -3,6 +3,7 @@ package employee.management.system.service;
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Skill;
 import employee.management.system.repository.SkillRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,18 +34,23 @@ public class SkillServiceImpl implements SkillService{
         return skillRepository.findAll();
     }
 
+    @Transactional
     @Override
     public void addSkill(Skill skill) {
         skillRepository.save(skill);
     }
 
+    @Transactional
     @Override
     public void updateSkill(Skill skill) {
         skillRepository.save(skill);
     }
-
+    @Transactional
     @Override
     public void deleteSkillById(int id) {
+        if(!skillRepository.existsById(id)){
+            throw new RuntimeException("Skill with id: " + id + " not found");
+        }
         skillRepository.deleteById(id);
     }
 

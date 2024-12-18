@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS shift;
 DROP TABLE IF EXISTS postion;
 DROP TABLE IF EXISTS skill;
 DROP TABLE IF EXISTS employee_skill;
+DROP TABLE IF EXISTS position_employee_history;
+DROP TABLE IF EXISTS shift_employee_history;
 
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -114,15 +116,54 @@ CREATE TABLE employee_skill (
 
 INSERT INTO employee_skill (employee_id, skill_id, proficiency_level)
 VALUES 
-(1, 1, "BEGINNER"),
-(1, 2, "BEGINNER"),
-(2, 1, "INTERMEDIATE"),
-(2, 5, "EXPERT"),
-(3, 3, "ADVANCED"),
-(3, 4, "BEGINNER"),
-(4, 2, "INTERMEDIATE"),
-(4, 3, "BEGINNER"),
-(5, 1, "EXPERT"),
-(5, 4, "ADVANCED");
+(1, 1, "początkujący"),
+(1, 2, "początkujący"),
+(2, 1, "średnio zaawansowany"),
+(2, 5, "ekspert"),
+(3, 3, "zaawansowany"),
+(3, 4, "początkujący"),
+(4, 2, "średnio zaawansowany"),
+(4, 3, "początkujący"),
+(5, 1, "ekspert"),
+(5, 4, "zaawansowany");
 
 
+CREATE TABLE position_employee_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    position_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(id),
+    FOREIGN KEY (position_id) REFERENCES `position`(id)
+);
+
+INSERT INTO position_employee_history (employee_id, position_id, start_date, start_time, end_time)
+VALUES
+(1, 1, '2023-01-01', '08:00:00', '16:00:00'),
+(1, 2, '2023-06-02', '09:00:00', '17:00:00'),
+(2, 2, '2022-03-01', '07:00:00', '15:00:00'),
+(2, 3, '2023-03-02', '10:00:00', '18:00:00'),
+(3, 1, '2021-05-15', '08:30:00', '16:30:00'),
+(4, 4, '2024-01-01', '09:00:00', '17:00:00');
+
+
+CREATE TABLE shift_employee_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    work_date DATE NOT NULL,
+    shift_name VARCHAR(50) NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(id)
+);
+
+INSERT INTO shift_employee_history (employee_id, work_date, shift_name, start_time, end_time)
+VALUES
+(1, '2024-05-01', 'Ranna', '08:00:00', '16:00:00'),
+(1, '2024-05-02', 'Wieczorna', '16:00:00', '00:00:00'),
+(2, '2024-05-01', 'Nocna', '00:00:00', '08:00:00'),
+(2, '2024-05-02', 'Ranna', '08:00:00', '16:00:00'),
+(3, '2024-05-03', 'Wieczorna', '16:00:00', '00:00:00'),
+(4, '2024-05-04', 'Ranna', '08:00:00', '16:00:00');
