@@ -26,6 +26,10 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
+    @Column(name = "has_driving_licence")
+    private boolean hasDrivingLicence;
+    @Column(name = "can_work_in_luggage_room")
+    private boolean canWorkInLuggageRoom;
     @OneToMany(mappedBy = "employee",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
@@ -42,11 +46,13 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber) {
+    public Employee(String firstName, String lastName, String email, String phoneNumber, boolean hasDrivingLicence, boolean canWorkInLuggageRoom) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.hasDrivingLicence = hasDrivingLicence;
+        this.canWorkInLuggageRoom = canWorkInLuggageRoom;
         idCardNumber = null;
     }
 
@@ -88,6 +94,22 @@ public class Employee {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isHasDrivingLicence() {
+        return hasDrivingLicence;
+    }
+
+    public void setHasDrivingLicence(boolean hasDrivingLicence) {
+        this.hasDrivingLicence = hasDrivingLicence;
+    }
+
+    public boolean isCanWorkInLuggageRoom() {
+        return canWorkInLuggageRoom;
+    }
+
+    public void setCanWorkInLuggageRoom(boolean canWorkInLuggageRoom) {
+        this.canWorkInLuggageRoom = canWorkInLuggageRoom;
     }
 
     public Integer getIdCardNumber() {
