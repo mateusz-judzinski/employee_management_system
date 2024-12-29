@@ -1,8 +1,10 @@
 package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Position;
 import employee.management.system.entity.Shift;
 import employee.management.system.repository.EmployeeRepository;
+import employee.management.system.repository.PositionRepository;
 import employee.management.system.repository.ShiftRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,14 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
     private final ShiftRepository shiftRepository;
+    private final PositionRepository positionRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ShiftRepository shiftRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ShiftRepository shiftRepository, PositionRepository positionRepository) {
         this.employeeRepository = employeeRepository;
         this.shiftRepository = shiftRepository;
+        this.positionRepository = positionRepository;
     }
-
     @Override
     public Employee findEmployeeById(int id) {
         return employeeRepository.findById(id).orElseThrow(() ->
@@ -71,5 +74,21 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public List<Employee> findEmployeesBySkillId(int skillId) {
         return employeeRepository.findEmployeesBySkillId(skillId);
+    }
+
+    @Transactional
+    @Override
+    public void removeEmployeeFromPositionByEmployeeId(int employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->
+                new RuntimeException("Employee with id: " + employeeId + " not found"));;
+        Position position = employee.getPosition();
+
+        employee.setPosition(positionRepository.findPositionByPositionName("przerwa"));
+        position.getEmployees().remove(employee);
+    }
+
+    @Override
+    public List<Employee> findEmployeesOnBreak() {
+        return employeeRepository.findEmployeesOnBreak();
     }
 }

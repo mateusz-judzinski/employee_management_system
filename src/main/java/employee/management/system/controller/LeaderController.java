@@ -7,8 +7,7 @@ import employee.management.system.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,9 +26,36 @@ public class LeaderController {
     }
 
     @GetMapping()
-    public String getLeaderPanel(){
+    public String getLeaderPanel(Model model){
+        List<Position> positions = positionService.findAllPositions();
+        model.addAttribute("positions", positions);
+        List<Employee> employeesOnBreak = employeeService.findEmployeesOnBreak();
+        model.addAttribute("employeesOnBreak", employeesOnBreak);
+
         return "leader/panel";
     }
+
+    @PostMapping("/position/add-employee/{positionId}")
+    public String addEmployeeToPosition(@PathVariable("positionId") int positionId,
+                                        @ModelAttribute("employees") List<Employee> employees){
+        positionService.addEmployeesIntoPosition(positionId, employees);
+        return "redirect:/leader-panel";
+    }
+
+    @GetMapping("/position/remove-employee/{employeeId}")
+    public String removeEmployeeFromPosition(@PathVariable("employeeId") int employeeId){
+        employeeService.removeEmployeeFromPositionByEmployeeId(employeeId);
+
+        return "redirect:/leader-panel";
+    }
+    @GetMapping("/position/switch-active/{positionId}")
+    public String switchActiveStatus(@PathVariable("positionId") int positionId){
+        positionService.switchActiveStatusByPositionId(positionId);
+
+        return "redirect:/leader-panel";
+    }
+
+
 
     @GetMapping("/employees")
     public String getShiftEmployeesForToday(Model model){
@@ -41,13 +67,4 @@ public class LeaderController {
         return "leader/todays-employees";
     }
 
-    @GetMapping("/positions")
-    public String getAllPositions(Model model){
-
-        List<Position> positions = positionService.findAllPositions();
-        model.addAttribute("positions", positions);
-
-        return "leader/todays-positions";
-
-    }
 }

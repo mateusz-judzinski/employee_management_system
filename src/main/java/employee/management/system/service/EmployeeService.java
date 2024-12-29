@@ -2,6 +2,7 @@ package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Skill;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -15,5 +16,6 @@ public interface EmployeeService {
     void deleteEmployeeById(int id);
     List<Employee> getShiftEmployees(LocalDate localDate);
     List<Employee> findEmployeesBySkillId(int skillId);
-
+    void removeEmployeeFromPositionByEmployeeId(int employeeId);
+    List<Employee> findEmployeesOnBreak();
 }

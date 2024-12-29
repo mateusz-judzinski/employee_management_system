@@ -1,5 +1,6 @@
 package employee.management.system.service;
 
+import employee.management.system.entity.Employee;
 import employee.management.system.entity.Position;
 import employee.management.system.repository.PositionRepository;
 import jakarta.transaction.Transactional;
@@ -53,5 +54,33 @@ public class PositionServiceImpl implements PositionService{
     @Override
     public Position findPositionByName(String name) {
         return positionRepository.findPositionByPositionName(name);
+    }
+
+    @Transactional
+    @Override
+    public void switchActiveStatusByPositionId(int positionId) {
+        Position position = positionRepository.findById(positionId).orElseThrow(() ->
+                new RuntimeException("Position with id: " + positionId + " not found"));
+        position.setIsActive(!position.getIsActive());
+
+        for (Employee employee : position.getEmployees()) {
+            employee.setPosition(positionRepository.findPositionByPositionName("przerwa"));
+        }
+        position.setEmployees(null);
+    }
+
+    @Transactional
+    @Override
+    public void addEmployeesIntoPosition(int positionId, List<Employee> employees) {
+        Position position = positionRepository.findById(positionId).orElseThrow(() ->
+                new RuntimeException("Position with id: " + positionId + " not found"));
+
+        List<Employee> updatedEmployees = position.getEmployees();
+        updatedEmployees.addAll(employees);
+        position.setEmployees(updatedEmployees);
+
+        for (Employee employee : employees) {
+            employee.setPosition(position);
+        }
     }
 }
