@@ -2,6 +2,7 @@ package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Position;
+import employee.management.system.repository.EmployeeRepository;
 import employee.management.system.repository.PositionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import java.util.List;
 public class PositionServiceImpl implements PositionService{
 
     private final PositionRepository positionRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public PositionServiceImpl(PositionRepository positionRepository) {
+    public PositionServiceImpl(PositionRepository positionRepository, EmployeeRepository employeeRepository) {
         this.positionRepository = positionRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -71,11 +74,13 @@ public class PositionServiceImpl implements PositionService{
 
     @Transactional
     @Override
-    public void addEmployeesIntoPosition(int positionId, List<Employee> employees) {
+    public void addEmployeesIntoPosition(int positionId, List<Integer> employeesIds) {
         Position position = positionRepository.findById(positionId).orElseThrow(() ->
                 new RuntimeException("Position with id: " + positionId + " not found"));
 
         List<Employee> updatedEmployees = position.getEmployees();
+        List<Employee> employees = employeeRepository.findAllById(employeesIds);
+
         updatedEmployees.addAll(employees);
         position.setEmployees(updatedEmployees);
 

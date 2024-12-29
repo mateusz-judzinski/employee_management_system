@@ -37,8 +37,13 @@ public class LeaderController {
 
     @PostMapping("/position/add-employee/{positionId}")
     public String addEmployeeToPosition(@PathVariable("positionId") int positionId,
-                                        @ModelAttribute("employees") List<Employee> employees){
-        positionService.addEmployeesIntoPosition(positionId, employees);
+                                        @RequestParam(value = "employeesIds", required = false) List<Integer> employeesIds){
+
+        if(employeesIds == null || employeesIds.isEmpty()){
+            return "redirect:/leader-panel";
+        }
+
+        positionService.addEmployeesIntoPosition(positionId, employeesIds);
         return "redirect:/leader-panel";
     }
 

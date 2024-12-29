@@ -14,5 +14,5 @@ public interface PositionService {
     void deletePositionById(int id);
     Position findPositionByName(String name);
     void switchActiveStatusByPositionId(int positionId);
-    void addEmployeesIntoPosition(int positionId, List<Employee> employees);
+    void addEmployeesIntoPosition(int positionId, List<Integer> employeesIds);
 }
