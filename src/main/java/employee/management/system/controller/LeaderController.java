@@ -27,10 +27,13 @@ public class LeaderController {
 
     @GetMapping()
     public String getLeaderPanel(Model model){
+
+        Position breakPosition = positionService.findPositionByName("przerwa");
+        model.addAttribute("breakPosition", breakPosition);
+
         List<Position> positions = positionService.findAllPositions();
+        positions.remove(breakPosition);
         model.addAttribute("positions", positions);
-        List<Employee> employeesOnBreak = employeeService.findEmployeesOnBreak();
-        model.addAttribute("employeesOnBreak", employeesOnBreak);
 
         return "leader/panel";
     }

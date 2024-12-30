@@ -17,5 +17,4 @@ public interface EmployeeService {
     List<Employee> getShiftEmployees(LocalDate localDate);
     List<Employee> findEmployeesBySkillId(int skillId);
     void removeEmployeeFromPositionByEmployeeId(int employeeId);
-    List<Employee> findEmployeesOnBreak();
 }

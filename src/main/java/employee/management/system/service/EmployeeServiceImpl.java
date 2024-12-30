@@ -86,9 +86,4 @@ public class EmployeeServiceImpl implements EmployeeService{
         employee.setPosition(positionRepository.findPositionByPositionName("przerwa"));
         position.getEmployees().remove(employee);
     }
-
-    @Override
-    public List<Employee> findEmployeesOnBreak() {
-        return employeeRepository.findEmployeesOnBreak();
-    }
 }

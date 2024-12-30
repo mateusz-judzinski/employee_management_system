@@ -9,6 +9,4 @@ import java.util.List;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query("SELECT e FROM Employee e JOIN e.skills s WHERE s.id = :skillId")
     List<Employee> findEmployeesBySkillId(int skillId);
-    @Query("SELECT e FROM Employee e WHERE e.position.positionName = 'przerwa'")
-    List<Employee> findEmployeesOnBreak();
 }
