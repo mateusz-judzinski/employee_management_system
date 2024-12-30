@@ -54,17 +54,17 @@ CREATE TABLE employee (
     has_driving_licence BOOLEAN NOT NULL,
     can_work_in_luggage_room BOOLEAN NOT NULL,
     position_id INT,
+    position_start_time DATETIME,
     FOREIGN KEY (position_id) REFERENCES `position`(id)
 );
 
-INSERT INTO employee (first_name, last_name, email, phone_number, id_card_number, has_driving_licence, can_work_in_luggage_room, position_id) 
+INSERT INTO employee (first_name, last_name, email, phone_number, id_card_number, has_driving_licence, can_work_in_luggage_room, position_id, position_start_time) 
 VALUES 
-('Adam', 'Demski', 'demski@gmail.com', '543241573', 1234, TRUE, TRUE, 1),
-('Grzegorz', 'Wawoczny', 'wawoczny@gmail.com', '869455731', NULL, TRUE, FALSE, 3),
-('Katarzyna', 'Piotrowska', 'k.piotrowska@gmail.com', '689473621', 4321, TRUE, FALSE, 2),
-('Paweł', 'Wiśniewski', 'p.wisniewski@gmail.com', '758924163', 5534, TRUE, TRUE, 5),
-('Monika', 'Lewandowska', 'm.lewandowska@gmail.com', '632874152', NULL, FALSE, FALSE, 4);
-
+('Adam', 'Demski', 'demski@gmail.com', '543241573', 1234, TRUE, TRUE, 1, '2024-12-30 14:00:00'),
+('Grzegorz', 'Wawoczny', 'wawoczny@gmail.com', '869455731', NULL, TRUE, FALSE, 3, '2024-12-30 12:30:00'),
+('Katarzyna', 'Piotrowska', 'k.piotrowska@gmail.com', '689473621', 4321, TRUE, FALSE, 2, '2024-12-30 13:45:00'),
+('Paweł', 'Wiśniewski', 'p.wisniewski@gmail.com', '758924163', 5534, TRUE, TRUE, 5, '2024-12-30 11:00:00'),
+('Monika', 'Lewandowska', 'm.lewandowska@gmail.com', '632874152', NULL, FALSE, FALSE, 4, '2024-12-30 10:30:00');
 
 
 CREATE TABLE shift (
@@ -79,7 +79,7 @@ CREATE TABLE shift (
 
 INSERT INTO shift (employee_id, work_date, shift_name, start_time, end_time) 
 VALUES 
-(1, '2024-12-11', "Zmiana poranna", '06:00:00', '14:00:00'),
+(1, '2024-12-30', "Zmiana poranna", '06:00:00', '14:00:00'),
 (1, '2024-12-15', "Zmiana poranna", '06:00:00', '14:00:00'),
 (2, '2024-12-11', "Zmiana popołudniowa", '10:00:00', '18:00:00'),
 (3, '2024-12-14', "Zmiana nocna", '22:00:00', '06:00:00'),

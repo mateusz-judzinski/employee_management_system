@@ -2,6 +2,10 @@ package employee.management.system.entity;
 
 import jakarta.persistence.*;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +30,10 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
+    @Column(name = "position_start_time")
+    private LocalDateTime positionStartTime;
+    @Transient
+    private Duration duration;
     @Column(name = "has_driving_licence")
     private boolean hasDrivingLicence;
     @Column(name = "can_work_in_luggage_room")
@@ -126,6 +134,32 @@ public class Employee {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public LocalDateTime getPositionStartTime() {
+        return positionStartTime;
+    }
+
+    public void setPositionStartTime(LocalDateTime positionStartTime) {
+        this.positionStartTime = positionStartTime;
+    }
+
+    public Duration getDuration() {
+        if(positionStartTime != null){
+            return Duration.between(positionStartTime, LocalDateTime.now());
+        }
+        return Duration.ZERO;
+    }
+
+    public String getDurationFormatted() {
+        if (positionStartTime != null) {
+            Duration duration = Duration.between(positionStartTime, LocalDateTime.now());
+            long hours = duration.toHours();
+            long minutes = duration.toMinutes() % 60;
+            long seconds = duration.getSeconds() % 60;
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        }
+        return "00:00:00";
     }
 
     public List<Shift> getShifts() {

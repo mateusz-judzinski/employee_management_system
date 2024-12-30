@@ -76,14 +76,4 @@ public class EmployeeServiceImpl implements EmployeeService{
         return employeeRepository.findEmployeesBySkillId(skillId);
     }
 
-    @Transactional
-    @Override
-    public void removeEmployeeFromPositionByEmployeeId(int employeeId) {
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->
-                new RuntimeException("Employee with id: " + employeeId + " not found"));;
-        Position position = employee.getPosition();
-
-        employee.setPosition(positionRepository.findPositionByPositionName("przerwa"));
-        position.getEmployees().remove(employee);
-    }
 }

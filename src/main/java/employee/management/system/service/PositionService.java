@@ -2,6 +2,7 @@ package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Position;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface PositionService {
     Position findPositionByName(String name);
     void switchActiveStatusByPositionId(int positionId);
     void addEmployeesIntoPosition(int positionId, List<Integer> employeesIds);
+    void removeEmployeeFromPositionByEmployeeId(int employeeId);
 }

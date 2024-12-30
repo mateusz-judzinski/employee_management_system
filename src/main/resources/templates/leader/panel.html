@@ -46,7 +46,7 @@
                 </div>
                 <div class="employee" th:each="employee : ${position.employees}">
                     <a th:href="@{'/leader-panel/position/remove-employee/' + ${employee.id}}" class="remove-btn" title="Remove">X</a>
-                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
+                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName} + ' ' + ${employee.getDurationFormatted()}">Employee Name</span>
                 </div>
             </div>
         </td>
@@ -60,14 +60,14 @@
     <tr>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Position</th>
+        <th>Duration</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="employee : ${breakPosition.employees}">
         <td th:text="${employee.firstName}">First Name</td>
         <td th:text="${employee.lastName}">Last Name</td>
-        <td th:text="${breakPosition.positionName}">Position</td>
+        <td th:text="${employee.getDurationFormatted()}">Duration</td>
     </tr>
     </tbody>
 </table>

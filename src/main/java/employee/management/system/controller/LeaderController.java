@@ -52,7 +52,7 @@ public class LeaderController {
 
     @GetMapping("/position/remove-employee/{employeeId}")
     public String removeEmployeeFromPosition(@PathVariable("employeeId") int employeeId){
-        employeeService.removeEmployeeFromPositionByEmployeeId(employeeId);
+        positionService.removeEmployeeFromPositionByEmployeeId(employeeId);
 
         return "redirect:/leader-panel";
     }
@@ -62,8 +62,6 @@ public class LeaderController {
 
         return "redirect:/leader-panel";
     }
-
-
 
     @GetMapping("/employees")
     public String getShiftEmployeesForToday(Model model){
