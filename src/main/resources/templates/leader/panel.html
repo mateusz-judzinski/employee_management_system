@@ -31,7 +31,7 @@
                 <div th:if="${position.isActive}">
                     <form th:action="@{/leader-panel/position/add-employee/{positionId}(positionId=${position.id})}" method="post">
                         <div class="dropdown">
-                            <button type="button">Wybierz pracowników</button>
+                            <button type="button">Choose employee</button>
                             <div class="dropdown-content">
                                 <div th:each="employee : ${breakPosition.employees}">
                                     <label>
