@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leader Panel</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/leader/panel_styles.css">
 </head>
 <body>
 <h1>Leader Panel</h1>
@@ -46,7 +46,8 @@
                 </div>
                 <div class="employee" th:each="employee : ${position.employees}">
                     <a th:href="@{'/leader-panel/position/remove-employee/' + ${employee.id}}" class="remove-btn" title="Remove">X</a>
-                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName} + ' ' + ${employee.getDurationFormatted()}">Employee Name</span>
+                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
+                    <span id="duration-${employee.id}" th:data-starttime="${employee.positionStartTime}">Duration</span>
                 </div>
             </div>
         </td>
@@ -67,9 +68,12 @@
     <tr th:each="employee : ${breakPosition.employees}">
         <td th:text="${employee.firstName}">First Name</td>
         <td th:text="${employee.lastName}">Last Name</td>
-        <td th:text="${employee.getDurationFormatted()}">Duration</td>
+        <td id="duration-${employee.id}" th:data-starttime="${employee.positionStartTime}">Duration</td>
     </tr>
     </tbody>
 </table>
+
+<script src="/js/leader/duration-updater.js"></script>
+
 </body>
 </html>

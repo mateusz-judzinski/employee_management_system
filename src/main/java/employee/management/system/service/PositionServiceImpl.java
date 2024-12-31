@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -31,7 +32,12 @@ public class PositionServiceImpl implements PositionService{
 
     @Override
     public List<Position> findAllPositions() {
-        return positionRepository.findAll();
+        List<Position> positions = positionRepository.findAll();
+        for (Position position : positions) {
+            sortEmployeesByStartTime(position);
+        }
+
+        return positions;
     }
 
     @Transactional
@@ -57,7 +63,10 @@ public class PositionServiceImpl implements PositionService{
 
     @Override
     public Position findPositionByName(String name) {
-        return positionRepository.findPositionByPositionName(name);
+        Position position = positionRepository.findPositionByPositionName(name);
+        sortEmployeesByStartTime(position);
+
+        return position;
     }
 
     @Transactional
@@ -102,5 +111,11 @@ public class PositionServiceImpl implements PositionService{
         employee.setPositionStartTime(LocalDateTime.now());
 
         position.getEmployees().remove(employee);
+    }
+
+    private void sortEmployeesByStartTime(Position position) {
+        if (position.getEmployees() != null) {
+            position.getEmployees().sort(Comparator.comparing(Employee::getPositionStartTime));
+        }
     }
 }

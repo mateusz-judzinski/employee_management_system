@@ -1,6 +1,7 @@
 package employee.management.system.entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -32,8 +33,6 @@ public class Employee {
     private Position position;
     @Column(name = "position_start_time")
     private LocalDateTime positionStartTime;
-    @Transient
-    private Duration duration;
     @Column(name = "has_driving_licence")
     private boolean hasDrivingLicence;
     @Column(name = "can_work_in_luggage_room")
