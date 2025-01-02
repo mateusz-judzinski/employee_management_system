@@ -103,7 +103,7 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean isHasDrivingLicence() {
+    public boolean hasDrivingLicence() {
         return hasDrivingLicence;
     }
 
@@ -111,7 +111,7 @@ public class Employee {
         this.hasDrivingLicence = hasDrivingLicence;
     }
 
-    public boolean isCanWorkInLuggageRoom() {
+    public boolean canWorkInLuggageRoom() {
         return canWorkInLuggageRoom;
     }
 

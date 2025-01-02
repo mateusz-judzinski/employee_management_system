@@ -17,6 +17,8 @@ public class Position {
     private String positionName;
     @Column(name = "description")
     private String description;
+    @Column(name = "need_id_card")
+    private boolean needIdCard;
     @Column(name = "is_active")
     private boolean isActive;
     @OneToMany(mappedBy = "position",
@@ -27,10 +29,11 @@ public class Position {
     public Position() {
     }
 
-    public Position(String positionName, String description, boolean isActive) {
+    public Position(String positionName, String description, boolean needIdCard, boolean isActive) {
         this.positionName = positionName;
         this.description = description;
         this.isActive = isActive;
+        this.needIdCard = needIdCard;
     }
 
     public int getId() {
@@ -55,6 +58,14 @@ public class Position {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isNeedIdCard() {
+        return needIdCard;
+    }
+
+    public void setNeedIdCard(boolean needIdCard) {
+        this.needIdCard = needIdCard;
     }
 
     public boolean getIsActive() {

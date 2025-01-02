@@ -28,22 +28,76 @@
         <td th:text="${position.positionName}">Position Name</td>
         <td>
             <div class="employee-container">
+
                 <div th:if="${position.isActive}">
                     <form th:action="@{/leader-panel/position/add-employee/{positionId}(positionId=${position.id})}" method="post">
                         <div class="dropdown">
                             <button type="button">Choose employee</button>
                             <div class="dropdown-content">
-                                <div th:each="employee : ${breakPosition.employees}">
-                                    <label>
-                                        <input type="checkbox" name="employeesIds" th:value="${employee.id}"/>
-                                        <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
-                                    </label>
+
+                                <div th:switch="${position.positionName}">
+                                    <div th:case="'melex'">
+                                        <div th:each="employee : ${breakPosition.employees}">
+                                            <div th:if="${employee.hasDrivingLicence}">
+                                                <label>
+                                                    <input type="checkbox" name="employeesIds" th:value="${employee.id}" />
+                                                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div th:case="'bagażownia'">
+                                        <div th:each="employee : ${breakPosition.employees}">
+                                            <div th:if="${employee.canWorkInLuggageRoom && employee.idCardNumber != null}">
+                                                <label>
+                                                    <input type="checkbox" name="employeesIds" th:value="${employee.id}" />
+                                                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div th:case="'bagażownia (pomoc)'">
+                                        <div th:each="employee : ${breakPosition.employees}">
+                                            <div th:if="${employee.canWorkInLuggageRoom && employee.idCardNumber == null}">
+                                                <label>
+                                                    <input type="checkbox" name="employeesIds" th:value="${employee.id}" />
+                                                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div th:case="*">
+                                        <div th:if="${position.needIdCard}">
+                                            <div th:each="employee : ${breakPosition.employees}">
+                                                <div th:if="${employee.idCardNumber != null}">
+                                                    <label>
+                                                        <input type="checkbox" name="employeesIds" th:value="${employee.id}" />
+                                                        <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div th:unless="${position.needIdCard}">
+                                            <div th:each="employee : ${breakPosition.employees}">
+                                                <label>
+                                                    <input type="checkbox" name="employeesIds" th:value="${employee.id}" />
+                                                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <button type="submit" style="margin-top: 10px; background-color: #28a745; color: #fff;">Confirm</button>
                             </div>
                         </div>
                     </form>
                 </div>
+
                 <div class="employee" th:each="employee : ${position.employees}">
                     <a th:href="@{'/leader-panel/position/remove-employee/' + ${employee.id}}" class="remove-btn" title="Remove">X</a>
                     <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
