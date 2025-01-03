@@ -1,19 +1,25 @@
 package employee.management.system.service;
 
+import employee.management.system.entity.Employee;
 import employee.management.system.entity.PositionEmployeeHistory;
 import employee.management.system.repository.PositionEmployeeHistoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class PositionEmployeeHistoryHistoryServiceImpl implements PositionEmployeeHistoryService {
+public class PositionEmployeeHistoryServiceImpl implements PositionEmployeeHistoryService {
     private final PositionEmployeeHistoryRepository positionEmployeeHistoryRepository;
 
     @Autowired
-    public PositionEmployeeHistoryHistoryServiceImpl(PositionEmployeeHistoryRepository positionEmployeeHistoryRepository) {
+    public PositionEmployeeHistoryServiceImpl(PositionEmployeeHistoryRepository positionEmployeeHistoryRepository) {
         this.positionEmployeeHistoryRepository = positionEmployeeHistoryRepository;
     }
 
@@ -52,5 +58,22 @@ public class PositionEmployeeHistoryHistoryServiceImpl implements PositionEmploy
             throw new RuntimeException("History with id: " + id + " not found");
         }
         positionEmployeeHistoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Map<Integer, LocalDateTime> findAllActiveEmployeesAndStartTimeDate() {
+        List<PositionEmployeeHistory> histories = positionEmployeeHistoryRepository.findActivePositionEmployeeHistories();
+
+        Map<Integer, LocalDateTime> activeEmployees = new HashMap<>();
+        for (PositionEmployeeHistory history : histories) {
+            int employeeId = history.getEmployee().getId();
+            LocalDate startDate = history.getStartDate();
+            LocalTime startTime = history.getStartTime();
+
+            LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+            activeEmployees.put(employeeId, startDateTime);
+        }
+
+        return activeEmployees;
     }
 }

@@ -91,17 +91,16 @@ CREATE TABLE employee (
     phone_number VARCHAR(50) NOT NULL,
     id_card_number VARCHAR(50),
     position_id INT,
-    position_start_time DATETIME,
     FOREIGN KEY (position_id) REFERENCES `position`(id)
 );
 
-INSERT INTO employee (first_name, last_name, email, phone_number, id_card_number, position_id, position_start_time) 
+INSERT INTO employee (first_name, last_name, email, phone_number, id_card_number, position_id) 
 VALUES 
-('Adam', 'Demski', 'demski@gmail.com', '543241573', 1234, 1, '2024-12-30 14:00:00'),
-('Grzegorz', 'Wawoczny', 'wawoczny@gmail.com', '869455731', NULL, 3, '2024-12-30 12:30:00'),
-('Katarzyna', 'Piotrowska', 'k.piotrowska@gmail.com', '689473621', 4321, 2, '2024-12-30 13:45:00'),
-('Paweł', 'Wiśniewski', 'p.wisniewski@gmail.com', '758924163', 5534, 5, '2024-12-30 11:00:00'),
-('Monika', 'Lewandowska', 'm.lewandowska@gmail.com', '632874152', NULL, 4, '2024-12-30 10:30:00');
+('Adam', 'Demski', 'demski@gmail.com', '543241573', 1234, 3),
+('Grzegorz', 'Wawoczny', 'wawoczny@gmail.com', '869455731', NULL, 3),
+('Katarzyna', 'Piotrowska', 'k.piotrowska@gmail.com', '689473621', 4321, 3),
+('Paweł', 'Wiśniewski', 'p.wisniewski@gmail.com', '758924163', 5534, 3),
+('Monika', 'Lewandowska', 'm.lewandowska@gmail.com', '632874152', NULL, 3);
 
 
 CREATE TABLE shift (
@@ -150,7 +149,6 @@ VALUES
 (3, 3),
 (4, 4),
 (5, 4);
-
 
 CREATE TABLE position_qualification (
     position_id INT NOT NULL,
@@ -202,16 +200,22 @@ CREATE TABLE position_employee_history (
     position_id INT NOT NULL,
     start_date DATE NOT NULL,
     start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
+    end_time TIME,
+    is_active BOOLEAN NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(id),
     FOREIGN KEY (position_id) REFERENCES `position`(id)
 );
 
-INSERT INTO position_employee_history (employee_id, position_id, start_date, start_time, end_time)
+INSERT INTO position_employee_history (employee_id, position_id, start_date, start_time, end_time, is_active)
 VALUES
-(1, 1, '2023-01-01', '08:00:00', '16:00:00'),
-(1, 2, '2023-06-02', '09:00:00', '17:00:00'),
-(2, 2, '2022-03-01', '07:00:00', '15:00:00'),
-(2, 3, '2023-03-02', '10:00:00', '18:00:00'),
-(3, 1, '2021-05-15', '08:30:00', '16:30:00'),
-(4, 4, '2024-01-01', '09:00:00', '17:00:00');
+(1, 3, '2025-01-03', '18:00:00', null, true),
+(2, 3, '2025-01-03', '18:00:00', null, true),
+(3, 3, '2025-01-03', '18:00:00', null, true),
+(4, 3, '2025-01-03', '18:00:00', null, true),
+(5, 3, '2025-01-03', '18:00:00', null, true),
+(1, 1, '2023-01-01', '08:00:00', '16:00:00', false),
+(1, 2, '2023-06-02', '09:00:00', '17:00:00', false),
+(2, 2, '2022-03-01', '07:00:00', '15:00:00', false),
+(2, 3, '2023-03-02', '10:00:00', '18:00:00', false),
+(3, 1, '2021-05-15', '08:30:00', '16:30:00', false),
+(4, 4, '2024-01-01', '09:00:00', '17:00:00', false);

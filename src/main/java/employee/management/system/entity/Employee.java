@@ -28,8 +28,6 @@ public class Employee {
     private String phoneNumber;
     @Column(name = "id_card_number")
     private Integer idCardNumber;
-    @Column(name = "position_start_time")
-    private LocalDateTime positionStartTime;
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
@@ -115,32 +113,6 @@ public class Employee {
 
     public void setPosition(Position position) {
         this.position = position;
-    }
-
-    public LocalDateTime getPositionStartTime() {
-        return positionStartTime;
-    }
-
-    public void setPositionStartTime(LocalDateTime positionStartTime) {
-        this.positionStartTime = positionStartTime;
-    }
-
-    public Duration getDuration() {
-        if(positionStartTime != null){
-            return Duration.between(positionStartTime, LocalDateTime.now());
-        }
-        return Duration.ZERO;
-    }
-
-    public String getDurationFormatted() {
-        if (positionStartTime != null) {
-            Duration duration = Duration.between(positionStartTime, LocalDateTime.now());
-            long hours = duration.toHours();
-            long minutes = duration.toMinutes() % 60;
-            long seconds = duration.getSeconds() % 60;
-            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        }
-        return "00:00:00";
     }
 
     public boolean hasAllNeededQualification(Position position) {

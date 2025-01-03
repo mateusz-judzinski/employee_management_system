@@ -27,15 +27,18 @@ public class PositionEmployeeHistory {
     private LocalTime startTime;
     @Column(name = "end_time")
     private LocalTime endTime;
+    @Column(name = "is_active")
+    private boolean isActive;
 
     public PositionEmployeeHistory() {
     }
 
-    public PositionEmployeeHistory(Employee employee, LocalDate startDate, LocalTime startTime) {
+    public PositionEmployeeHistory(Employee employee, Position position) {
         this.employee = employee;
-        this.startDate = startDate;
-        this.startTime = startTime;
-        this.endTime = LocalTime.now();
+        this.position = position;
+        startDate = LocalDate.now();
+        startTime = LocalTime.now();
+        isActive = true;
     }
 
     public int getId() {
@@ -84,6 +87,14 @@ public class PositionEmployeeHistory {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override
