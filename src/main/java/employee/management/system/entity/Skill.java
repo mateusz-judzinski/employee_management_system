@@ -17,13 +17,12 @@ public class Skill {
     private String skillName;
     @Column(name = "description")
     private String description;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(
-            name = "employee_skill",
-            joinColumns = @JoinColumn(name = "skill_id"),
-            inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    private List<Employee> employees;
+    private List<Position> positions;
+    @OneToMany(mappedBy = "skill",
+            cascade = CascadeType.ALL)
+    private List<EmployeeSkill> employees;
 
     public Skill() {
     }
@@ -57,11 +56,19 @@ public class Skill {
         this.description = description;
     }
 
-    public List<Employee> getEmployees() {
+    public List<Position> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
+    }
+
+    public List<EmployeeSkill> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(List<EmployeeSkill> employees) {
         this.employees = employees;
     }
 
@@ -75,13 +82,21 @@ public class Skill {
                 '}';
     }
 
-    void addEmployee(Employee employee){
+    void addEmployee(EmployeeSkill employee){
 
         if(employees == null){
             employees = new ArrayList<>();
         }
         employees.add(employee);
-        employee.getSkills().add(this);
+        employee.setSkill(this);
 
+    }
+
+    void addPosition(Position position){
+        if(positions == null){
+            positions = new ArrayList<>();
+        }
+        positions.add(position);
+        position.setSkill(this);
     }
 }

@@ -17,23 +17,33 @@ public class Position {
     private String positionName;
     @Column(name = "description")
     private String description;
-    @Column(name = "need_id_card")
-    private boolean needIdCard;
     @Column(name = "is_active")
     private boolean isActive;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "skill_id")
+    private Skill skill;
     @OneToMany(mappedBy = "position",
                 cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                         CascadeType.DETACH, CascadeType.REFRESH})
     private List<Employee> employees;
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "position_qualification",
+            joinColumns = @JoinColumn(name = "position_id"),
+            inverseJoinColumns = @JoinColumn(name = "qualification_id")
+    )
+    private List<Qualification> neededQualifications;
 
     public Position() {
     }
 
-    public Position(String positionName, String description, boolean needIdCard, boolean isActive) {
+    public Position(String positionName, String description, boolean isActive) {
         this.positionName = positionName;
         this.description = description;
         this.isActive = isActive;
-        this.needIdCard = needIdCard;
     }
 
     public int getId() {
@@ -60,14 +70,6 @@ public class Position {
         this.description = description;
     }
 
-    public boolean isNeedIdCard() {
-        return needIdCard;
-    }
-
-    public void setNeedIdCard(boolean needIdCard) {
-        this.needIdCard = needIdCard;
-    }
-
     public boolean getIsActive() {
         return isActive;
     }
@@ -76,12 +78,28 @@ public class Position {
         isActive = active;
     }
 
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
+    }
+
     public List<Employee> getEmployees() {
         return employees;
     }
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public List<Qualification> getNeededQualifications() {
+        return neededQualifications;
+    }
+
+    public void setNeededQualifications(List<Qualification> neededQualifications) {
+        this.neededQualifications = neededQualifications;
     }
 
     @Override
@@ -99,5 +117,14 @@ public class Position {
             employees = new ArrayList<>();
         }
         employees.add(employee);
+        employee.setPosition(this);
+    }
+
+    public void addQualification(Qualification qualification){
+        if(neededQualifications == null){
+            neededQualifications = new ArrayList<>();
+        }
+        neededQualifications.add(qualification);
+        qualification.getPositions().add(this);
     }
 }

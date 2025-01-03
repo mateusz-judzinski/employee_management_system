@@ -28,38 +28,36 @@ public class Employee {
     private String phoneNumber;
     @Column(name = "id_card_number")
     private Integer idCardNumber;
+    @Column(name = "position_start_time")
+    private LocalDateTime positionStartTime;
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
-    @Column(name = "position_start_time")
-    private LocalDateTime positionStartTime;
-    @Column(name = "has_driving_licence")
-    private boolean hasDrivingLicence;
-    @Column(name = "can_work_in_luggage_room")
-    private boolean canWorkInLuggageRoom;
     @OneToMany(mappedBy = "employee",
+            cascade = CascadeType.ALL)
+    private List<Shift> shifts;
+    @OneToMany(mappedBy = "employee",
+            cascade = CascadeType.ALL)
+    private List<EmployeeSkill> skills;
+
+    @ManyToMany(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
-    private List<Shift> shifts;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
-            name = "employee_skill",
+            name = "employee_qualification",
             joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
+            inverseJoinColumns = @JoinColumn(name = "qualification_id")
     )
-    private List<Skill> skills;
+    private List<Qualification> qualifications;
 
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber, boolean hasDrivingLicence, boolean canWorkInLuggageRoom) {
+    public Employee(String firstName, String lastName, String email, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.hasDrivingLicence = hasDrivingLicence;
-        this.canWorkInLuggageRoom = canWorkInLuggageRoom;
         idCardNumber = null;
     }
 
@@ -101,22 +99,6 @@ public class Employee {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public boolean hasDrivingLicence() {
-        return hasDrivingLicence;
-    }
-
-    public void setHasDrivingLicence(boolean hasDrivingLicence) {
-        this.hasDrivingLicence = hasDrivingLicence;
-    }
-
-    public boolean canWorkInLuggageRoom() {
-        return canWorkInLuggageRoom;
-    }
-
-    public void setCanWorkInLuggageRoom(boolean canWorkInLuggageRoom) {
-        this.canWorkInLuggageRoom = canWorkInLuggageRoom;
     }
 
     public Integer getIdCardNumber() {
@@ -161,6 +143,14 @@ public class Employee {
         return "00:00:00";
     }
 
+    public boolean hasAllNeededQualification(Position position) {
+        if (position == null || position.getNeededQualifications() == null || position.getNeededQualifications().isEmpty()) {
+            return true;
+        }
+        return qualifications.containsAll(position.getNeededQualifications());
+    }
+
+
     public List<Shift> getShifts() {
         return shifts;
     }
@@ -169,12 +159,20 @@ public class Employee {
         this.shifts = shifts;
     }
 
-    public List<Skill> getSkills() {
+    public List<EmployeeSkill> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<Skill> skills) {
+    public void setSkills(List<EmployeeSkill> skills) {
         this.skills = skills;
+    }
+
+    public List<Qualification> getQualifications() {
+        return qualifications;
+    }
+
+    public void setQualifications(List<Qualification> qualifications) {
+        this.qualifications = qualifications;
     }
 
     @Override
@@ -198,12 +196,21 @@ public class Employee {
         shift.setEmployee(this);
     }
 
-    public void addSkill(Skill skill){
+    public void addSkill(EmployeeSkill skill){
 
         if(skills == null){
             skills = new ArrayList<>();
         }
         skills.add(skill);
-        skill.getEmployees().add(this);
+        skill.setEmployee(this);
+    }
+
+    public void addQualification(Qualification qualification){
+
+        if(qualifications == null){
+            qualifications = new ArrayList<>();
+        }
+        qualifications.add(qualification);
+        qualification.getEmployees().add(this);
     }
 }

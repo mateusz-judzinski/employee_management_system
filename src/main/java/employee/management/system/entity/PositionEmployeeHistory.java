@@ -1,16 +1,15 @@
-package employee.management.system.entity.history;
+package employee.management.system.entity;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Position;
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "position_employee_history")
-public class PositionEmployee {
+public class PositionEmployeeHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +28,10 @@ public class PositionEmployee {
     @Column(name = "end_time")
     private LocalTime endTime;
 
-    public PositionEmployee() {
+    public PositionEmployeeHistory() {
     }
 
-    public PositionEmployee(Employee employee, LocalDate startDate, LocalTime startTime) {
+    public PositionEmployeeHistory(Employee employee, LocalDate startDate, LocalTime startTime) {
         this.employee = employee;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -89,7 +88,7 @@ public class PositionEmployee {
 
     @Override
     public String toString() {
-        return "PositionEmployee{" +
+        return "PositionEmployeeHistory{" +
                 "id=" + id +
                 ", employee=" + employee +
                 ", startDate=" + startDate +
