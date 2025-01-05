@@ -20,8 +20,8 @@ public class EmployeeSkill {
     private Skill skill;
     @Column(name = "proficiency_level")
     private int proficiencyLevel;
-    @Column(name = "time_experience")
-    private LocalTime timeExperience;
+    @Column(name = "time_experience_in_minutes")
+    private int timeExperienceInMinutes;
 
     public EmployeeSkill() {
     }
@@ -30,7 +30,7 @@ public class EmployeeSkill {
         this.employee = employee;
         this.skill = skill;
         proficiencyLevel = 0;
-        timeExperience = LocalTime.parse("00:00:00");
+        timeExperienceInMinutes = 0;
     }
 
     public int getId() {
@@ -65,15 +65,15 @@ public class EmployeeSkill {
         this.proficiencyLevel = proficiencyLevel;
     }
 
-    public LocalTime getTimeExperience() {
-        return timeExperience;
+    public int getTimeExperienceInMinutes() {
+        return timeExperienceInMinutes;
     }
 
-    public void setTimeExperience(LocalTime timeExperience) {
-        this.timeExperience = timeExperience;
+    public void setTimeExperienceInMinutes(int timeExperienceInMinutes) {
+        this.timeExperienceInMinutes = timeExperienceInMinutes;
     }
 
-    public void addExperience(int hours, int minutes, int seconds) {
-        this.timeExperience = this.timeExperience.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+    public void addExperience(int minutes) {
+        this.timeExperienceInMinutes = this.timeExperienceInMinutes + minutes;
     }
 }

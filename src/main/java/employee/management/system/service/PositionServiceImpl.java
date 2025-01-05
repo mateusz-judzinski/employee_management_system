@@ -1,16 +1,15 @@
 package employee.management.system.service;
 
-import employee.management.system.entity.Employee;
-import employee.management.system.entity.Position;
-import employee.management.system.entity.PositionEmployeeHistory;
+import employee.management.system.entity.*;
 import employee.management.system.repository.EmployeeRepository;
+import employee.management.system.repository.EmployeeSkillRepository;
 import employee.management.system.repository.PositionEmployeeHistoryRepository;
 import employee.management.system.repository.PositionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
@@ -21,12 +20,14 @@ public class PositionServiceImpl implements PositionService{
     private final PositionRepository positionRepository;
     private final EmployeeRepository employeeRepository;
     private final PositionEmployeeHistoryRepository historyRepository;
+    private final EmployeeSkillRepository employeeSkillRepository;
 
     @Autowired
-    public PositionServiceImpl(PositionRepository positionRepository, EmployeeRepository employeeRepository, PositionEmployeeHistoryRepository historyRepository) {
+    public PositionServiceImpl(PositionRepository positionRepository, EmployeeRepository employeeRepository, PositionEmployeeHistoryRepository historyRepository, EmployeeSkillRepository employeeSkillRepository) {
         this.positionRepository = positionRepository;
         this.employeeRepository = employeeRepository;
         this.historyRepository = historyRepository;
+        this.employeeSkillRepository = employeeSkillRepository;
     }
 
     @Override
@@ -132,10 +133,29 @@ public class PositionServiceImpl implements PositionService{
     private void processHistory(Employee employee, Position newPosition){
 
         PositionEmployeeHistory history = historyRepository.findByEmployeeIdAndIsActiveTrue(employee.getId());
+
+        LocalTime startTime = history.getStartTime();
+        updateEmployeeSkillTimeExperience(employee, startTime);
+
         history.setEndTime(LocalTime.now());
         history.setActive(false);
 
         PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, newPosition);
         historyRepository.save(newHistory);
     }
-}
+
+    private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime){
+
+        if(employee.getPosition().getSkill() != null){
+            int minutes = (int) Duration.between(startTime, LocalTime.now()).toMinutes();
+
+            int employeeId = employee.getId();
+            int skillId = employee.getPosition().getId();
+
+            EmployeeSkill employeeSkill = employeeSkillRepository.findEmployeeSkillByEmployeeIdAndSkillId(employeeId, skillId);
+            employeeSkill.addExperience(minutes);
+
+            employeeSkillRepository.save(employeeSkill);
+            }
+        }
+    }
