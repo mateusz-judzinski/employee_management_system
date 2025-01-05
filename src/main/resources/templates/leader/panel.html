@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="/css/leader/panel_styles.css">
 </head>
 <body>
-<h1>Leader Panel</h1>
+<h1>Panel Lidera</h1>
 
-<h2>Positions</h2>
+<h2>Stanowiska</h2>
 
 <div class="legend">
     <img src="/images/level_0.png" alt="Level 0"> Brak doświadczenia
@@ -22,18 +22,18 @@
     <thead>
     <tr>
         <th>Status</th>
-        <th>Position Name</th>
-        <th>Employees</th>
+        <th>Nazwa stanowiska</th>
+        <th>Pracownicy</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="position : ${positions}" th:classappend="${!position.isActive} ? 'inactive'">
         <td>
             <a th:href="@{'/leader-panel/position/switch-active/' + ${position.id}}" class="toggle-btn">
-                <span th:text="${position.isActive ? 'Deactivate' : 'Activate'}">Toggle</span>
+                <span th:text="${position.isActive ? 'Dezaktywuj' : 'Aktywuj'}">Toggle</span>
             </a>
         </td>
-        <td th:text="${position.positionName}">Position Name</td>
+        <td th:text="${position.positionName}" th:title="${position.description}">Position Name</td>
         <td>
             <div class="employee-container">
                 <div th:if="${position.isActive}">
@@ -67,13 +67,17 @@
     </tbody>
 </table>
 
-<h2>Employees on Break</h2>
+<div class="mt-4">
+    <a href="/leader-panel/position/add-temporary" class="add-temp-position-btn">Dodaj tymczasowe stanowisko</a>
+</div>
+
+<h2>Pracownicy na przerwie</h2>
 <table>
     <thead>
     <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Duration</th>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Długość przerwy</th>
     </tr>
     </thead>
     <tbody>

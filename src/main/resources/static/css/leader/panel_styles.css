@@ -137,3 +137,29 @@ tbody tr.inactive {
     vertical-align: middle;
     margin-right: 5px;
 }
+
+.add-temp-position-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.add-temp-position-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.add-temp-position-btn:active {
+    background-color: #1e7e34;
+    transform: translateY(1px);
+}
+
