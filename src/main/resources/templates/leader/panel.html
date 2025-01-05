@@ -10,6 +10,14 @@
 <h1>Leader Panel</h1>
 
 <h2>Positions</h2>
+
+<div class="legend">
+    <img src="/images/level_0.png" alt="Level 0"> Brak doświadczenia
+    <img src="/images/level_1.png" alt="Level 1"> Początkujący
+    <img src="/images/level_2.png" alt="Level 2"> Średnio zaawansowany
+    <img src="/images/level_3.png" alt="Level 3"> Zaawansowany
+</div>
+
 <table>
     <thead>
     <tr>
@@ -37,6 +45,7 @@
                                     <div th:if="${employee.hasAllNeededQualification(position)}">
                                         <label>
                                             <input type="checkbox" name="employeesIds" th:value="${employee.id}"/>
+                                            <img th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
                                             <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
                                         </label>
                                     </div>
@@ -48,6 +57,7 @@
                 </div>
                 <div class="employee" th:each="employee : ${position.employees}">
                     <a th:href="@{'/leader-panel/position/remove-employee/' + ${employee.id}}" class="remove-btn" title="Remove">X</a>
+                    <img th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
                     <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
                     <span id="duration-${employee.id}" th:data-starttime="${activeEmployees[employee.id]}">Duration</span>
                 </div>

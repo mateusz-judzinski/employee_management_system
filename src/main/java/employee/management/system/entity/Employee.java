@@ -122,6 +122,17 @@ public class Employee {
         return qualifications.containsAll(position.getNeededQualifications());
     }
 
+    public int getSkillProficiencyLevelForPosition(Position position){
+        Skill positionSkill = position.getSkill();
+        int proficiencyLevel = 0;
+
+        for (EmployeeSkill employeeSkill:skills) {
+            if(employeeSkill.getSkill() == positionSkill){
+                proficiencyLevel = employeeSkill.getProficiencyLevel();
+            }
+        }
+        return proficiencyLevel;
+    }
 
     public List<Shift> getShifts() {
         return shifts;

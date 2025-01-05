@@ -2,12 +2,15 @@ package employee.management.system.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "employee_skill")
 public class EmployeeSkill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -16,15 +19,18 @@ public class EmployeeSkill {
     @JoinColumn(name = "skill_id")
     private Skill skill;
     @Column(name = "proficiency_level")
-    private String proficiencyLevel;
+    private int proficiencyLevel;
+    @Column(name = "time_experience")
+    private LocalTime timeExperience;
 
     public EmployeeSkill() {
     }
 
-    public EmployeeSkill(Employee employee, Skill skill, String proficiencyLevel) {
+    public EmployeeSkill(Employee employee, Skill skill) {
         this.employee = employee;
         this.skill = skill;
-        this.proficiencyLevel = proficiencyLevel;
+        proficiencyLevel = 0;
+        timeExperience = LocalTime.parse("00:00:00");
     }
 
     public int getId() {
@@ -51,13 +57,23 @@ public class EmployeeSkill {
         this.skill = skill;
     }
 
-    public String getProficiencyLevel() {
+    public int getProficiencyLevel() {
         return proficiencyLevel;
     }
 
-    public void setProficiencyLevel(String proficiencyLevel) {
+    public void setProficiencyLevel(int proficiencyLevel) {
         this.proficiencyLevel = proficiencyLevel;
     }
 
+    public LocalTime getTimeExperience() {
+        return timeExperience;
+    }
 
+    public void setTimeExperience(LocalTime timeExperience) {
+        this.timeExperience = timeExperience;
+    }
+
+    public void addExperience(int hours, int minutes, int seconds) {
+        this.timeExperience = this.timeExperience.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+    }
 }

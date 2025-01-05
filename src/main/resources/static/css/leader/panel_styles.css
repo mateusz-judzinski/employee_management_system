@@ -126,3 +126,14 @@ tbody tr.inactive {
 .remove-btn:hover {
     background-color: #cc0000;
 }
+
+.legend {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.legend img {
+    vertical-align: middle;
+    margin-right: 5px;
+}
