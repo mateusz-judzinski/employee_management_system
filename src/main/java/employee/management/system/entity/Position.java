@@ -19,6 +19,8 @@ public class Position {
     private String description;
     @Column(name = "is_active")
     private boolean isActive;
+    @Column(name = "is_temporary")
+    private boolean isTemporary;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "skill_id")
@@ -40,10 +42,11 @@ public class Position {
     public Position() {
     }
 
-    public Position(String positionName, String description, boolean isActive) {
+    public Position(String positionName, String description, boolean isActive, boolean isTemporary) {
         this.positionName = positionName;
         this.description = description;
         this.isActive = isActive;
+        this.isTemporary = isTemporary;
     }
 
     public int getId() {
@@ -76,6 +79,14 @@ public class Position {
 
     public void setIsActive(boolean active) {
         isActive = active;
+    }
+
+    public boolean isTemporary() {
+        return isTemporary;
+    }
+
+    public void setTemporary(boolean temporary) {
+        isTemporary = temporary;
     }
 
     public Skill getSkill() {

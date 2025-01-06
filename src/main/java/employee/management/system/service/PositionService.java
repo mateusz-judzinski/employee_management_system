@@ -17,4 +17,5 @@ public interface PositionService {
     void switchActiveStatusByPositionId(int positionId);
     void addEmployeesIntoPosition(int positionId, List<Integer> employeesIds);
     void removeEmployeeFromPositionByEmployeeId(int employeeId);
+    void addTemporaryPosition(String positionName, String description);
 }

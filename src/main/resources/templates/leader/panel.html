@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leader Panel</title>
     <link rel="stylesheet" href="/css/leader/panel_styles.css">
+    <link rel="stylesheet" href="/css/leader/temp-position-form.css">
+    <link rel="stylesheet" href="/css/leader/deactivation-pop-up.css">
 </head>
 <body>
 <h1>Panel Lidera</h1>
@@ -27,13 +29,29 @@
     </tr>
     </thead>
     <tbody>
+
     <tr th:each="position : ${positions}" th:classappend="${!position.isActive} ? 'inactive'">
         <td>
-            <a th:href="@{'/leader-panel/position/switch-active/' + ${position.id}}" class="toggle-btn">
+            <a th:if="${position.isTemporary}" class="toggle-btn"
+               th:data-position-id="${position.id}" id="deactivate-link-${position.id}">
+                <span th:text="${position.isActive ? 'Dezaktywuj' : 'Aktywuj'}">Toggle</span>
+            </a>
+            <a th:if="${!position.isTemporary}" th:href="@{'/leader-panel/position/switch-active/' + ${position.id}}" class="toggle-btn">
                 <span th:text="${position.isActive ? 'Dezaktywuj' : 'Aktywuj'}">Toggle</span>
             </a>
         </td>
-        <td th:text="${position.positionName}" th:title="${position.description}">Position Name</td>
+
+        <td th:if="${position.isTemporary}"
+            class="position-name"
+            th:text="${position.positionName}"
+            th:title="${position.description}">
+            Position Name
+        </td>
+        <td th:unless="${position.isTemporary}"
+            th:text="${position.positionName}">
+            Position Name
+        </td>
+
         <td>
             <div class="employee-container">
                 <div th:if="${position.isActive}">
@@ -45,7 +63,7 @@
                                     <div th:if="${employee.hasAllNeededQualification(position)}">
                                         <label>
                                             <input type="checkbox" name="employeesIds" th:value="${employee.id}"/>
-                                            <img th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
+                                            <img th:if="${!position.isTemporary}" th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
                                             <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
                                         </label>
                                     </div>
@@ -68,7 +86,35 @@
 </table>
 
 <div class="mt-4">
-    <a href="/leader-panel/position/add-temporary" class="add-temp-position-btn">Dodaj tymczasowe stanowisko</a>
+    <button id="add-temp-position-btn" class="add-temp-position-btn">Dodaj tymczasowe stanowisko</button>
+</div>
+
+<div id="temp-position-form-overlay" style="display: none;">
+    <div id="temp-position-form-popup">
+        <span id="close-popup-btn">&times;</span>
+        <form th:action="@{/leader-panel/position/add-temporary}" method="post">
+            <div>
+                <label for="positionName">Nazwa stanowiska:</label>
+                <input type="text" id="positionName" name="positionName" required>
+            </div>
+            <div>
+                <label for="description">Opis stanowiska:</label>
+                <textarea id="description" name="description" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="popup-submit-btn">Dodaj stanowisko</button>
+        </form>
+    </div>
+</div>
+
+<div id="deactivation-popup" style="display: none;">
+    <div class="popup-content">
+        <span id="close-popup-btn">&times;</span>
+        <p>Uwaga! Po dezaktywacji stanowiska, nastąpi jego trwałe usunięcie. Czy na pewno chcesz kontynuować?</p>
+        <form id="deactivation-form" th:action="@{/leader-panel/position/deactivate-temporary}" method="post">
+            <input type="hidden" id="position-id" name="positionId">
+            <button type="submit" id="continue-btn">Kontynuuj</button>
+        </form>
+    </div>
 </div>
 
 <h2>Pracownicy na przerwie</h2>
@@ -89,6 +135,8 @@
     </tbody>
 </table>
 
+<script src="/js/leader/deactivation-pop-up.js"></script>
+<script src="/js/leader/temp-position-form.js"></script>
 <script src="/js/leader/duration-updater.js"></script>
 
 </body>

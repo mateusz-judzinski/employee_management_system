@@ -15,7 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class PositionServiceImpl implements PositionService{
+public class PositionServiceImpl implements PositionService {
 
     private final PositionRepository positionRepository;
     private final EmployeeRepository employeeRepository;
@@ -61,7 +61,7 @@ public class PositionServiceImpl implements PositionService{
     @Transactional
     @Override
     public void deletePositionById(int id) {
-        if(!positionRepository.existsById(id)){
+        if (!positionRepository.existsById(id)) {
             throw new RuntimeException("Position with id: " + id + " not found");
         }
         positionRepository.deleteById(id);
@@ -80,15 +80,21 @@ public class PositionServiceImpl implements PositionService{
     public void switchActiveStatusByPositionId(int positionId) {
         Position position = positionRepository.findById(positionId).orElseThrow(() ->
                 new RuntimeException("Position with id: " + positionId + " not found"));
-        position.setIsActive(!position.getIsActive());
 
+        position.setIsActive(!position.getIsActive());
         Position breakPosition = positionRepository.findPositionByPositionName("przerwa");
 
         for (Employee employee : position.getEmployees()) {
             processHistory(employee, breakPosition);
             employee.setPosition(breakPosition);
         }
-        position.setEmployees(null);
+
+        if(position.isTemporary()){
+            positionRepository.delete(position);
+        }
+        else{
+            position.setEmployees(null);
+        }
     }
 
     @Transactional
@@ -108,6 +114,7 @@ public class PositionServiceImpl implements PositionService{
             employee.setPosition(position);
         }
     }
+
     @Transactional
     @Override
     public void removeEmployeeFromPositionByEmployeeId(int employeeId) {
@@ -123,6 +130,14 @@ public class PositionServiceImpl implements PositionService{
         position.getEmployees().remove(employee);
     }
 
+    @Transactional
+    @Override
+    public void addTemporaryPosition(String positionName, String description) {
+
+        Position temporaryPosition = new Position(positionName, description, true, true);
+        positionRepository.save(temporaryPosition);
+    }
+
     private void sortEmployeesByStartTime(Position position) {
         if (position.getEmployees() != null) {
             position.getEmployees().sort(Comparator.comparing(employee ->
@@ -130,7 +145,7 @@ public class PositionServiceImpl implements PositionService{
         }
     }
 
-    private void processHistory(Employee employee, Position newPosition){
+    private void processHistory(Employee employee, Position newPosition) {
 
         PositionEmployeeHistory history = historyRepository.findByEmployeeIdAndIsActiveTrue(employee.getId());
 
@@ -140,13 +155,20 @@ public class PositionServiceImpl implements PositionService{
         history.setEndTime(LocalTime.now());
         history.setActive(false);
 
-        PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, newPosition);
-        historyRepository.save(newHistory);
+        if(newPosition.isTemporary()){
+            Position otherPosition = positionRepository.findPositionByPositionName("inne");
+            PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, otherPosition);
+            historyRepository.save(newHistory);
+        }
+        else{
+            PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, newPosition);
+            historyRepository.save(newHistory);
+        }
     }
 
-    private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime){
+    private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime) {
 
-        if(employee.getPosition().getSkill() != null){
+        if (employee.getPosition().getSkill() != null) {
             int minutes = (int) Duration.between(startTime, LocalTime.now()).toMinutes();
 
             int employeeId = employee.getId();
@@ -156,6 +178,6 @@ public class PositionServiceImpl implements PositionService{
             employeeSkill.addExperience(minutes);
 
             employeeSkillRepository.save(employeeSkill);
-            }
         }
     }
+}

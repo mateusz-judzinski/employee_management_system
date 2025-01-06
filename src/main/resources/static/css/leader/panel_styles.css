@@ -163,3 +163,7 @@ tbody tr.inactive {
     transform: translateY(1px);
 }
 
+.position-name {
+    cursor: help;
+}
+

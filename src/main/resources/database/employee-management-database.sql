@@ -64,23 +64,24 @@ CREATE TABLE `position` (
     id INT AUTO_INCREMENT PRIMARY KEY,
     position_name VARCHAR(100) NOT NULL,
 	description TEXT,
-    is_active BOOLEAN,
+    is_active BOOLEAN NOT NULL,
+    is_temporary BOOLEAN NOT NULL,
     skill_id INT,
     FOREIGN KEY (skill_id) REFERENCES `skill`(id)
 );
 
-INSERT INTO `position` (position_name, description, is_active, skill_id) 
+INSERT INTO `position` (position_name, description, is_active, is_temporary, skill_id) 
 VALUES 
-("ciąg", "ciąg pierwszy", true, 1),
-("skan", "skan główny", true, 2),
-("przerwa", "przerwa", true, null),
-("paszportówka", "paszportówka przy kontroli granicznej", true, 3),
-("paszportówka (pomoc)", "pomoc przez vke", true, null),
-("przylot", "obsługa przylotów", true, 4),
-("przylot (pomoc)", "pomoc przez vke", true, null),
-("bagażownia", "rozładunek bagaży", true, 5),
-("bagażownia (pomoc)", "pomoc przez vke", true, null),
-("melex", "transport pasażerów z parkingu pod terminal", true, 6);
+("ciąg", "ciąg pierwszy", true, false, 1),
+("skan", "skan główny", true, false, 2),
+("przerwa", "przerwa", true, false, null),
+("paszportówka", "paszportówka przy kontroli granicznej", true, false, 3),
+("paszportówka (pomoc)", "pomoc przez vke", true, false, null),
+("przylot", "obsługa przylotów", true, false, 4),
+("przylot (pomoc)", "pomoc przez vke", true, false, null),
+("bagażownia", "rozładunek bagaży", true, false, 5),
+("bagażownia (pomoc)", "pomoc przez vke", true, false, null),
+("melex", "transport pasażerów z parkingu pod terminal", true, false, 6);
 
 
 CREATE TABLE employee (
@@ -172,26 +173,47 @@ VALUES
 (10, 3);
 
 CREATE TABLE employee_skill (
+	id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT NOT NULL,
     skill_id INT NOT NULL,
-    proficiency_level VARCHAR(50) NOT NULL,
-	PRIMARY KEY (employee_id, skill_id),
+    proficiency_level INT NOT NULL,
+    time_experience_in_minutes INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(id),
     FOREIGN KEY (skill_id) REFERENCES skill(id)
 );
 
-INSERT INTO employee_skill (employee_id, skill_id, proficiency_level)
+INSERT INTO employee_skill (employee_id, skill_id, proficiency_level, time_experience_in_minutes)
 VALUES 
-(1, 1, "początkujący"),
-(1, 2, "początkujący"),
-(2, 1, "średnio zaawansowany"),
-(2, 5, "ekspert"),
-(3, 3, "zaawansowany"),
-(3, 4, "początkujący"),
-(4, 2, "średnio zaawansowany"),
-(4, 3, "początkujący"),
-(5, 1, "ekspert"),
-(5, 4, "zaawansowany");
+(1, 1, 0, 1199),
+(1, 2, 1, 1500),
+(1, 3, 2, 3599),
+(1, 4, 3, 8999),
+(1, 5, 0, 500),
+(1, 6, 2, 2500),
+(2, 1, 1, 1800),
+(2, 2, 0, 800),
+(2, 3, 3, 8999),
+(2, 4, 2, 4000),
+(2, 5, 1, 1500),
+(2, 6, 0, 1199),
+(3, 1, 3, 8999),
+(3, 2, 2, 3599),
+(3, 3, 1, 2500),
+(3, 4, 0, 1199),
+(3, 5, 2, 5500),
+(3, 6, 1, 1800),
+(4, 1, 0, 1500),
+(4, 2, 1, 2200),
+(4, 3, 3, 8999),
+(4, 4, 2, 3599),
+(4, 5, 1, 1800),
+(4, 6, 0, 800),
+(5, 1, 2, 2500),
+(5, 2, 3, 8999),
+(5, 3, 1, 1199),
+(5, 4, 2, 3599),
+(5, 5, 0, 1500),
+(5, 6, 1, 2000);
 
 
 CREATE TABLE position_employee_history (

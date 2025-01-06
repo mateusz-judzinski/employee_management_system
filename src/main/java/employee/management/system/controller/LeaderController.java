@@ -37,8 +37,11 @@ public class LeaderController {
         Position breakPosition = positionService.findPositionByName("przerwa");
         model.addAttribute("breakPosition", breakPosition);
 
+        Position otherPosition = positionService.findPositionByName("inne");
+
         List<Position> positions = positionService.findAllPositions();
         positions.remove(breakPosition);
+        positions.remove(otherPosition);
         model.addAttribute("positions", positions);
 
         Map<Integer, LocalDateTime> activeEmployees = historyService.findAllActiveEmployeesAndStartTimeDate();
@@ -56,6 +59,20 @@ public class LeaderController {
         }
 
         positionService.addEmployeesIntoPosition(positionId, employeesIds);
+        return "redirect:/leader-panel";
+    }
+
+    @PostMapping("/position/add-temporary")
+    public String addTemporaryPosition(@RequestParam String positionName, @RequestParam String description){
+        positionService.addTemporaryPosition(positionName, description);
+
+        return "redirect:/leader-panel";
+    }
+
+    @PostMapping("/position/deactivate-temporary")
+    public String deactivateTemporaryPosition(@RequestParam("positionId") int positionId){
+        positionService.switchActiveStatusByPositionId(positionId);
+
         return "redirect:/leader-panel";
     }
 
