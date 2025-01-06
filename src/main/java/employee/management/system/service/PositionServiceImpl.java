@@ -172,7 +172,7 @@ public class PositionServiceImpl implements PositionService {
             int minutes = (int) Duration.between(startTime, LocalTime.now()).toMinutes();
 
             int employeeId = employee.getId();
-            int skillId = employee.getPosition().getId();
+            int skillId = employee.getPosition().getSkill().getId();
 
             EmployeeSkill employeeSkill = employeeSkillRepository.findEmployeeSkillByEmployeeIdAndSkillId(employeeId, skillId);
             employeeSkill.addExperience(minutes);
