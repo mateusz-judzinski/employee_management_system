@@ -75,7 +75,7 @@
                 </div>
                 <div class="employee" th:each="employee : ${position.employees}">
                     <a th:href="@{'/leader-panel/position/remove-employee/' + ${employee.id}}" class="remove-btn" title="Remove">X</a>
-                    <img th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
+                    <img th:if="${!position.isTemporary}" th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
                     <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
                     <span id="duration-${employee.id}" th:data-starttime="${activeEmployees[employee.id]}">Duration</span>
                 </div>
@@ -110,12 +110,10 @@
     <div class="popup-content">
         <span id="close-popup-btn">&times;</span>
         <p>Uwaga! Po dezaktywacji stanowiska, nastąpi jego trwałe usunięcie. Czy na pewno chcesz kontynuować?</p>
-        <form id="deactivation-form" th:action="@{/leader-panel/position/deactivate-temporary}" method="post">
-            <input type="hidden" id="position-id" name="positionId">
-            <button type="submit" id="continue-btn">Kontynuuj</button>
-        </form>
+        <button id="continue-btn">Kontynuuj</button>
     </div>
 </div>
+
 
 <h2>Pracownicy na przerwie</h2>
 <table>

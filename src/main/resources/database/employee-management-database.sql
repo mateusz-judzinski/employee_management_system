@@ -81,7 +81,8 @@ VALUES
 ("przylot (pomoc)", "pomoc przez vke", true, false, null),
 ("bagażownia", "rozładunek bagaży", true, false, 5),
 ("bagażownia (pomoc)", "pomoc przez vke", true, false, null),
-("melex", "transport pasażerów z parkingu pod terminal", true, false, 6);
+("melex", "transport pasażerów z parkingu pod terminal", true, false, 6),
+("inne", "wszystkie stanowiska stworzone tymczasowo", false, false, null);
 
 
 CREATE TABLE employee (

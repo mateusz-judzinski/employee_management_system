@@ -69,13 +69,6 @@ public class LeaderController {
         return "redirect:/leader-panel";
     }
 
-    @PostMapping("/position/deactivate-temporary")
-    public String deactivateTemporaryPosition(@RequestParam("positionId") int positionId){
-        positionService.switchActiveStatusByPositionId(positionId);
-
-        return "redirect:/leader-panel";
-    }
-
     @GetMapping("/position/remove-employee/{employeeId}")
     public String removeEmployeeFromPosition(@PathVariable("employeeId") int employeeId){
         positionService.removeEmployeeFromPositionByEmployeeId(employeeId);
