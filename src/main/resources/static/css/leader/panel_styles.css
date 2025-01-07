@@ -7,7 +7,7 @@
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 280px;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     padding: 10px;
@@ -19,23 +19,41 @@
 
 .dropdown-content input[type="checkbox"] {
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .dropdown-content label {
     display: block;
     padding: 8px 0;
     cursor: pointer;
+    text-align: left;
 }
 
-.dropdown button {
+.dropdown-button {
+    width: 300px;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
+
 }
 
-.dropdown button:hover {
+.dropdown-button:hover {
     background-color: #ddd;
 }
+
+.dropdown-confirm-btn {
+    width: 280px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    background-color: #28a745;
+    color: #fff;
+    display: inline-block;
+    border: none;
+    border-radius: 4px;
+}
+
 
 body {
     font-family: Arial, sans-serif;
@@ -46,15 +64,95 @@ body {
 
 h1 {
     text-align: center;
+    margin-top: 30px;
+    margin-bottom: 50px;
 }
 
 table {
-    width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.tables-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+
+.positions-table th:nth-child(1), .positions-table td:nth-child(1) {
+    width: 20%;
+}
+
+.positions-table th:nth-child(2), .positions-table td:nth-child(2) {
+    width: 30%;
+}
+
+.positions-table th:nth-child(3), .positions-table td:nth-child(3) {
+    width: 50%;
+}
+
+.positions-table{
+    width: 60%;
+
+}
+
+.break-employees-table{
+    width: 38%;
+
+}
+
+.break-employees-table th:nth-child(1), .break-employees-table td:nth-child(1) {
+    width: 50%;
+}
+
+.break-employees-table th:nth-child(2), .break-employees-table td:nth-child(2) {
+    width: 50%;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.positions-title {
+    margin: 0;
+    font-size: 1.5em;
+    margin-left: 5%;
+}
+
+.legend {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-left: 235px;
+}
+
+.legend img {
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+
+.break-title {
+    margin: 0;
+    font-size: 1.5em;
+    text-align: right;
+    margin-right: 425px;
+    margin-bottom: 10px;
+    flex-grow: 1; /
+}
+
+
 
 thead {
     background-color: #007BFF;
@@ -92,6 +190,7 @@ tbody tr.inactive {
     background-color: #0056b3;
 }
 
+
 .employee-container {
     display: flex;
     flex-direction: column;
@@ -104,6 +203,7 @@ tbody tr.inactive {
     gap: 10px;
     padding: 5px 10px;
     border-radius: 4px;
+    margin-left: 65px
 }
 
 .remove-btn {
@@ -112,14 +212,14 @@ tbody tr.inactive {
     color: #fff;
     border: none;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     padding: 0;
-    font-size: 14px;
+    font-size: 11px;
     line-height: 1;
 }
 
@@ -127,16 +227,7 @@ tbody tr.inactive {
     background-color: #cc0000;
 }
 
-.legend {
-    text-align: right;
-    font-size: 14px;
-    margin-top: 10px;
-}
 
-.legend img {
-    vertical-align: middle;
-    margin-right: 5px;
-}
 
 .add-temp-position-btn {
     display: inline-block;
@@ -151,6 +242,7 @@ tbody tr.inactive {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin-top: 10px;
+    margin-left: 5%;
 }
 
 .add-temp-position-btn:hover {

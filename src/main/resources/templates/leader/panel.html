@@ -11,27 +11,31 @@
 <body>
 <h1>Panel Lidera</h1>
 
-<h2>Stanowiska</h2>
+<div class="header-container">
+    <h2 class="positions-title">Stanowiska</h2>
+    <div class="legend">
+        <img src="/images/level_0.png" alt="Level 0"> Brak doświadczenia
+        <img src="/images/level_1.png" alt="Level 1"> Początkujący
+        <img src="/images/level_2.png" alt="Level 2"> Średnio zaawansowany
+        <img src="/images/level_3.png" alt="Level 3"> Zaawansowany
+    </div>
 
-<div class="legend">
-    <img src="/images/level_0.png" alt="Level 0"> Brak doświadczenia
-    <img src="/images/level_1.png" alt="Level 1"> Początkujący
-    <img src="/images/level_2.png" alt="Level 2"> Średnio zaawansowany
-    <img src="/images/level_3.png" alt="Level 3"> Zaawansowany
+    <h2 class="break-title">Pracownicy na przerwie</h2>
 </div>
 
-<table>
+<div class="tables-container">
+<table class="positions-table">
     <thead>
     <tr>
-        <th>Interakcja</th>
-        <th>Nazwa stanowiska</th>
-        <th>Pracownicy</th>
+        <th class="position-col1">Interakcja</th>
+        <th class="position-col2">Nazwa stanowiska</th>
+        <th class="position-col3">Pracownicy</th>
     </tr>
     </thead>
     <tbody>
 
     <tr th:each="position : ${positions}" th:classappend="${!position.isActive} ? 'inactive'">
-        <td>
+        <td style="text-align: center;">
             <a th:if="${position.isTemporary}" class="toggle-btn"
                th:data-position-id="${position.id}" id="deactivate-link-${position.id}">
                 <span th:text="${position.isActive ? 'Dezaktywuj' : 'Aktywuj'}">Toggle</span>
@@ -52,12 +56,12 @@
             Position Name
         </td>
 
-        <td>
+        <td style="text-align: center;">
             <div class="employee-container">
                 <div th:if="${position.isActive}">
                     <form th:action="@{/leader-panel/position/add-employee/{positionId}(positionId=${position.id})}" method="post">
                         <div class="dropdown">
-                            <button type="button">Wybierz pracowników</button>
+                            <button type="button" class="dropdown-button">Wybierz pracowników</button>
                             <div class="dropdown-content">
                                 <div th:each="employee : ${breakPosition.employees}">
                                     <div th:if="${employee.hasAllNeededQualification(position)}">
@@ -68,7 +72,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <button type="submit" style="margin-top: 10px; background-color: #28a745; color: #fff;">Potwierdź</button>
+                                <button type="submit" class="dropdown-confirm-btn">Potwierdź</button>
                             </div>
                         </div>
                     </form>
@@ -84,6 +88,22 @@
     </tr>
     </tbody>
 </table>
+
+<table class="break-employees-table">
+    <thead>
+    <tr>
+        <th>Imię i nazwisko</th>
+        <th>Długość przerwy</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${breakPosition.employees}">
+        <td th:text="${employee.firstName} + ' ' + ${employee.lastName}">First Name</td>
+        <td id="duration-${employee.id}" th:data-starttime="${activeEmployees[employee.id]}">Duration</td>
+    </tr>
+    </tbody>
+</table>
+</div>
 
 <div class="mt-4">
     <button id="add-temp-position-btn" class="add-temp-position-btn">Dodaj tymczasowe stanowisko</button>
@@ -113,25 +133,6 @@
         <button id="continue-btn">Kontynuuj</button>
     </div>
 </div>
-
-
-<h2>Pracownicy na przerwie</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Imię</th>
-        <th>Nazwisko</th>
-        <th>Długość przerwy</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="employee : ${breakPosition.employees}">
-        <td th:text="${employee.firstName}">First Name</td>
-        <td th:text="${employee.lastName}">Last Name</td>
-        <td id="duration-${employee.id}" th:data-starttime="${activeEmployees[employee.id]}">Duration</td>
-    </tr>
-    </tbody>
-</table>
 
 <script src="/js/leader/deactivation-pop-up.js"></script>
 <script src="/js/leader/temp-position-form.js"></script>
