@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Today's Employees</title>
-    <link rel="stylesheet" href="/css/leader/todays-employees.css">
+    <title>Schedule</title>
+    <link rel="stylesheet" href="/css/leader/schedule.css">
     <link rel="stylesheet" href="/css/leader/hamburger-menu.css">
 </head>
 <body>
+<h1>Schedule</h1>
 
 <div class="hamburger-menu">
     <button class="hamburger-icon" id="hamburger-icon">&#9776;</button>
@@ -19,33 +20,33 @@
     </div>
 </div>
 
-<h1>Today's Employees</h1>
-<div class="table-container">
-    <table class="employees-table">
+<div class="date-picker-container">
+    <form action="/leader-panel/schedule" method="get">
+        <label for="selectedDate">Wybierz dzień:</label>
+        <input type="date" id="selectedDate" name="date" required>
+        <button type="submit">Wyświetl grafik</button>
+    </form>
+</div>
+
+<div class="tables-container">
+    <table class="schedule-table">
         <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>ID Card Number</th>
-            <th>Qualifications</th>
+            <th>Pracownik</th>
+            <th>Czas rozpoczęcia</th>
+            <th>Czas zakończenia</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="employee : ${employees}">
-            <td th:text="${employee.firstName}">First Name</td>
-            <td th:text="${employee.lastName}">Last Name</td>
-            <td th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}">
-                ID Card Number
-            </td>
-            <td>
-                <span th:each="qualification : ${employee.qualifications}" th:text="${qualification.name}" th:append="' '"></span>
-            </td>
+        <tr th:each="shift : ${shifts}">
+            <td th:text="${shift.employee.firstName + ' ' + shift.employee.lastName}"></td>
+            <td th:text="${shift.startTime}"></td>
+            <td th:text="${shift.endTime}"></td>
         </tr>
         </tbody>
     </table>
 </div>
 
 <script src="/js/leader/hamburger-menu.js"></script>
-
 </body>
 </html>

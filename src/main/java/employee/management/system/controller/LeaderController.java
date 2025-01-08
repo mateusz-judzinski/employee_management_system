@@ -2,10 +2,11 @@ package employee.management.system.controller;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Position;
-import employee.management.system.entity.PositionEmployeeHistory;
+import employee.management.system.entity.Shift;
 import employee.management.system.service.EmployeeService;
 import employee.management.system.service.PositionEmployeeHistoryService;
 import employee.management.system.service.PositionService;
+import employee.management.system.service.ShiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,12 +24,14 @@ public class LeaderController {
     private final EmployeeService employeeService;
     private final PositionService positionService;
     private final PositionEmployeeHistoryService historyService;
+    private final ShiftService shiftService;
 
     @Autowired
-    public LeaderController(EmployeeService employeeService, PositionService positionService, PositionEmployeeHistoryService historyService) {
+    public LeaderController(EmployeeService employeeService, PositionService positionService, PositionEmployeeHistoryService historyService, ShiftService shiftService) {
         this.employeeService = employeeService;
         this.positionService = positionService;
         this.historyService = historyService;
+        this.shiftService = shiftService;
     }
 
     @GetMapping()
@@ -90,6 +93,15 @@ public class LeaderController {
         model.addAttribute("employees", employees);
 
         return "leader/todays-employees";
+    }
+
+    @GetMapping("/schedule")
+    public String getSchedule(@RequestParam(value = "date", required = false) String date, Model model) {
+        LocalDate selectedDate = (date != null) ? LocalDate.parse(date) : LocalDate.now();
+        List<Shift> shifts = shiftService.getShiftsByWorkDate(selectedDate);
+        model.addAttribute("shifts", shifts);
+        model.addAttribute("selectedDate", selectedDate);
+        return "leader/schedule";
     }
 
 }

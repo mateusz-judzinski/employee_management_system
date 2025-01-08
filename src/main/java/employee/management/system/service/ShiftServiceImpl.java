@@ -77,6 +77,11 @@ public class ShiftServiceImpl implements ShiftService {
         return shiftRepository.getScheduleForDay(dayToUse, month);
     }
 
+    @Override
+    public List<Shift> getShiftsByWorkDate(LocalDate selectedDate) {
+        return shiftRepository.findShiftsByWorkDate(selectedDate);
+    }
+
     private Map<String, List<String>> splitMonthScheduleOnDays(List<Shift> shifts){
 
         Map<String, List<String>> dailySchedule = new TreeMap<>();
