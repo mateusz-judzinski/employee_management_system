@@ -38,7 +38,7 @@
                 ID Card Number
             </td>
             <td>
-                <span th:each="qualification : ${employee.qualifications}" th:text="${qualification.name}" th:append="' '"></span>
+                <span th:each="qualification : ${employee.qualifications}" th:text="${qualification.name} + ' ' " th:append="' '"></span>
             </td>
         </tr>
         </tbody>
