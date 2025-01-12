@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -98,6 +99,7 @@ public class ShiftServiceImpl implements ShiftService {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
 
+
         int continueRowIndex = 1;
         int continueColumnIndex = 1;
         Row continueCheckRow = sheet.getRow(continueRowIndex);
@@ -115,7 +117,7 @@ public class ShiftServiceImpl implements ShiftService {
         int shiftEndColumnIndex = 4;
         Cell shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
 
-
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         while(continueCheckRow != null){
             for(int i = 0; i < 12; i++){
                 if(!employeeNameStringValue.isBlank()){
@@ -128,30 +130,16 @@ public class ShiftServiceImpl implements ShiftService {
                     List<LocalTime> newList = new ArrayList<>();
                     shifts.put(firstName + " " + lastName, newList);
 
-                    for(int j = 0; j < 30; j++){
-                        if((shiftStartCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(shiftStartCell)) && (shiftEndCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(shiftEndCell))){
+                    for(int j = 0; j < 31; j++){
+                        if((shiftStartCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(shiftStartCell))){
 
-                            double shiftStartCellNumericValue = shiftStartCell.getNumericCellValue();
+                            String shiftStartCellTime = formatter.format(shiftStartCell.getDateCellValue());
+                            LocalTime shiftStartLocalTime = LocalTime.parse(shiftStartCellTime);
+                            shifts.get(firstName + " " + lastName).add(shiftStartLocalTime);
 
-                            int totalSeconds = (int) Math.round(shiftStartCellNumericValue * 24 * 60 * 60);
-                            int hours = totalSeconds / 3600;
-                            int minutes = (totalSeconds % 3600) / 60;
-                            int seconds = totalSeconds % 60;
-
-                            LocalTime shiftStarTime = LocalTime.of(hours, minutes, seconds);
-
-
-                            double shiftEndCellNumericValue = shiftEndCell.getNumericCellValue();
-
-                            totalSeconds = (int) Math.round(shiftEndCellNumericValue * 24 * 60 * 60);
-                            hours = totalSeconds / 3600;
-                            minutes = (totalSeconds % 3600) / 60;
-                            seconds = totalSeconds % 60;
-
-                            LocalTime shiftEndTime = LocalTime.of(hours, minutes, seconds);
-
-                            shifts.get(firstName + " " + lastName).add(shiftStarTime);
-                            shifts.get(firstName + " " + lastName).add(shiftEndTime);
+                            String shiftEndCellTime = formatter.format(shiftEndCell.getDateCellValue());
+                            LocalTime shiftEndLocalTime = LocalTime.parse(shiftEndCellTime);
+                            shifts.get(firstName + " " + lastName).add(shiftEndLocalTime);
                         }
 
                         shiftStartRowIndex++;
@@ -176,21 +164,37 @@ public class ShiftServiceImpl implements ShiftService {
             continueRowIndex = continueRowIndex + 42;
             continueCheckRow = sheet.getRow(continueRowIndex);
 
-
-            employeeNameRowIndex = continueRowIndex;
-            employeeNameColumnIndex = continueColumnIndex + 2;
-            employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
-            employeeNameStringValue = employeeNameCell.getStringCellValue();
-
-
-            shiftStartRowIndex = employeeNameRowIndex + 5;
-            shiftStartColumnIndex = employeeNameColumnIndex;
-            shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
+            if(continueCheckRow != null){
+                employeeNameRowIndex = continueRowIndex;
+                employeeNameColumnIndex = continueColumnIndex + 2;
+                employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
+                employeeNameStringValue = employeeNameCell.getStringCellValue();
 
 
-            shiftEndRowIndex = shiftStartRowIndex;
-            shiftEndColumnIndex = shiftStartColumnIndex + 1;
-            shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
+                shiftStartRowIndex = employeeNameRowIndex + 5;
+                shiftStartColumnIndex = employeeNameColumnIndex;
+                shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
+
+
+                shiftEndRowIndex = shiftStartRowIndex;
+                shiftEndColumnIndex = shiftStartColumnIndex + 1;
+                shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
+            }
+        }
+        workbook.close();
+
+        int iterator = 2;
+        for (String employee:shifts.keySet()) {
+            System.out.println(employee);
+            for (LocalTime localTime:shifts.get(employee)) {
+                if(iterator % 2 == 0){
+                    System.out.print(localTime + " - ");
+                } else{
+                    System.out.print(localTime);
+                    System.out.println();
+                }
+                iterator++;
+            }
         }
     }
 
