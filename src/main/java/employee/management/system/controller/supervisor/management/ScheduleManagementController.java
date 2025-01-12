@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,18 +23,27 @@ public class ScheduleManagementController {
         this.shiftService = shiftService;
     }
 
-    @GetMapping("/month-schedule")
+    @GetMapping()
     public String getMonthlySchedule(@RequestParam(value = "month", required = false) Integer month, Model model) {
         Map<String, List<String>> dailySchedule = shiftService.getScheduleForMonth(month);
         model.addAttribute("dailySchedule", dailySchedule);
         return "supervisor/schedule/month-schedule";
     }
 
-    @GetMapping("/day-schedule")
-    public String getDailySchedule(@RequestParam(value = "day", required = false) Integer day, Model model) {
-        List<Shift> shifts = shiftService.getScheduleForDay(day);
-        model.addAttribute("shifts", shifts);
-        model.addAttribute("day", day);
-        return "supervisor/schedule/day-schedule";
+    @GetMapping("/import")
+    public String importSchedulePage(){
+        return "supervisor/schedule/import-schedule";
+    }
+
+    @PostMapping("/import")
+    public String importSchedule(@RequestParam("file") MultipartFile file, Model model){
+        try{
+            shiftService.importSchedule(file);
+        } catch (IOException e) {
+            String error = "An error occurred: " + e.getMessage();
+            model.addAttribute("error", error);
+            return "user/error";
+        }
+        return "redirect:/supervisor-panel/schedule/import";
     }
 }
