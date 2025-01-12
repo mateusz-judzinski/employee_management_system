@@ -99,7 +99,6 @@ public class ShiftServiceImpl implements ShiftService {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
 
-
         int continueRowIndex = 1;
         int continueColumnIndex = 1;
         Row continueCheckRow = sheet.getRow(continueRowIndex);
@@ -132,14 +131,20 @@ public class ShiftServiceImpl implements ShiftService {
 
                     for(int j = 0; j < 31; j++){
                         if((shiftStartCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(shiftStartCell))){
+//                            CellStyle shiftStartCellStyle = shiftStartCell.getCellStyle();
+//                            XSSFColor startColor = ((XSSFCellStyle) shiftStartCellStyle).getFillForegroundColorColor();
+//                            String startHexColor = startColor.getARGBHex();
+//                            System.out.println(startHexColor);
 
-                            String shiftStartCellTime = formatter.format(shiftStartCell.getDateCellValue());
-                            LocalTime shiftStartLocalTime = LocalTime.parse(shiftStartCellTime);
-                            shifts.get(firstName + " " + lastName).add(shiftStartLocalTime);
+//                            if(!startHexColor.equals("FF00B0F0") && !startHexColor.equals("FF00B050")) {
+                                String shiftStartCellTime = formatter.format(shiftStartCell.getDateCellValue());
+                                LocalTime shiftStartLocalTime = LocalTime.parse(shiftStartCellTime);
+                                shifts.get(firstName + " " + lastName).add(shiftStartLocalTime);
 
-                            String shiftEndCellTime = formatter.format(shiftEndCell.getDateCellValue());
-                            LocalTime shiftEndLocalTime = LocalTime.parse(shiftEndCellTime);
-                            shifts.get(firstName + " " + lastName).add(shiftEndLocalTime);
+                                String shiftEndCellTime = formatter.format(shiftEndCell.getDateCellValue());
+                                LocalTime shiftEndLocalTime = LocalTime.parse(shiftEndCellTime);
+                                shifts.get(firstName + " " + lastName).add(shiftEndLocalTime);
+//                            }
                         }
 
                         shiftStartRowIndex++;
