@@ -131,12 +131,9 @@ public class ShiftServiceImpl implements ShiftService {
 
                     for(int j = 0; j < 31; j++){
                         if((shiftStartCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(shiftStartCell))){
-//                            CellStyle shiftStartCellStyle = shiftStartCell.getCellStyle();
-//                            XSSFColor startColor = ((XSSFCellStyle) shiftStartCellStyle).getFillForegroundColorColor();
-//                            String startHexColor = startColor.getARGBHex();
-//                            System.out.println(startHexColor);
+                            boolean shouldAddCell = shouldAddCellMethod(shiftStartCell);
 
-//                            if(!startHexColor.equals("FF00B0F0") && !startHexColor.equals("FF00B050")) {
+                            if (shouldAddCell) {
                                 String shiftStartCellTime = formatter.format(shiftStartCell.getDateCellValue());
                                 LocalTime shiftStartLocalTime = LocalTime.parse(shiftStartCellTime);
                                 shifts.get(firstName + " " + lastName).add(shiftStartLocalTime);
@@ -144,7 +141,8 @@ public class ShiftServiceImpl implements ShiftService {
                                 String shiftEndCellTime = formatter.format(shiftEndCell.getDateCellValue());
                                 LocalTime shiftEndLocalTime = LocalTime.parse(shiftEndCellTime);
                                 shifts.get(firstName + " " + lastName).add(shiftEndLocalTime);
-//                            }
+                                }
+
                         }
 
                         shiftStartRowIndex++;
@@ -201,6 +199,25 @@ public class ShiftServiceImpl implements ShiftService {
                 iterator++;
             }
         }
+    }
+
+    private boolean shouldAddCellMethod(Cell shiftStartCell) {
+        CellStyle shiftStartCellStyle = shiftStartCell.getCellStyle();
+        XSSFColor startColor = ((XSSFCellStyle) shiftStartCellStyle).getFillForegroundColorColor();
+
+        boolean shouldAddCell = false;
+
+        if(startColor == null){
+            shouldAddCell = true;
+
+        } else {
+            String startHexColor = startColor.getARGBHex();
+
+            if(!startHexColor.equals("FF00B0F0") && !startHexColor.equals("FF00B050")){
+                shouldAddCell = true;
+            }
+        }
+        return shouldAddCell;
     }
 
     private Map<String, List<String>> splitMonthScheduleOnDays(List<Shift> shifts){
