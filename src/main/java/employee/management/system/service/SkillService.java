@@ -2,7 +2,9 @@ package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Skill;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface SkillService {
