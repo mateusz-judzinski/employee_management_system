@@ -218,7 +218,6 @@ VALUES
     ('Konrad', 'Świebocki', 'konrad.swiebocki@example.com', '123456786', '1117', NULL),
     ('Sara', 'Gozdzek', 'sara.gozdzek@example.com', '123456787', '1118', NULL),
     ('Zuzanna', 'Misdzioł', 'zuzanna.misdziol@example.com', '123456788', '1119', NULL),
-    ('Natalia', 'Kuśmierek', 'natalia.kusmierek@example.com', '123456789', '1120', NULL),
     ('Dawid', 'Michałowski', 'dawid.michalowski@example.com', '123456780', '1121', NULL),
     ('Mateusz', 'Mroczyński', 'mateusz.mroczynski@example.com', '123456781', '1122', NULL),
     ('Sofiia', 'Malchaniuk', 'sofiia.malchaniuk@example.com', '123456782', '1123', NULL),

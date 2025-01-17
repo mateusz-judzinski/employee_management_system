@@ -1,13 +1,15 @@
 package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
-import employee.management.system.entity.Position;
+import employee.management.system.entity.PositionEmployeeHistory;
 import employee.management.system.entity.Shift;
 import employee.management.system.repository.EmployeeRepository;
-import employee.management.system.repository.PositionRepository;
+import employee.management.system.repository.PositionEmployeeHistoryRepository;
 import employee.management.system.repository.ShiftRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,13 +20,15 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
     private final ShiftRepository shiftRepository;
-    private final PositionRepository positionRepository;
+    private final PositionService positionService;
+    private final PositionEmployeeHistoryRepository historyRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ShiftRepository shiftRepository, PositionRepository positionRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ShiftRepository shiftRepository, PositionService positionService, PositionEmployeeHistoryRepository historyRepository) {
         this.employeeRepository = employeeRepository;
         this.shiftRepository = shiftRepository;
-        this.positionRepository = positionRepository;
+        this.positionService = positionService;
+        this.historyRepository = historyRepository;
     }
     @Override
     public Employee findEmployeeById(int id) {
@@ -76,4 +80,37 @@ public class EmployeeServiceImpl implements EmployeeService{
         return employeeRepository.findEmployeesBySkillId(skillId);
     }
 
+
+    @Scheduled(cron = "0 1/30 * * * *")
+    @Transactional
+    @Override
+    public void removePositionFromEmployeeAfterShift() {
+
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        List<Employee> employeeWithPositionToRemove = employeeRepository.findEmployeesThatFinishedShift(today, yesterday);
+        if(employeeWithPositionToRemove != null){
+            for (Employee employee:employeeWithPositionToRemove) {
+
+                if(employee.getPosition() != null){
+                    positionService.processHistory(employee, null);
+                    employee.setPosition(null);
+                }
+            }
+        }
+    }
+    @PostConstruct
+    @Override
+    public void initDebug() {
+        List<Employee> employees = employeeRepository.findByPositionIsNotNull();
+        for (Employee employee:employees) {
+            employee.setPosition(null);
+            employeeRepository.save(employee);
+        }
+        List<PositionEmployeeHistory> histories = historyRepository.findActivePositionEmployeeHistories();
+        for (PositionEmployeeHistory history:histories) {
+            historyRepository.delete(history);
+        }
+    }
 }

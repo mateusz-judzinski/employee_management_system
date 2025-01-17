@@ -145,7 +145,9 @@ public class PositionServiceImpl implements PositionService {
         }
     }
 
-    private void processHistory(Employee employee, Position newPosition) {
+    @Transactional
+    @Override
+    public void processHistory(Employee employee, Position newPosition) {
 
         PositionEmployeeHistory history = historyRepository.findByEmployeeIdAndIsActiveTrue(employee.getId());
 
@@ -155,14 +157,16 @@ public class PositionServiceImpl implements PositionService {
         history.setEndTime(LocalTime.now());
         history.setActive(false);
 
-        if(newPosition.isTemporary()){
-            Position otherPosition = positionRepository.findPositionByPositionName("inne");
-            PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, otherPosition);
-            historyRepository.save(newHistory);
-        }
-        else{
-            PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, newPosition);
-            historyRepository.save(newHistory);
+        if(newPosition != null){
+            if(newPosition.isTemporary()){
+                Position otherPosition = positionRepository.findPositionByPositionName("inne");
+                PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, otherPosition);
+                historyRepository.save(newHistory);
+            }
+            else{
+                PositionEmployeeHistory newHistory = new PositionEmployeeHistory(employee, newPosition);
+                historyRepository.save(newHistory);
+            }
         }
     }
 

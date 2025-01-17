@@ -16,4 +16,7 @@ public interface EmployeeService {
     void deleteEmployeeById(int id);
     List<Employee> getShiftEmployees(LocalDate localDate);
     List<Employee> findEmployeesBySkillId(int skillId);
+    void removePositionFromEmployeeAfterShift();
+    void initDebug();
+
 }

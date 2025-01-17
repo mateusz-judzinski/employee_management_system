@@ -38,6 +38,8 @@ public class LeaderController {
     @GetMapping()
     public String getLeaderPanel(Model model){
 
+        shiftService.updateEmployeesWithCurrentShift();
+
         Position breakPosition = positionService.findPositionByName("przerwa");
         model.addAttribute("breakPosition", breakPosition);
 

@@ -15,6 +15,7 @@ public class SecurityConfig {
                         configurer
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/login").permitAll()
+                                .requestMatchers("/debug").permitAll()
                                 .requestMatchers("/leader-panel/**").hasRole("LEADER")
                                 .requestMatchers("/supervisor-panel/**").hasRole("SUPERVISOR")
                                 .anyRequest().authenticated()

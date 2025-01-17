@@ -1,8 +1,12 @@
 package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Position;
+import employee.management.system.entity.PositionEmployeeHistory;
 import employee.management.system.entity.Shift;
 import employee.management.system.repository.EmployeeRepository;
+import employee.management.system.repository.PositionEmployeeHistoryRepository;
+import employee.management.system.repository.PositionRepository;
 import employee.management.system.repository.ShiftRepository;
 import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.*;
@@ -14,10 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -26,11 +28,15 @@ public class ShiftServiceImpl implements ShiftService {
 
     private final ShiftRepository shiftRepository;
     private final EmployeeRepository employeeRepository;
+    private final PositionRepository positionRepository;
+    private final PositionEmployeeHistoryRepository historyRepository;
 
     @Autowired
-    public ShiftServiceImpl(ShiftRepository shiftRepository, EmployeeRepository employeeRepository) {
+    public ShiftServiceImpl(ShiftRepository shiftRepository, EmployeeRepository employeeRepository, PositionRepository positionRepository, PositionEmployeeHistoryRepository historyRepository) {
         this.shiftRepository = shiftRepository;
         this.employeeRepository = employeeRepository;
+        this.positionRepository = positionRepository;
+        this.historyRepository = historyRepository;
     }
 
     @Override
@@ -98,43 +104,49 @@ public class ShiftServiceImpl implements ShiftService {
         int month = LocalDate.now().getMonthValue() + 1;
         int year = LocalDate.now().getYear();
 
-        if(shiftRepository.existsByMonthAndYear(month, year)){
-            Workbook workbook = WorkbookFactory.create(file.getInputStream());
-            Sheet sheet = workbook.getSheetAt(0);
+        deleteScheduleIfExists(month, year);
 
-            int continueRowIndex = 1;
-            int continueColumnIndex = 1;
-            Row continueCheckRow = sheet.getRow(continueRowIndex);
+        Workbook workbook = WorkbookFactory.create(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
 
-            int employeeNameRowIndex = 1;
-            int employeeNameColumnIndex = 3;
-            Cell employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
-            String employeeNameStringValue = employeeNameCell.getStringCellValue();
+        int continueRowIndex = 1;
+        int continueColumnIndex = 1;
+        Row continueCheckRow = sheet.getRow(continueRowIndex);
 
-            int shiftStartRowIndex = 6;
-            int shiftStartColumnIndex = 3;
-            Cell shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
+        int employeeNameRowIndex = 1;
+        int employeeNameColumnIndex = 3;
+        Cell employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
+        String employeeNameStringValue = employeeNameCell.getStringCellValue();
 
-            int shiftEndRowIndex = 6;
-            int shiftEndColumnIndex = 4;
-            Cell shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
+        int shiftStartRowIndex = 6;
+        int shiftStartColumnIndex = 3;
+        Cell shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-            while(continueCheckRow != null){
-                for(int i = 0; i < 12; i++){
-                    if(!employeeNameStringValue.isBlank()){
+        int shiftEndRowIndex = 6;
+        int shiftEndColumnIndex = 4;
+        Cell shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
 
-                        String[] parts = employeeNameStringValue.split(" ");
-                        String firstName = parts[0];
-                        String lastName = parts[1];
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        while (continueCheckRow != null) {
+            for (int i = 0; i < 12; i++) {
+                if (!employeeNameStringValue.isBlank()) {
 
-                        Employee employee = employeeRepository.findEmployeeByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName);
-                        if(employee != null){
-                            for(int j = 0; j < 31; j++){
-                                if((shiftStartCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(shiftStartCell))){
-                                    boolean shouldAddCell = shouldAddCellMethod(shiftStartCell);
+                    String[] parts = employeeNameStringValue.split(" ");
+                    String firstName = parts[0];
+                    String lastName = parts[1];
 
-                                    if (shouldAddCell) {
+                    Employee employee = employeeRepository.findEmployeeByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName);
+                    if (employee != null) {
+                        for (int j = 0; j < 31; j++) {
+
+                            boolean isDateOutOfBound = j + 1 <= LocalDate.now().plusMonths(1).lengthOfMonth();
+
+                            if (isDateOutOfBound) {
+                                if ((shiftStartCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(shiftStartCell))) {
+
+                                    boolean isCorrectCellColor = isCorrectCellColor(shiftStartCell);
+
+                                    if (isCorrectCellColor) {
                                         String shiftStartCellTime = formatter.format(shiftStartCell.getDateCellValue());
                                         LocalTime shiftStartLocalTime = LocalTime.parse(shiftStartCellTime);
 
@@ -142,7 +154,7 @@ public class ShiftServiceImpl implements ShiftService {
                                         LocalTime shiftEndLocalTime = LocalTime.parse(shiftEndCellTime);
 
 
-                                        int day = i + 1;
+                                        int day = j + 1;
                                         LocalDate shiftDate = LocalDate.of(year, month, day);
 
                                         String shiftName = calculateShiftName(shiftStartLocalTime);
@@ -154,48 +166,85 @@ public class ShiftServiceImpl implements ShiftService {
                                         employeeRepository.save(employee);
                                     }
                                 }
-
-                                shiftStartRowIndex++;
-                                shiftEndRowIndex++;
-                                shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
-                                shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
                             }
+                            shiftStartRowIndex++;
+                            shiftEndRowIndex++;
+                            shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
+                            shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
                         }
                     }
-                    employeeNameColumnIndex = employeeNameColumnIndex + 3;
-                    employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
-                    employeeNameStringValue = employeeNameCell.getStringCellValue();
-
-                    shiftStartRowIndex = employeeNameRowIndex + 5;
-                    shiftStartColumnIndex = employeeNameColumnIndex;
-                    shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
-
-                    shiftEndRowIndex = shiftStartRowIndex;
-                    shiftEndColumnIndex = shiftStartColumnIndex + 1;
-                    shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
                 }
+                employeeNameColumnIndex = employeeNameColumnIndex + 3;
+                employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
+                employeeNameStringValue = employeeNameCell.getStringCellValue();
 
-                continueRowIndex = continueRowIndex + 42;
-                continueCheckRow = sheet.getRow(continueRowIndex);
+                shiftStartRowIndex = employeeNameRowIndex + 5;
+                shiftStartColumnIndex = employeeNameColumnIndex;
+                shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
 
-                if(continueCheckRow != null){
-                    employeeNameRowIndex = continueRowIndex;
-                    employeeNameColumnIndex = continueColumnIndex + 2;
-                    employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
-                    employeeNameStringValue = employeeNameCell.getStringCellValue();
-
-
-                    shiftStartRowIndex = employeeNameRowIndex + 5;
-                    shiftStartColumnIndex = employeeNameColumnIndex;
-                    shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
-
-
-                    shiftEndRowIndex = shiftStartRowIndex;
-                    shiftEndColumnIndex = shiftStartColumnIndex + 1;
-                    shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
-                }
+                shiftEndRowIndex = shiftStartRowIndex;
+                shiftEndColumnIndex = shiftStartColumnIndex + 1;
+                shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
             }
-            workbook.close();
+
+            continueRowIndex = continueRowIndex + 42;
+            continueCheckRow = sheet.getRow(continueRowIndex);
+
+            if (continueCheckRow != null) {
+                employeeNameRowIndex = continueRowIndex;
+                employeeNameColumnIndex = continueColumnIndex + 2;
+                employeeNameCell = sheet.getRow(employeeNameRowIndex).getCell(employeeNameColumnIndex);
+                employeeNameStringValue = employeeNameCell.getStringCellValue();
+
+
+                shiftStartRowIndex = employeeNameRowIndex + 5;
+                shiftStartColumnIndex = employeeNameColumnIndex;
+                shiftStartCell = sheet.getRow(shiftStartRowIndex).getCell(shiftStartColumnIndex);
+
+
+                shiftEndRowIndex = shiftStartRowIndex;
+                shiftEndColumnIndex = shiftStartColumnIndex + 1;
+                shiftEndCell = sheet.getRow(shiftEndRowIndex).getCell(shiftEndColumnIndex);
+            }
+        }
+        workbook.close();
+    }
+
+    @Transactional
+    @Override
+    public void updateEmployeesWithCurrentShift() {
+
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        List<Shift> currentEmployees = shiftRepository.findCurrentShifts(today, yesterday);
+        Position breakPosition = positionRepository.findPositionByPositionName("przerwa");
+
+        for (Shift shift : currentEmployees) {
+            Employee employee = shift.getEmployee();
+            if (employee.getPosition() == null) {
+
+                PositionEmployeeHistory history = new PositionEmployeeHistory(employee, breakPosition);
+                history.setStartDate(shift.getWorkDate());
+                history.setStartTime(shift.getStartTime());
+                history.setActive(true);
+
+                historyRepository.save(history);
+
+                employee.setPosition(breakPosition);
+            }
+        }
+    }
+
+
+    private void deleteScheduleIfExists(int month, int year){
+        if(shiftRepository.existsByMonthAndYear(month, year)){
+            List<Shift> shiftsToDelete = shiftRepository.getShiftsByMonthAndYear(month, year);
+            for (Shift shift:shiftsToDelete) {
+                shift.getEmployee().getShifts().remove(shift);
+            }
+
+            shiftRepository.deleteAll(shiftsToDelete);
         }
     }
 
@@ -211,7 +260,7 @@ public class ShiftServiceImpl implements ShiftService {
         return shiftName;
     }
 
-    private boolean shouldAddCellMethod(Cell shiftStartCell) {
+    private boolean isCorrectCellColor(Cell shiftStartCell) {
         CellStyle shiftStartCellStyle = shiftStartCell.getCellStyle();
         XSSFColor startColor = ((XSSFCellStyle) shiftStartCellStyle).getFillForegroundColorColor();
 
