@@ -17,7 +17,7 @@ public interface ShiftService {
     List<Shift> findShiftsByWorkDate(LocalDate workDate);
     Map<String, List<String>> getScheduleForMonth(Integer month);
     List<Shift> getScheduleForDay(Integer day);
-    List<Shift> getShiftsByWorkDate(LocalDate selectedDate);
+    List<Shift> getEntireDayScheduleByWorkDate(LocalDate selectedDate);
     void importSchedule(MultipartFile file) throws IOException;
     void updateEmployeesWithCurrentShift();
 }

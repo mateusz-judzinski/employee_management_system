@@ -37,6 +37,7 @@
 </div>
 
 <div class="tables-container">
+<div class="left-container">
 <table class="positions-table">
     <thead>
     <tr>
@@ -80,7 +81,7 @@
                                     <div th:if="${employee.hasAllNeededQualification(position)}">
                                         <label>
                                             <input type="checkbox" name="employeesIds" th:value="${employee.id}"/>
-                                            <img th:if="${!position.isTemporary}" th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
+                                            <img th:if="${!position.isTemporary} AND ${employee.getSkillProficiencyLevelForPosition(position) != -1}" th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
                                             <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Employee Name</span>
                                         </label>
                                     </div>
@@ -101,6 +102,11 @@
     </tr>
     </tbody>
 </table>
+    <div class="mt-4">
+        <button id="add-temp-position-btn" class="add-temp-position-btn">Dodaj tymczasowe stanowisko</button>
+    </div>
+</div>
+
 
 <table class="break-employees-table">
     <thead>
@@ -118,9 +124,7 @@
 </table>
 </div>
 
-<div class="mt-4">
-    <button id="add-temp-position-btn" class="add-temp-position-btn">Dodaj tymczasowe stanowisko</button>
-</div>
+
 
 <div id="temp-position-form-overlay" style="display: none;">
     <div id="temp-position-form-popup">

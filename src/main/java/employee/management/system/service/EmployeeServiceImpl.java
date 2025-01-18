@@ -9,6 +9,7 @@ import employee.management.system.repository.ShiftRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -63,9 +64,10 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<Employee> getShiftEmployees(LocalDate localDate) {
+    public List<Employee> getShiftEmployees(LocalDate today) {
 
-        List<Shift> shifts = shiftRepository.findShiftsByWorkDate(localDate);
+        LocalDate yesterday = today.minusDays(1);
+        List<Shift> shifts = shiftRepository.findCurrentShifts(today, yesterday);
         List<Employee> employees = new ArrayList<>();
 
         for (Shift shift:shifts) {

@@ -17,7 +17,8 @@ public class Skill {
     private String skillName;
     @Column(name = "description")
     private String description;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+    @OneToMany(mappedBy = "skill",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     private List<Position> positions;
     @OneToMany(mappedBy = "skill",

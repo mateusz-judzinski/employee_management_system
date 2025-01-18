@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -8,21 +7,33 @@ body {
 
 h1 {
     text-align: center;
-    margin-top: 20px;
-    font-size: 2em;
+    margin-top: 30px;
+    font-size: 2.5em;
+    color: #333;
+}
+
+.header-set {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.header {
+    margin-left: 5%;
 }
 
 .tables-container {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
 }
 
 .schedule-table {
-    width: 80%;
+    width: 90%;
     border-collapse: collapse;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .schedule-table thead {
@@ -30,10 +41,11 @@ h1 {
     color: #fff;
 }
 
-.schedule-table th, schedule-table td {
-    padding: 15px;
+.schedule-table th, .schedule-table td {
+    padding: 20px;
     text-align: left;
     border: 1px solid #ddd;
+    font-size: 1em;
 }
 
 .schedule-table tbody tr:nth-child(odd) {
@@ -41,7 +53,7 @@ h1 {
 }
 
 .schedule-table tbody tr:hover {
-    background-color: #f1f1f1;
+    background-color: #e6f2ff;
     cursor: pointer;
 }
 
@@ -49,28 +61,17 @@ h1 {
     font-weight: bold;
 }
 
-@media (max-width: 768px) {
-    .schedule-table {
-        font-size: 14px;
-    }
-
-    .schedule-table th, .schedule-table td {
-        padding: 10px;
-    }
-}
-
 .date-picker-container {
     display: flex;
-    justify-content: center;
-    margin: 20px 0;
-    text-align: right;
-    margin-left: 1050px;
+    justify-content: flex-end;
+    margin: 30px 20px;
+    margin-right: 5%;
 }
 
 .date-picker-container form {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
 .date-picker-container label {
@@ -79,8 +80,16 @@ h1 {
 }
 
 .date-picker-container input[type="date"] {
-    padding: 5px;
+    padding: 10px;
     font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.date-picker-container input[type="date"]:focus {
+    border-color: #007BFF;
+    outline: none;
 }
 
 .date-picker-container button {
@@ -91,9 +100,28 @@ h1 {
     font-size: 1em;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .date-picker-container button:hover {
     background-color: #0056b3;
 }
 
+
+@media (max-width: 768px) {
+    .schedule-table {
+        font-size: 14px;
+    }
+
+    .schedule-table th, .schedule-table td {
+        padding: 15px;
+    }
+
+    .date-picker-container {
+        justify-content: center;
+    }
+
+    .date-picker-container button {
+        padding: 10px 20px;
+    }
+}

@@ -98,9 +98,20 @@ table {
 }
 
 .positions-table{
-    width: 60%;
+    width: 100%;
 
 }
+
+.left-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 60%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 
 .break-employees-table{
     width: 38%;
@@ -133,7 +144,7 @@ table {
     text-align: right;
     font-size: 14px;
     margin-top: 10px;
-    margin-left: 235px;
+    margin-left: 230px;
 }
 
 .legend img {
@@ -147,7 +158,7 @@ table {
     margin: 0;
     font-size: 1.5em;
     text-align: right;
-    margin-right: 425px;
+    margin-right: 420px;
     margin-bottom: 10px;
     flex-grow: 1; /
 }
@@ -242,7 +253,6 @@ tbody tr.inactive {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin-top: 10px;
-    margin-left: 5%;
 }
 
 .add-temp-position-btn:hover {

@@ -124,7 +124,7 @@ public class Employee {
 
     public int getSkillProficiencyLevelForPosition(Position position){
         Skill positionSkill = position.getSkill();
-        int proficiencyLevel = 0;
+        int proficiencyLevel = -1;
 
         for (EmployeeSkill employeeSkill:skills) {
             if(employeeSkill.getSkill() == positionSkill){

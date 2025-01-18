@@ -91,17 +91,16 @@ public class LeaderController {
     @GetMapping("/employees")
     public String getShiftEmployeesForToday(Model model){
 
-        LocalDate workDate = LocalDate.now();
-        List<Employee> employees = employeeService.getShiftEmployees(workDate);
+        List<Employee> employees = employeeService.getAllEmployees();
         model.addAttribute("employees", employees);
 
-        return "leader/todays-employees";
+        return "leader/employees";
     }
 
     @GetMapping("/schedule")
     public String getSchedule(@RequestParam(value = "date", required = false) String date, Model model) {
         LocalDate selectedDate = (date != null) ? LocalDate.parse(date) : LocalDate.now();
-        List<Shift> shifts = shiftService.getShiftsByWorkDate(selectedDate);
+        List<Shift> shifts = shiftService.getEntireDayScheduleByWorkDate(selectedDate);
         model.addAttribute("shifts", shifts);
         model.addAttribute("selectedDate", selectedDate);
         return "leader/schedule";

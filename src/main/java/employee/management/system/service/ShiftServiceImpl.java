@@ -93,8 +93,9 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public List<Shift> getShiftsByWorkDate(LocalDate selectedDate) {
-        return shiftRepository.findShiftsByWorkDate(selectedDate);
+    public List<Shift> getEntireDayScheduleByWorkDate(LocalDate selectedDate) {
+        LocalDate dayBefore = selectedDate.minusDays(1);
+        return shiftRepository.findEntireDaySchedule(selectedDate, dayBefore);
     }
 
     @Override

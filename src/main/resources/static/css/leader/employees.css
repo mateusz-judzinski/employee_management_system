@@ -6,9 +6,11 @@ body {
 }
 
 h1 {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 2em;
+    text-align: left;
+    margin-left: 5%;
+    margin-top: 57px;
+    font-size: 2.5em;
+    color: #333;
 }
 
 
@@ -22,7 +24,8 @@ h1 {
     width: 90%;
     border-collapse: collapse;
     background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .employees-table thead {
@@ -31,13 +34,14 @@ h1 {
 }
 
 .employees-table th, .employees-table td {
-    padding: 15px;
+    padding: 20px;
     text-align: left;
     border: 1px solid #ddd;
+    font-size: 1em;
 }
 
 .employees-table tbody tr:nth-child(odd) {
-    background-color: #f2f2f2;
+    background-color: #f9f9f9;
 }
 
 .employees-table tbody tr:hover {
