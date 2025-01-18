@@ -125,3 +125,11 @@ h1 {
         padding: 10px 20px;
     }
 }
+
+.inactive-row td {
+    text-decoration: line-through;
+    color: #888;
+    background-color: #f0f0f0;
+}
+
+

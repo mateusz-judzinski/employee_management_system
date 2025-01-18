@@ -20,4 +20,5 @@ public interface ShiftService {
     List<Shift> getEntireDayScheduleByWorkDate(LocalDate selectedDate);
     void importSchedule(MultipartFile file) throws IOException;
     void updateEmployeesWithCurrentShift();
+    List<List<Shift>> splitOnActiveAndInactive(List<Shift> shifts);
 }

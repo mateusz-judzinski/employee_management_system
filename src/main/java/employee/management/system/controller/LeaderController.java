@@ -100,8 +100,10 @@ public class LeaderController {
     @GetMapping("/schedule")
     public String getSchedule(@RequestParam(value = "date", required = false) String date, Model model) {
         LocalDate selectedDate = (date != null) ? LocalDate.parse(date) : LocalDate.now();
-        List<Shift> shifts = shiftService.getEntireDayScheduleByWorkDate(selectedDate);
-        model.addAttribute("shifts", shifts);
+        List<Shift> allShifts = shiftService.getEntireDayScheduleByWorkDate(selectedDate);
+        List<List<Shift>> splitShifts = shiftService.splitOnActiveAndInactive(allShifts);
+        model.addAttribute("activeShifts", splitShifts.get(0));
+        model.addAttribute("inactiveShifts", splitShifts.get(1));
         model.addAttribute("selectedDate", selectedDate);
         return "leader/schedule";
     }

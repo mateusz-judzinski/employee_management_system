@@ -38,7 +38,6 @@ public class Position {
             inverseJoinColumns = @JoinColumn(name = "qualification_id")
     )
     private List<Qualification> neededQualifications;
-
     public Position() {
     }
 

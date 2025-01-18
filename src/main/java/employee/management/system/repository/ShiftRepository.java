@@ -29,7 +29,11 @@ public interface ShiftRepository extends JpaRepository<Shift, Integer> {
             "(s.endTime > CURRENT_TIME OR s.endTime < s.startTime)) " +
             "OR (s.workDate = :yesterday AND s.startTime > s.endTime AND s.endTime > CURRENT_TIME))")
     List<Shift> findCurrentShifts(@Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
-
-
+    @Query("SELECT s FROM Shift s " +
+            "WHERE s.isActive = true " +
+            "AND ((s.workDate < :yesterday) " +
+            "OR (s.workDate = :yesterday AND s.startTime > s.endTime AND CURRENT_TIME > s.endTime) " +
+            "OR (s.workDate = :today AND s.endTime < CURRENT_TIME))")
+    List<Shift> findFinishedShiftsWithActiveOnTrue(@Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
 
 }

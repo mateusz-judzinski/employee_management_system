@@ -224,7 +224,10 @@ public class ShiftServiceImpl implements ShiftService {
         for (Shift shift : currentEmployees) {
             Employee employee = shift.getEmployee();
             if (employee.getPosition() == null) {
-
+                if(!shift.isActive()){
+                    shift.setActive(true);
+                    shiftRepository.save(shift);
+                }
                 PositionEmployeeHistory history = new PositionEmployeeHistory(employee, breakPosition);
                 history.setStartDate(shift.getWorkDate());
                 history.setStartTime(shift.getStartTime());
@@ -235,6 +238,24 @@ public class ShiftServiceImpl implements ShiftService {
                 employee.setPosition(breakPosition);
             }
         }
+    }
+
+    @Override
+    public List<List<Shift>> splitOnActiveAndInactive(List<Shift> shifts) {
+        List<Shift> activeShifts = new ArrayList<>();
+        List<Shift> inactiveShifts = new ArrayList<>();
+        for(Shift shift:shifts){
+            if(shift.isActive()){
+                activeShifts.add(shift);
+            }else{
+                inactiveShifts.add(shift);
+            }
+        }
+        List<List<Shift>> result = new ArrayList<>();
+        result.add(activeShifts);
+        result.add(inactiveShifts);
+
+        return result;
     }
 
 
@@ -251,12 +272,12 @@ public class ShiftServiceImpl implements ShiftService {
 
     private String calculateShiftName(LocalTime shiftStartTime){
         String shiftName;
-        if(shiftStartTime.getHour() >= 14){
-            shiftName = "Zmiana nocna";
-        } else if(shiftStartTime.getHour() >= 7){
+        if(shiftStartTime.getHour() <= 9){
+            shiftName = "Zmiana poranna";
+        } else if(shiftStartTime.getHour() <= 13){
             shiftName = "Zmiana popołudniowa";
         } else{
-            shiftName = "Zmiana poranna";
+            shiftName = "Zmiana nocna";
         }
         return shiftName;
     }

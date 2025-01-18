@@ -9,7 +9,6 @@ import employee.management.system.repository.ShiftRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -99,6 +98,12 @@ public class EmployeeServiceImpl implements EmployeeService{
                     positionService.processHistory(employee, null);
                     employee.setPosition(null);
                 }
+            }
+        }
+        List<Shift> shiftsToDeactivate = shiftRepository.findFinishedShiftsWithActiveOnTrue(today, yesterday);
+        if(shiftsToDeactivate != null){
+            for(Shift shift: shiftsToDeactivate){
+                shift.setActive(false);
             }
         }
     }

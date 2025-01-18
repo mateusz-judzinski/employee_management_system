@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "shift")
@@ -25,6 +26,8 @@ public class Shift {
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "employee_id")
     private Employee employee;
+    @Column(name = "is_active")
+    private boolean isActive;
 
     public Shift() {
     }
@@ -34,6 +37,7 @@ public class Shift {
         this.shiftName = shiftName;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.isActive = true;
     }
 
     public int getId() {
@@ -82,5 +86,13 @@ public class Shift {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

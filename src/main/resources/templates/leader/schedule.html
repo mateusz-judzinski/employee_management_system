@@ -44,7 +44,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="shift : ${shifts}">
+        <tr th:each="shift : ${activeShifts}">
+            <td th:text="${shift.employee.firstName + ' ' + shift.employee.lastName}"></td>
+            <td th:text="${shift.startTime}"></td>
+            <td th:text="${shift.endTime}"></td>
+            <td th:text="${shift.workDate}"></td>
+        </tr>
+        <tr th:each="shift : ${inactiveShifts}"  th:class="'inactive-row'">
             <td th:text="${shift.employee.firstName + ' ' + shift.employee.lastName}"></td>
             <td th:text="${shift.startTime}"></td>
             <td th:text="${shift.endTime}"></td>
