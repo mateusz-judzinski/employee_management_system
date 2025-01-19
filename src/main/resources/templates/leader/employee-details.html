@@ -1,10 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Pracownika</title>
+    <link rel="stylesheet" href="/css/leader/employee-details.css">
+    <link rel="stylesheet" href="/css/leader/hamburger-menu.css">
 </head>
 <body>
-<h1>you've done it!</h1>
-</body>
+
+<div class="hamburger-menu">
+    <button class="hamburger-icon" id="hamburger-icon">&#9776;</button>
+    <div class="hamburger-dropdown" id="hamburger-dropdown">
+        <a href="/leader-panel">Panel</a>
+        <a href="/leader-panel/schedule">Grafik</a>
+        <a href="/leader-panel/employees">Lista</a>
+        <a href="/logout">Wyloguj</a>
+    </div>
+</div>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <img th:src="@{/images/user.png}" alt="Zdjęcie pracownika" class="profile-image">
+        <div class="profile-info">
+            <h1 th:text="${employee.firstName} + ' ' + ${employee.lastName}"></h1>
+            <p><strong>Email:</strong> <span th:text="${employee.email}"></span></p>
+            <p><strong>Telefon:</strong> <span th:text="${employee.phoneNumber}"></span></p>
+            <p><strong>Numer przepustki:</strong> <span th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}"></span></p>
+            <p><strong>Aktualne stanowisko:</strong> <span th:text="${employee.position != null ? employee.position.positionName : 'poza praca'}"></span></p>
+        </div>
+    </div>
+
+    <div class="back-button-container">
+        <a href="/leader-panel/employees" class="back-button">Powrót do listy pracowników</a>
+    </div>
+
+    <div class="profile-details">
+        <h2>Umiejętności</h2>
+        <table class="skills-table">
+            <thead>
+            <tr>
+                <th>Umiejętność</th>
+                <th>Poziom</th>
+                <th>Doświadczenie (godziny)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="skill : ${skills}">
+                <td th:text="${skill.skill.skillName}"></td>
+                <td th:text="${skill.proficiencyLevel}"></td>
+                <td th:text="${T(java.lang.Math).round(skill.timeExperienceInMinutes / 60.0)}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>Średni czas spędzony na stanowiskach</h2>
+        <table class="time-table">
+            <thead>
+            <tr>
+                <th>Stanowisko</th>
+                <th>Czas pracy</th>
+                <th>Procent całości</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${averagePositionTimes}">
+                <td th:text="${entry.positionName}"></td>
+                <td th:text="${entry.averageTime}"></td>
+                <td th:text="${entry.percentage + '%'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script src="/js/leader/hamburger-menu.js"></script>
+    </body>
 </html>

@@ -44,6 +44,11 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService{
         }
     }
 
+    @Override
+    public List<EmployeeSkill> findAllEmployeeSkillByEmployeeId(int employeeId) {
+        return employeeSkillRepository.findAllEmployeeSkillByEmployeeId(employeeId);
+    }
+
     private int calculateSkillProficiency(int timeExperienceInMinutes){
         if(timeExperienceInMinutes >= 9000){
             return 3;

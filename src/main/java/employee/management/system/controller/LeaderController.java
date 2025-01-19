@@ -1,9 +1,7 @@
 package employee.management.system.controller;
 
-import employee.management.system.entity.Employee;
-import employee.management.system.entity.EmployeeSkill;
-import employee.management.system.entity.Position;
-import employee.management.system.entity.Shift;
+import employee.management.system.dto.AveragePositionTime;
+import employee.management.system.entity.*;
 import employee.management.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +117,11 @@ public class LeaderController {
         Employee employee = employeeService.findEmployeeById(employeeId);
         model.addAttribute("employee", employee);
 
+        List<EmployeeSkill> skills = employeeSkillService.findAllEmployeeSkillByEmployeeId(employeeId);
+        model.addAttribute("skills", skills);
 
+        List<AveragePositionTime> averagePositionTimes = historyService.calculateEmployeePositionRatioPercentage(employeeId);
+        model.addAttribute("averagePositionTimes", averagePositionTimes);
 
         return "leader/employee-details";
     }

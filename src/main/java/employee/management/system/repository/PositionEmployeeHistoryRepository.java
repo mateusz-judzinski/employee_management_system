@@ -15,5 +15,6 @@ public interface PositionEmployeeHistoryRepository extends JpaRepository<Positio
     List<PositionEmployeeHistory> findByEmployeeId(int employeeId);
     @Query("SELECT history FROM PositionEmployeeHistory history JOIN history.position position WHERE position.positionName = :positionName")
     List<PositionEmployeeHistory> findAllByPositionName(@Param("positionName") String positionName);
+    List<PositionEmployeeHistory> findAllPositionEmployeeHistoryByEmployeeIdAndPositionId(int employeeId, int positionId);
 
 }

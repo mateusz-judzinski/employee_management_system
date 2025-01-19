@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface PositionRepository extends JpaRepository<Position, Integer> {
     Position findPositionByPositionName(String name);
+    @Query("SELECT p FROM Position p WHERE p.positionName != 'przerwa' AND p.isTemporary = FALSE")
+    List<Position> findAllPositionsForCalculations();
 }
