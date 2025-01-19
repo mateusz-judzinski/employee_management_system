@@ -4,6 +4,7 @@ import employee.management.system.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +14,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findEmployeesBySkillId(int skillId);
     Employee findEmployeeByFirstNameIgnoreCaseAndLastNameIgnoreCase(String firstName, String lastName);
     List<Employee> findByPositionIsNotNull();
+    List<Employee> findAllByOrderByLastNameAsc();
     @Query("""
             SELECT e
             FROM Employee e
@@ -37,6 +39,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
               )
             """)
     List<Employee> findEmployeesThatFinishedShift(@Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
+    List<Employee> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
+    List<Employee> findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(String firstName, String lastName);
+    @Query("SELECT e FROM Employee e JOIN e.shifts s WHERE " +
+            "((s.workDate = :today AND s.startTime <= CURRENT_TIME AND " +
+            "(s.endTime > CURRENT_TIME OR s.endTime < s.startTime)) " +
+            "OR (s.workDate = :yesterday AND s.startTime > s.endTime AND s.endTime > CURRENT_TIME))")
+    List<Employee> findEmployeesWithCurrentShifts(@Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
 
 
 }

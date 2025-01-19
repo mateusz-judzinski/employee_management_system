@@ -12,16 +12,20 @@
 <div class="hamburger-menu">
     <button class="hamburger-icon" id="hamburger-icon">&#9776;</button>
     <div class="hamburger-dropdown" id="hamburger-dropdown">
-        <a href="/leader-panel">Home</a>
+        <a href="/leader-panel">Panel</a>
         <a href="/leader-panel/schedule">Grafik</a>
-        <a href="/leader-panel/employees">Pracownicy</a>
+        <a href="/leader-panel/employees">Lista</a>
         <a href="/logout">Wyloguj</a>
     </div>
 </div>
 
 <div class="header-set">
     <div class="header">
-        <h1>Schedule</h1>
+        <h1>
+            Grafik
+            <span class="schedule-span" th:if="${selectedDate != null}" th:text="'(' + ${selectedDate} + ')'"></span>
+        </h1>
+
     </div>
 
     <div class="date-picker-container">
@@ -44,14 +48,20 @@
         </tr>
         </thead>
         <tbody>
+
         <tr th:each="shift : ${activeShifts}">
-            <td th:text="${shift.employee.firstName + ' ' + shift.employee.lastName}"></td>
+            <td>
+                <span th:text="${shift.employee.firstName} + ' ' + ${shift.employee.lastName}"></span>
+            </td>
             <td th:text="${shift.startTime}"></td>
             <td th:text="${shift.endTime}"></td>
             <td th:text="${shift.workDate}"></td>
         </tr>
-        <tr th:each="shift : ${inactiveShifts}"  th:class="'inactive-row'">
-            <td th:text="${shift.employee.firstName + ' ' + shift.employee.lastName}"></td>
+
+        <tr th:each="shift : ${inactiveShifts}" th:class="'inactive-row'">
+            <td th:onclick="'window.location.href=\'/leader-panel/employees/details/' + ${shift.employee.id} + '\''">
+                <span th:text="${shift.employee.firstName} + ' ' + ${shift.employee.lastName}"></span>
+            </td>
             <td th:text="${shift.startTime}"></td>
             <td th:text="${shift.endTime}"></td>
             <td th:text="${shift.workDate}"></td>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employees</title>
+    <title>Pracownicy</title>
     <link rel="stylesheet" href="/css/leader/employees.css">
     <link rel="stylesheet" href="/css/leader/hamburger-menu.css">
 </head>
@@ -12,34 +12,57 @@
 <div class="hamburger-menu">
     <button class="hamburger-icon" id="hamburger-icon">&#9776;</button>
     <div class="hamburger-dropdown" id="hamburger-dropdown">
-        <a href="/leader-panel">Home</a>
+        <a href="/leader-panel">Panel</a>
         <a href="/leader-panel/schedule">Grafik</a>
-        <a href="/leader-panel/employees">Pracownicy</a>
+        <a href="/leader-panel/employees">Lista</a>
         <a href="/logout">Wyloguj</a>
     </div>
 </div>
 
-<h1>Employees</h1>
+<div class="header-row">
+    <h1>Lista pracowników</h1>
+    <div class="two-forms-set">
+        <form action="/leader-panel/employees/search" method="get" class="search-form">
+            <input type="text" name="searchData" placeholder="Szukaj pracownika..." class="search-input" th:value="${searchData}">
+            <button type="submit" class="search-button">Szukaj</button>
+        </form>
+
+        <form action="/leader-panel/employees/today" method="get" class="display-employees-form" th:if="${!todays}">
+            <button type="submit" class="display-employees-button">Wyświetl dzisiejszych pracowników</button>
+        </form>
+
+        <form action="/leader-panel/employees" method="get" class="display-employees-form" th:if="${todays}">
+            <button type="submit" class="display-employees-button">Wyświetl wszystkich pracowników</button>
+        </form>
+    </div>
+</div>
+
+
 <div class="table-container">
     <table class="employees-table">
         <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>ID Card Number</th>
-            <th>Qualifications</th>
+            <th>Pracownik</th>
+            <th>Numer przepustki</th>
+            <th>Numer telefonu</th>
+            <th>Email</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="employee : ${employees}">
-            <td th:text="${employee.firstName}">First Name</td>
-            <td th:text="${employee.lastName}">Last Name</td>
+            <td th:onclick="'window.location.href=\'/leader-panel/employees/details/' + ${employee.id} + '\''">
+                <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
+                <img th:if="${employee.hasQualificationWithId(2)}"
+                     th:src="@{/images/car.png}"
+                     alt="Car Qualification"
+                     th:title="'Posiada prawo jazdy'"
+                     class="qualification-icon" />
+            </td>
             <td th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}">
-                ID Card Number
+                Numer przepustki
             </td>
-            <td>
-                <span th:each="qualification : ${employee.qualifications}" th:text="${qualification.name} + ' ' " th:append="' '"></span>
-            </td>
+            <td th:text="${employee.phoneNumber}">Numer telefonu</td>
+            <td th:text="${employee.email}">Email</td>
         </tr>
         </tbody>
     </table>

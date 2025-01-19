@@ -196,4 +196,16 @@ public class Employee {
         qualifications.add(qualification);
         qualification.getEmployees().add(this);
     }
+    public boolean hasQualificationWithId(int qualificationId) {
+        if (qualifications == null) {
+            return false;
+        }
+        for (Qualification qualification:qualifications) {
+            if(qualification.getId() == qualificationId){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -9,6 +9,7 @@ import employee.management.system.repository.ShiftRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -119,5 +120,28 @@ public class EmployeeServiceImpl implements EmployeeService{
         for (PositionEmployeeHistory history:histories) {
             historyRepository.delete(history);
         }
+    }
+
+    @Override
+    public List<Employee> getAllEmployeesSortedByLastName() {
+        return employeeRepository.findAllByOrderByLastNameAsc();
+    }
+
+    @Override
+    public List<Employee> getEmployeesFromSearchBarByOneElement(String firstOrLastName, String lastOrFirstName) {
+        return employeeRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstOrLastName, lastOrFirstName);
+    }
+
+    @Override
+    public List<Employee> getEmployeesFromSearchBarByTwoElements(String firstName, String lastName) {
+        return employeeRepository.findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName);
+    }
+
+    @Override
+    public List<Employee> findEmployeesWithCurrentShift() {
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+
+        return employeeRepository.findEmployeesWithCurrentShifts(today, yesterday);
     }
 }

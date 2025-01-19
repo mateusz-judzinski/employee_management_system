@@ -2,6 +2,7 @@ package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Skill;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -18,5 +19,8 @@ public interface EmployeeService {
     List<Employee> findEmployeesBySkillId(int skillId);
     void removePositionFromEmployeeAfterShift();
     void initDebug();
-
+    List<Employee> getAllEmployeesSortedByLastName();
+    List<Employee> getEmployeesFromSearchBarByOneElement(String firstOrLastName, String lastOrFirstName);
+    List<Employee> getEmployeesFromSearchBarByTwoElements(String firstName, String lastName);
+    List<Employee> findEmployeesWithCurrentShift();
 }

@@ -1,20 +1,18 @@
 package employee.management.system.controller;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.EmployeeSkill;
 import employee.management.system.entity.Position;
 import employee.management.system.entity.Shift;
-import employee.management.system.service.EmployeeService;
-import employee.management.system.service.PositionEmployeeHistoryService;
-import employee.management.system.service.PositionService;
-import employee.management.system.service.ShiftService;
+import employee.management.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,13 +24,15 @@ public class LeaderController {
     private final PositionService positionService;
     private final PositionEmployeeHistoryService historyService;
     private final ShiftService shiftService;
+    private final EmployeeSkillService employeeSkillService;
 
     @Autowired
-    public LeaderController(EmployeeService employeeService, PositionService positionService, PositionEmployeeHistoryService historyService, ShiftService shiftService) {
+    public LeaderController(EmployeeService employeeService, PositionService positionService, PositionEmployeeHistoryService historyService, ShiftService shiftService, EmployeeSkillService employeeSkillService) {
         this.employeeService = employeeService;
         this.positionService = positionService;
         this.historyService = historyService;
         this.shiftService = shiftService;
+        this.employeeSkillService = employeeSkillService;
     }
 
     @GetMapping()
@@ -89,10 +89,69 @@ public class LeaderController {
     }
 
     @GetMapping("/employees")
-    public String getShiftEmployeesForToday(Model model){
+    public String getAllEmployees(Model model){
 
-        List<Employee> employees = employeeService.getAllEmployees();
+        List<Employee> employees = employeeService.getAllEmployeesSortedByLastName();
         model.addAttribute("employees", employees);
+
+        boolean todays = false;
+        model.addAttribute("todays", todays);
+
+        return "leader/employees";
+    }
+
+    @GetMapping("/employees/today")
+    public String getTodaysEmployees(Model model){
+
+        List<Employee> employees = employeeService.findEmployeesWithCurrentShift();
+        model.addAttribute("employees", employees);
+
+        boolean todays = true;
+        model.addAttribute("todays", todays);
+
+        return "leader/employees";
+    }
+
+    @GetMapping("/employees/details/{employeeId}")
+    public String getDetailsForEmployee(@PathVariable("employeeId") int employeeId, Model model){
+
+        Employee employee = employeeService.findEmployeeById(employeeId);
+        model.addAttribute("employee", employee);
+
+
+
+        return "leader/employee-details";
+    }
+
+    @GetMapping("/employees/search")
+    public String getEmployeesSearchBar(@RequestParam(value = "searchData", required = false) String searchData, Model model){
+
+        List<Employee> employees;
+
+        if(searchData == null || searchData.isBlank()){
+            employees = employeeService.getAllEmployeesSortedByLastName();
+        } else{
+            String[] employee = searchData.split(" ");
+            if(employee.length == 1){
+                String name = employee[0];
+                employees = employeeService.getEmployeesFromSearchBarByOneElement(name, name);
+
+            } else if (employee.length == 2){
+                String firstName = employee[0];
+                String lastName = employee[1];
+                employees = employeeService.getEmployeesFromSearchBarByTwoElements(firstName, lastName);
+
+            } else{
+                employees = new ArrayList<>();
+            }
+
+        }
+
+        boolean todays = false;
+
+        model.addAttribute("todays", todays);
+        model.addAttribute("employees", employees);
+        model.addAttribute("searchData", searchData);
 
         return "leader/employees";
     }
