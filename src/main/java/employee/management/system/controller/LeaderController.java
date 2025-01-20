@@ -4,6 +4,7 @@ import employee.management.system.dto.AveragePositionTime;
 import employee.management.system.entity.*;
 import employee.management.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -125,6 +126,11 @@ public class LeaderController {
 
         List<PositionEmployeeHistory> todaysHistory = historyService.findTodaysActivityByEmployeeId(employeeId);
         model.addAttribute("todaysHistory", todaysHistory);
+
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear();
+        List<Shift> thisMonthShifts = shiftService.getMonthShiftForEmployeeById(employeeId, month, year);
+        model.addAttribute("thisMonthShifts", thisMonthShifts);
 
         return "leader/employee-details";
     }

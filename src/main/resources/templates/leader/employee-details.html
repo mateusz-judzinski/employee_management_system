@@ -24,75 +24,124 @@
         <img th:src="@{/images/user.png}" alt="Zdjęcie pracownika" class="profile-image">
         <div class="profile-info">
             <h1 th:text="${employee.firstName} + ' ' + ${employee.lastName}"></h1>
-            <p><strong>Email:</strong> <span th:text="${employee.email}"></span></p>
-            <p><strong>Telefon:</strong> <span th:text="${employee.phoneNumber}"></span></p>
-            <p><strong>Numer przepustki:</strong> <span th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}"></span></p>
-            <p><strong>Aktualne stanowisko:</strong> <span th:text="${employee.position != null ? employee.position.positionName : 'poza praca'}"></span></p>
+            <p>Email: <span th:text="${employee.email}"></span></p>
+            <p>Telefon: <span th:text="${employee.phoneNumber}"></span></p>
+            <p>Numer przepustki: <span th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}"></span></p>
+            <p>Aktualne stanowisko: <span th:text="${employee.position != null ? employee.position.positionName : 'brak'}"></span></p>
         </div>
     </div>
 
-    <div class="back-button-container">
-        <a href="/leader-panel/employees" class="back-button">Powrót do listy pracowników</a>
-    </div>
+    <hr class="separator">
 
     <div class="profile-details">
-        <h2>Umiejętności</h2>
-        <table class="skills-table">
-            <thead>
-            <tr>
-                <th>Umiejętność</th>
-                <th>Poziom</th>
-                <th>Doświadczenie</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="skill : ${skills}" th:if="${skill.timeExperienceInMinutes != 0}">
-                <td th:text="${skill.skill.skillName}"></td>
-                <td th:text="${skill.proficiencyLevel}"></td>
-                <td th:text="${T(java.lang.Math).round(skill.timeExperienceInMinutes / 60.0) + 'h'}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="table-container active" id="skills-table-container">
+            <div class="h2-navigation">
+                <button id="prev-table" aria-label="Poprzednia tabela">&larr;</button>
+                <h2>Umiejętności pracownika</h2>
+                <button id="next-table" aria-label="Następna tabela">&rarr;</button>
+            </div>
+            <table class="skills-table">
+                <thead>
+                <tr>
+                    <th>Umiejętność</th>
+                    <th>Poziom</th>
+                    <th>Doświadczenie</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="skill : ${skills}" th:if="${skill.timeExperienceInMinutes != 0}">
+                    <td th:text="${skill.skill.skillName}"></td>
+                    <td th:text="${skill.proficiencyLevel}"></td>
+                    <td th:text="${T(java.lang.Math).round(skill.timeExperienceInMinutes / 60.0) + 'h'}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <h2>Średni czas spędzony na stanowiskach</h2>
-        <table class="time-table">
-            <thead>
-            <tr>
-                <th>Stanowisko</th>
-                <th>Czas pracy</th>
-                <th>Procent całości</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="averagePositionTime : ${averagePositionTimes}" th:if="${averagePositionTime.percentage != 0}">
-                <td th:text="${averagePositionTime.positionName}"></td>
-                <td th:text="${averagePositionTime.timeSpent}"></td>
-                <td th:text="${averagePositionTime.percentage + '%'}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="table-container" id="time-table-container">
+            <div class="h2-navigation">
+                <button id="prev-table" aria-label="Poprzednia tabela">&larr;</button>
+                <h2>Statystyki stanowisk</h2>
+                <button id="next-table" aria-label="Następna tabela">&rarr;</button>
+            </div>
+            <table class="stats-table">
+                <thead>
+                <tr>
+                    <th>Stanowisko</th>
+                    <th>Czas pracy</th>
+                    <th>Procent całości</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="averagePositionTime : ${averagePositionTimes}" th:if="${averagePositionTime.percentage != 0}">
+                    <td th:text="${averagePositionTime.positionName}"></td>
+                    <td th:text="${averagePositionTime.timeSpent}"></td>
+                    <td th:text="${averagePositionTime.percentage + '%'}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <h2>Dzisiejsze aktywności</h2>
-        <table class="activity-table">
-            <thead>
-            <tr>
-                <th>Nazwa stanowiska</th>
-                <th>Czas rozpoczęcia</th>
-                <th>Czas zakończenia</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="activity : ${todaysHistory}">
-                <td th:text="${activity.position.positionName}"></td>
-                <td th:text="${activity.startTime}"></td>
-                <td th:text="${activity.endTime != null ? activity.endTime : 'nadal'}"></td>
-            </tr>
-            </tbody>
-        </table>
+
+        <div class="table-container" id="activity-table-container" th:if="${employee.position != null}">
+            <div class="h2-navigation">
+                <button id="prev-table" aria-label="Poprzednia tabela">&larr;</button>
+                <h2>Dzisiejsza aktywność</h2>
+                <button id="next-table" aria-label="Następna tabela">&rarr;</button>
+            </div>
+            <table class="activity-table">
+                <thead>
+                <tr>
+                    <th>Nazwa stanowiska</th>
+                    <th>Czas rozpoczęcia</th>
+                    <th>Czas zakończenia</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="activity : ${todaysHistory}">
+                    <td th:text="${activity.position.positionName}"></td>
+                    <td th:text="${activity.startTime}"></td>
+                    <td th:text="${activity.endTime != null ? activity.endTime : 'obecnie'}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="table-container" id="month-shifts-table-container">
+            <div class="h2-navigation">
+                <button id="prev-table" aria-label="Poprzednia tabela">&larr;</button>
+                <h2>Zmiany w tym miesiącu</h2>
+                <button id="next-table" aria-label="Następna tabela">&rarr;</button>
+            </div>
+            <table class="month-shifts-table">
+                <thead>
+                <tr>
+                    <th>Data pracy</th>
+                    <th>Godzina rozpoczęcia</th>
+                    <th>Godzina zakończenia</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="shift : ${thisMonthShifts}">
+                    <td th:text="${shift.workDate}"></td>
+                    <td th:text="${shift.startTime}"></td>
+                    <td th:text="${shift.endTime}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
     </div>
+</div>
 
+<div class="back-button-container">
+    <a href="/leader-panel/employees" class="back-button">Powrót do listy pracowników</a>
 </div>
 
 <script src="/js/leader/hamburger-menu.js"></script>
+<script src="/js/leader/navigation-buttons.js"></script>
+
 </body>
 </html>

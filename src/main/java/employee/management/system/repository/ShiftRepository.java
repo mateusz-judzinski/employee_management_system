@@ -11,10 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ShiftRepository extends JpaRepository<Shift, Integer> {
-    @Query("SELECT s FROM Shift s WHERE MONTH(s.workDate) = :month ORDER BY s.workDate ASC")
-    List<Shift> getScheduleForMonth(int month);
-    @Query("SELECT s FROM Shift s WHERE DAY(s.workDate) = :day AND MONTH(s.workDate) = :month ORDER BY s.startTime ASC")
-    List<Shift> getScheduleForDay(int day, int month);
     List<Shift> findShiftsByWorkDate(LocalDate workDate);
     @Query("SELECT s FROM Shift s WHERE " +
             "s.workDate = :day OR (s.workDate = :dayBefore AND s.startTime > s.endTime) " +
@@ -35,5 +31,7 @@ public interface ShiftRepository extends JpaRepository<Shift, Integer> {
             "OR (s.workDate = :yesterday AND s.startTime > s.endTime AND CURRENT_TIME > s.endTime) " +
             "OR (s.workDate = :today AND s.startTime < s.endTime AND CURRENT_TIME > s.endTime))")
     List<Shift> findFinishedShiftsWithActiveOnTrue(@Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
+    @Query("SELECT s FROM Shift s WHERE s.employee.id = :employeeId AND MONTH(s.workDate) = :month AND YEAR(s.workDate) = :year ORDER BY s.workDate ASC")
+    List<Shift> getMonthScheduleForEmployeeById(@Param("employeeId") int employeeId, @Param("month") int month, @Param("year") int year);
 
 }

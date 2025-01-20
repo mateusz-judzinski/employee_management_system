@@ -76,21 +76,7 @@ public class ShiftServiceImpl implements ShiftService {
         return shiftRepository.findShiftsByWorkDate(workDate);
     }
 
-    @Override
-    public Map<String, List<String>> getScheduleForMonth(Integer month) {
-        int monthToUse = (month != null) ? month : LocalDate.now().getMonthValue();
-        List<Shift> shifts = shiftRepository.getScheduleForMonth(monthToUse);
 
-        return splitMonthScheduleOnDays(shifts);
-    }
-
-    @Override
-    public List<Shift> getScheduleForDay(Integer day) {
-        int dayToUse = (day != null) ? day : LocalDate.now().getDayOfMonth();
-        int month = LocalDate.now().getMonthValue();
-
-        return shiftRepository.getScheduleForDay(dayToUse, month);
-    }
 
     @Override
     public List<Shift> getEntireDayScheduleByWorkDate(LocalDate selectedDate) {
@@ -272,6 +258,11 @@ public class ShiftServiceImpl implements ShiftService {
         result.add(inactiveShifts);
 
         return result;
+    }
+
+    @Override
+    public List<Shift> getMonthShiftForEmployeeById(int employeeId, int month, int year) {
+        return shiftRepository.getMonthScheduleForEmployeeById(employeeId, month, year);
     }
 
     private boolean wasAlreadyActiveToday(Shift shift, List<PositionEmployeeHistory> latestHistories){

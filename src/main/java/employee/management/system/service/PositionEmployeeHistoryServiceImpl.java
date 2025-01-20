@@ -86,17 +86,19 @@ public class PositionEmployeeHistoryServiceImpl implements PositionEmployeeHisto
         LocalTime totalTime = LocalTime.of(0, 0, 0);
 
         for (PositionEmployeeHistory history : histories) {
-            Duration duration;
-            LocalTime startTime = history.getStartTime();
-            LocalTime endTime = history.getEndTime();
+            if(history.getEndTime() != null){
+                Duration duration;
+                LocalTime startTime = history.getStartTime();
+                LocalTime endTime = history.getEndTime();
 
-            if (endTime.isBefore(startTime)) {
-                duration = Duration.between(startTime, endTime.plusHours(24));
-            } else {
-                duration = Duration.between(startTime, endTime);
+                if (endTime.isBefore(startTime)) {
+                    duration = Duration.between(startTime, endTime.plusHours(24));
+                } else {
+                    duration = Duration.between(startTime, endTime);
+                }
+
+                totalTime = totalTime.plusSeconds(duration.getSeconds());
             }
-
-            totalTime = totalTime.plusSeconds(duration.getSeconds());
         }
         return totalTime;
     }

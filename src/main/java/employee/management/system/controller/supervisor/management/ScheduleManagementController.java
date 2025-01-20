@@ -23,13 +23,6 @@ public class ScheduleManagementController {
         this.shiftService = shiftService;
     }
 
-    @GetMapping()
-    public String getMonthlySchedule(@RequestParam(value = "month", required = false) Integer month, Model model) {
-        Map<String, List<String>> dailySchedule = shiftService.getScheduleForMonth(month);
-        model.addAttribute("dailySchedule", dailySchedule);
-        return "supervisor/schedule/month-schedule";
-    }
-
     @GetMapping("/import")
     public String importSchedulePage(){
         return "supervisor/schedule/import-schedule";

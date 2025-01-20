@@ -93,7 +93,7 @@
                 </div>
                 <div class="employee" th:each="employee : ${position.employees}">
                     <a th:href="@{'/leader-panel/position/remove-employee/' + ${employee.id}}" class="remove-btn" title="Remove">X</a>
-                    <img th:if="${!position.isTemporary}" th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
+                    <img th:if="${!position.isTemporary} AND ${employee.getSkillProficiencyLevelForPosition(position) != -1}" th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
                     <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
                     <span id="duration-${employee.id}" th:data-starttime="${activeEmployees[employee.id]}">Duration</span>
                 </div>
