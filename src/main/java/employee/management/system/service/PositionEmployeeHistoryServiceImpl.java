@@ -13,10 +13,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PositionEmployeeHistoryServiceImpl implements PositionEmployeeHistoryService {
@@ -134,9 +131,18 @@ public class PositionEmployeeHistoryServiceImpl implements PositionEmployeeHisto
             averagePositionTimes.add(new AveragePositionTime(position.getPositionName(), formattedTime, percentage));
         }
 
+        averagePositionTimes.sort(Comparator.comparingDouble(AveragePositionTime::getPercentage).reversed());
+
         return averagePositionTimes;
     }
 
+    @Override
+    public List<PositionEmployeeHistory> findTodaysActivityByEmployeeId(int employeeId) {
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+
+        return positionEmployeeHistoryRepository.findTodaysActivityByEmployeeId(employeeId, today, yesterday);
+    }
 
 
 }

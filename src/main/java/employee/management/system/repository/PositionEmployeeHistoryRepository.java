@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,10 @@ public interface PositionEmployeeHistoryRepository extends JpaRepository<Positio
     @Query("SELECT history FROM PositionEmployeeHistory history JOIN history.position position WHERE position.positionName = :positionName")
     List<PositionEmployeeHistory> findAllByPositionName(@Param("positionName") String positionName);
     List<PositionEmployeeHistory> findAllPositionEmployeeHistoryByEmployeeIdAndPositionId(int employeeId, int positionId);
-
+    @Query("SELECT history FROM PositionEmployeeHistory history WHERE history.employee.id = :employeeId " +
+            "AND (history.startDate = :today " +
+            "OR (history.startDate = :yesterday AND history.startTime > history.endTime))")
+    List<PositionEmployeeHistory> findTodaysActivityByEmployeeId(@Param("employeeId") int employeeId, @Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
+    @Query("SELECT h FROM PositionEmployeeHistory h WHERE h.employee.id = :employeeId ORDER BY h.startDate DESC, h.startTime DESC")
+    List<PositionEmployeeHistory> findLatestHistoryByEmployeeId(@Param("employeeId") int employeeId);
 }

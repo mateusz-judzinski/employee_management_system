@@ -85,25 +85,19 @@ ul {
     color: #fff;
 }
 
-.back-button-container {
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
+}
+
+.activity-table th, .activity-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
     text-align: left;
 }
 
-.back-button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 1em;
-    color: #fff;
+.activity-table th {
     background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    color: #fff;
 }
-
-.back-button:hover {
-    background-color: #0056b3;
-}
-

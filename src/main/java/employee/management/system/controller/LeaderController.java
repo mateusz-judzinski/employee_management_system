@@ -123,6 +123,9 @@ public class LeaderController {
         List<AveragePositionTime> averagePositionTimes = historyService.calculateEmployeePositionRatioPercentage(employeeId);
         model.addAttribute("averagePositionTimes", averagePositionTimes);
 
+        List<PositionEmployeeHistory> todaysHistory = historyService.findTodaysActivityByEmployeeId(employeeId);
+        model.addAttribute("todaysHistory", todaysHistory);
+
         return "leader/employee-details";
     }
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -46,7 +47,10 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService{
 
     @Override
     public List<EmployeeSkill> findAllEmployeeSkillByEmployeeId(int employeeId) {
-        return employeeSkillRepository.findAllEmployeeSkillByEmployeeId(employeeId);
+        List<EmployeeSkill> skills = employeeSkillRepository.findAllEmployeeSkillByEmployeeId(employeeId);
+        skills.sort(Comparator.comparingInt(EmployeeSkill::getTimeExperienceInMinutes).reversed());
+
+        return skills;
     }
 
     private int calculateSkillProficiency(int timeExperienceInMinutes){

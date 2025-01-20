@@ -42,14 +42,14 @@
             <tr>
                 <th>Umiejętność</th>
                 <th>Poziom</th>
-                <th>Doświadczenie (godziny)</th>
+                <th>Doświadczenie</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="skill : ${skills}">
+            <tr th:each="skill : ${skills}" th:if="${skill.timeExperienceInMinutes != 0}">
                 <td th:text="${skill.skill.skillName}"></td>
                 <td th:text="${skill.proficiencyLevel}"></td>
-                <td th:text="${T(java.lang.Math).round(skill.timeExperienceInMinutes / 60.0)}"></td>
+                <td th:text="${T(java.lang.Math).round(skill.timeExperienceInMinutes / 60.0) + 'h'}"></td>
             </tr>
             </tbody>
         </table>
@@ -64,16 +64,35 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="entry : ${averagePositionTimes}">
-                <td th:text="${entry.positionName}"></td>
-                <td th:text="${entry.averageTime}"></td>
-                <td th:text="${entry.percentage + '%'}"></td>
+            <tr th:each="averagePositionTime : ${averagePositionTimes}" th:if="${averagePositionTime.percentage != 0}">
+                <td th:text="${averagePositionTime.positionName}"></td>
+                <td th:text="${averagePositionTime.timeSpent}"></td>
+                <td th:text="${averagePositionTime.percentage + '%'}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>Dzisiejsze aktywności</h2>
+        <table class="activity-table">
+            <thead>
+            <tr>
+                <th>Nazwa stanowiska</th>
+                <th>Czas rozpoczęcia</th>
+                <th>Czas zakończenia</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="activity : ${todaysHistory}">
+                <td th:text="${activity.position.positionName}"></td>
+                <td th:text="${activity.startTime}"></td>
+                <td th:text="${activity.endTime != null ? activity.endTime : 'nadal'}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 
+</div>
 
-    <script src="/js/leader/hamburger-menu.js"></script>
-    </body>
+<script src="/js/leader/hamburger-menu.js"></script>
+</body>
 </html>

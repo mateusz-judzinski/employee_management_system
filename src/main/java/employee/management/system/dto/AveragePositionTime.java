@@ -2,12 +2,12 @@ package employee.management.system.dto;
 
 public class AveragePositionTime {
     private String positionName;
-    private String averageTime;
+    private String timeSpent;
     private double percentage;
 
-    public AveragePositionTime(String positionName, String averageTime, double percentage) {
+    public AveragePositionTime(String positionName, String timeSpent, double percentage) {
         this.positionName = positionName;
-        this.averageTime = averageTime;
+        this.timeSpent = timeSpent;
         this.percentage = percentage;
     }
 
@@ -19,12 +19,12 @@ public class AveragePositionTime {
         this.positionName = positionName;
     }
 
-    public String getAverageTime() {
-        return averageTime;
+    public String getTimeSpent() {
+        return timeSpent;
     }
 
-    public void setAverageTime(String averageTime) {
-        this.averageTime = averageTime;
+    public void setTimeSpent(String timeSpent) {
+        this.timeSpent = timeSpent;
     }
 
     public double getPercentage() {

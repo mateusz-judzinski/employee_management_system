@@ -228,14 +228,30 @@ public class ShiftServiceImpl implements ShiftService {
                     shift.setActive(true);
                     shiftRepository.save(shift);
                 }
-                PositionEmployeeHistory history = new PositionEmployeeHistory(employee, breakPosition);
-                history.setStartDate(shift.getWorkDate());
-                history.setStartTime(shift.getStartTime());
-                history.setActive(true);
 
-                historyRepository.save(history);
+                List<PositionEmployeeHistory> latestHistories = historyRepository.findLatestHistoryByEmployeeId(employee.getId());
 
-                employee.setPosition(breakPosition);
+                if(wasAlreadyActiveToday(shift, latestHistories)) {
+                    PositionEmployeeHistory history = new PositionEmployeeHistory(employee, breakPosition);
+                    history.setStartDate(LocalDate.now());
+                    history.setStartTime(LocalTime.now());
+                    history.setActive(true);
+
+                    historyRepository.save(history);
+
+                    employee.setPosition(breakPosition);
+
+                } else{
+                    PositionEmployeeHistory history = new PositionEmployeeHistory(employee, breakPosition);
+                    history.setStartDate(shift.getWorkDate());
+                    history.setStartTime(shift.getStartTime());
+                    history.setActive(true);
+
+                    historyRepository.save(history);
+
+                    employee.setPosition(breakPosition);
+                }
+
             }
         }
     }
@@ -258,6 +274,21 @@ public class ShiftServiceImpl implements ShiftService {
         return result;
     }
 
+    private boolean wasAlreadyActiveToday(Shift shift, List<PositionEmployeeHistory> latestHistories){
+        boolean result = false;
+        if(latestHistories == null || latestHistories.isEmpty()){
+            return false;
+        }
+        else{
+            PositionEmployeeHistory latestHistory = latestHistories.get(0);
+            if(shift.getWorkDate().isEqual(latestHistory.getStartDate())){
+                result = true;
+            } else if (shift.getWorkDate().isEqual(latestHistory.getStartDate().minusDays(1)) && shift.getStartTime().isAfter(shift.getEndTime())) {
+                result = true;
+            }
+        }
+        return result;
+    }
 
     private void deleteScheduleIfExists(int month, int year){
         if(shiftRepository.existsByMonthAndYear(month, year)){
