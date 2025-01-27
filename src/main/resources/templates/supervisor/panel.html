@@ -1,31 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Supervisor Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel kierownika</title>
+    <link rel="stylesheet" href="/css/supervisor/panel.css">
+    <link rel="stylesheet" href="/css/user/hamburger-menu.css">
 </head>
 <body>
-<h1>Supervisor Panel</h1>
-<a href="/supervisor-panel/employees">Employee list</a>
-<br>
-<a href="/supervisor-panel/users">Leaders list</a>
-<br>
-<a href="/supervisor-panel/schedule/day-schedule">Day Schedule</a>
-<br>
-<a href="/supervisor-panel/schedule/month-schedule">Month Schedule</a>
-<br>
-<a href="/supervisor-panel/positions">Position</a>
-<br>
-<a href="/supervisor-panel/skills">Skill</a>
-<br>
-<a href="/supervisor-panel/history">History</a>
-<br>
-<a href="/supervisor-panel/schedule/import">Import</a>
-<br>
-<br>
-<a href="/logout">Logout</a>
+<h1>Panel kierownika</h1>
 
-<br>
+
+<div th:replace="~{fragments/supervisor-menu :: menu}"></div>
+
+
+<div class="header-container">
+    <h2 class="positions-title">Stanowiska</h2>
+    <div class="legend">
+        <img src="/images/level_0.png" alt="Level 0"> Brak doświadczenia
+        <img src="/images/level_1.png" alt="Level 1"> Początkujący
+        <img src="/images/level_2.png" alt="Level 2"> Średnio zaawansowany
+        <img src="/images/level_3.png" alt="Level 3"> Zaawansowany
+    </div>
+
+    <h2 class="break-title">Pracownicy na przerwie</h2>
+</div>
+
+<div class="tables-container">
+    <div class="left-container">
+        <table class="positions-table">
+            <thead>
+            <tr>
+                <th class="position-col1">Status</th>
+                <th class="position-col2">Nazwa stanowiska</th>
+                <th class="position-col3">Pracownicy</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="position : ${positions}" th:classappend="${!position.isActive} ? 'inactive'">
+                <td>
+                    <span class="status-indicator" th:classappend="${position.isActive} ? 'active' : 'inactive'">
+                        <i th:if="${position.isActive}" class="icon-circle active"></i>
+                        <i th:if="${!position.isActive}" class="icon-circle inactive"></i>
+                        <span th:text="${position.isActive ? 'Aktywne' : 'Nieaktywne'}"></span>
+                    </span>
+                </td>
+
+
+                <td th:if="${position.isTemporary}"
+                    class="position-name"
+                    th:text="${position.positionName}"
+                    th:title="${position.description}">
+                    Position Name
+                </td>
+                <td th:unless="${position.isTemporary}"
+                    th:text="${position.positionName}">
+                    Position Name
+                </td>
+
+                <td>
+                    <div class="employee-container">
+                        <div class="employee" th:each="employee : ${position.employees}">
+                            <img th:if="${!position.isTemporary} AND ${employee.getSkillProficiencyLevelForPosition(position) != -1}" th:src="@{'/images/level_' + ${employee.getSkillProficiencyLevelForPosition(position)} + '.png'}" alt="Poziom umiejętności" style="vertical-align: -2px;" />
+                            <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
+                            <span id="duration-${employee.id}" th:data-starttime="${activeEmployees[employee.id]}">Duration</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <table class="break-employees-table">
+        <thead>
+        <tr>
+            <th>Imię i nazwisko</th>
+            <th>Długość przerwy</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${breakPosition.employees}">
+            <td th:text="${employee.firstName} + ' ' + ${employee.lastName}">First Name</td>
+            <td id="duration-${employee.id}" th:data-starttime="${activeEmployees[employee.id]}">Duration</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<script src="/js/user/duration-updater.js"></script>
+<script src="/js/user/hamburger-menu.js"></script>
 
 </body>
 </html>

@@ -83,7 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
 
-    @Scheduled(cron = "0 1/30 * * * *")
+    @Scheduled(cron = "0 14/30 * * * *")
     @Transactional
     @Override
     public void removePositionFromEmployeeAfterShift() {

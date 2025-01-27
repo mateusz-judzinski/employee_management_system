@@ -1,0 +1,216 @@
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    margin-right: 2%;
+}
+
+table {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tables-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+
+.positions-table th:nth-child(1), .positions-table td:nth-child(1) {
+    width: 20%;
+}
+
+.positions-table th:nth-child(2), .positions-table td:nth-child(2) {
+    width: 30%;
+}
+
+.positions-table th:nth-child(3), .positions-table td:nth-child(3) {
+    width: 50%;
+}
+
+.positions-table{
+    width: 100%;
+
+}
+
+.left-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 60%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+.break-employees-table{
+    width: 38%;
+
+}
+
+.break-employees-table th:nth-child(1), .break-employees-table td:nth-child(1) {
+    width: 50%;
+}
+
+.break-employees-table th:nth-child(2), .break-employees-table td:nth-child(2) {
+    width: 50%;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.positions-title {
+    margin: 0;
+    font-size: 1.5em;
+    margin-left: 5%;
+}
+
+.legend {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-left: 230px;
+}
+
+.legend img {
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+
+.break-title {
+    margin: 0;
+    font-size: 1.5em;
+    text-align: right;
+    margin-right: 420px;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+
+
+thead {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+tbody tr.inactive {
+    background-color: #e0e0e0;
+    color: #888;
+}
+
+.toggle-btn {
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+
+.employee-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.employee {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+
+}
+
+
+.position-name {
+    cursor: help;
+}
+
+
+.status-cell {
+    text-align: center;
+    vertical-align: middle;
+    padding: 16px 0;
+}
+
+
+.status-indicator {
+    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+
+.icon-circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+.icon-circle.active {
+    background-color: #28a745;
+}
+
+.icon-circle.inactive {
+    background-color: #dc3545;
+}
+
+
+.status-indicator.active {
+    color: #28a745;
+}
+
+.status-indicator.inactive {
+    color: #dc3545;
+}
+

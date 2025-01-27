@@ -8,6 +8,6 @@ public class ErrorController {
 
     @GetMapping("/access-denied")
     public String showAccessDeniedPage(){
-        return "access-denied-page";
+        return "user/access-denied";
     }
 }

@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Pracownika</title>
-    <link rel="stylesheet" href="/css/leader/employee-details.css">
+    <link rel="stylesheet" href="/css/supervisor/employee-details.css">
     <link rel="stylesheet" href="/css/user/hamburger-menu.css">
 </head>
 <body>
 
-<div th:replace="~{fragments/leader-menu :: menu}"></div>
+<div th:replace="~{fragments/supervisor-menu :: menu}"></div>
+
 
 <div class="profile-container">
     <div class="profile-header">
@@ -131,7 +132,7 @@
 </div>
 
 <div class="back-button-container">
-    <a href="/leader-panel/employees" class="back-button">Powrót do listy pracowników</a>
+    <a href="/supervisor-panel/employees/list" class="back-button">Powrót do listy pracowników</a>
 </div>
 
 <script src="/js/user/hamburger-menu.js"></script>

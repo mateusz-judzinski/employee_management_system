@@ -4,24 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leader Panel</title>
-    <link rel="stylesheet" href="/css/leader/leader-panel.css">
+    <link rel="stylesheet" href="/css/leader/panel.css">
     <link rel="stylesheet" href="/css/leader/temp-position-form.css">
     <link rel="stylesheet" href="/css/leader/deactivation-pop-up.css">
-    <link rel="stylesheet" href="/css/leader/hamburger-menu.css">
+    <link rel="stylesheet" href="/css/user/hamburger-menu.css">
 </head>
 <body>
 <h1>Panel Lidera</h1>
 
 
-<div class="hamburger-menu">
-    <button class="hamburger-icon" id="hamburger-icon">&#9776;</button>
-    <div class="hamburger-dropdown" id="hamburger-dropdown">
-        <a href="/leader-panel">Panel</a>
-        <a href="/leader-panel/schedule">Grafik</a>
-        <a href="/leader-panel/employees">Lista</a>
-        <a href="/logout">Wyloguj</a>
-    </div>
-</div>
+<div th:replace="~{fragments/leader-menu :: menu}"></div>
 
 
 <div class="header-container">
@@ -153,8 +145,8 @@
 
 <script src="/js/leader/deactivation-pop-up.js"></script>
 <script src="/js/leader/temp-position-form.js"></script>
-<script src="/js/leader/duration-updater.js"></script>
-<script src="/js/leader/hamburger-menu.js"></script>
+<script src="/js/user/duration-updater.js"></script>
+<script src="/js/user/hamburger-menu.js"></script>
 
 </body>
 </html>

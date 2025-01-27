@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="menu">
+    <div class="hamburger-menu">
+        <button class="hamburger-icon" id="hamburger-icon">&#9776;</button>
+        <div class="hamburger-dropdown" id="hamburger-dropdown">
+            <a href="/supervisor-panel">Panel</a>
+            <a href="/supervisor-panel/schedules/list">Grafik</a>
+            <a href="/supervisor-panel/employees/list">Lista</a>
+            <a href="/logout">Wyloguj</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

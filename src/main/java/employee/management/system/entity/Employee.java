@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employee")
@@ -196,12 +197,12 @@ public class Employee {
         qualifications.add(qualification);
         qualification.getEmployees().add(this);
     }
-    public boolean hasQualificationWithId(int qualificationId) {
+    public boolean hasQualificationWithName(String qualificationName) {
         if (qualifications == null) {
             return false;
         }
         for (Qualification qualification:qualifications) {
-            if(qualification.getId() == qualificationId){
+            if(Objects.equals(qualification.getName(), qualificationName)){
                 return true;
             }
         }

@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule</title>
-    <link rel="stylesheet" href="/css/leader/schedule.css">
+    <link rel="stylesheet" href="/css/supervisor/schedule.css">
     <link rel="stylesheet" href="/css/user/hamburger-menu.css">
 </head>
 <body>
 
-<div th:replace="~{fragments/leader-menu :: menu}"></div>
+<div th:replace="~{fragments/supervisor-menu :: menu}"></div>
+
 
 <div class="header-set">
     <div class="header">
@@ -21,7 +22,7 @@
     </div>
 
     <div class="date-picker-container">
-        <form action="/leader-panel/schedule" method="get">
+        <form action="/supervisor-panel/schedules/list" method="get">
             <label for="selectedDate">Wybierz dzień:</label>
             <input type="date" id="selectedDate" name="date" required>
             <button type="submit">Wyświetl grafik</button>
@@ -51,7 +52,7 @@
         </tr>
 
         <tr th:each="shift : ${inactiveShifts}" th:class="'inactive-row'">
-            <td th:onclick="'window.location.href=\'/leader-panel/employees/details/' + ${shift.employee.id} + '\''">
+            <td th:onclick="'window.location.href=\'/supervisor-panel/employees/details/' + ${shift.employee.id} + '\''">
                 <span th:text="${shift.employee.firstName} + ' ' + ${shift.employee.lastName}"></span>
             </td>
             <td th:text="${shift.startTime}"></td>
