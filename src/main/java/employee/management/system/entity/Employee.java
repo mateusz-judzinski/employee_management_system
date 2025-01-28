@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -133,6 +134,22 @@ public class Employee {
             }
         }
         return proficiencyLevel;
+    }
+
+    public List<Shift> getIncomingShifts(){
+        List<Shift> incomingShifts = new ArrayList<>();
+
+        for (Shift shift:shifts){
+            if(shift.getWorkDate().isAfter(LocalDate.now()) || shift.getWorkDate().isEqual(LocalDate.now())){
+                incomingShifts.add(shift);
+            } else if (shift.getWorkDate().isEqual(LocalDate.now().minusDays(1)) && shift.getStartTime().isAfter(shift.getEndTime())) {
+                incomingShifts.add(shift);
+            }
+        }
+
+        incomingShifts.sort(Comparator.comparing(Shift::getWorkDate));
+
+        return incomingShifts;
     }
 
     public List<Shift> getShifts() {

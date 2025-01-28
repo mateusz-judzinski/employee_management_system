@@ -76,4 +76,18 @@ public class EmployeeSkill {
     public void addExperience(int minutes) {
         this.timeExperienceInMinutes = this.timeExperienceInMinutes + minutes;
     }
+
+    public String getSkillProficiencyName(){
+        if(proficiencyLevel == 3){
+            return "zaawansowany";
+        } else if(proficiencyLevel == 2){
+            return "średnio zaawansowany";
+        } else if (proficiencyLevel == 1) {
+            return "początkujący";
+        } else if(proficiencyLevel == 0){
+            return "brak doświadoczenia";
+        } else{
+            return "błąd";
+        }
+    }
 }

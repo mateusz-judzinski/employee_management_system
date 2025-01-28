@@ -25,13 +25,19 @@ public class SupervisorController {
     private final PositionEmployeeHistoryService historyService;
     private final EmployeeService employeeService;
     private final EmployeeSkillService employeeSkillService;
+    private final QualificationService qualificationService;
+    private final SkillService skillService;
+    private final UserService userService;
 
-    public SupervisorController(ShiftService shiftService, PositionService positionService, PositionEmployeeHistoryService historyService, EmployeeService employeeService, EmployeeSkillService employeeSkillService) {
+    public SupervisorController(ShiftService shiftService, PositionService positionService, PositionEmployeeHistoryService historyService, EmployeeService employeeService, EmployeeSkillService employeeSkillService, QualificationService qualificationService, SkillService skillService, UserService userService) {
         this.shiftService = shiftService;
         this.positionService = positionService;
         this.historyService = historyService;
         this.employeeService = employeeService;
         this.employeeSkillService = employeeSkillService;
+        this.qualificationService = qualificationService;
+        this.skillService = skillService;
+        this.userService = userService;
     }
 
     @GetMapping()
@@ -144,5 +150,86 @@ public class SupervisorController {
         model.addAttribute("searchData", searchData);
 
         return "supervisor/employees/list";
+    }
+
+    @GetMapping("/management/search")
+    public String getEmployeesManagementSearchBar(@RequestParam(value = "searchData", required = false) String searchData, @RequestParam(value = "date", required = false) String date, Model model){
+
+        List<Employee> employees;
+
+        if(searchData == null || searchData.isBlank()){
+            employees = employeeService.getAllEmployeesSortedByLastName();
+        } else{
+            String[] employee = searchData.split(" ");
+            if(employee.length == 1){
+                String name = employee[0];
+                employees = employeeService.getEmployeesFromSearchBarByOneElement(name, name);
+
+            } else if (employee.length == 2){
+                String firstName = employee[0];
+                String lastName = employee[1];
+                employees = employeeService.getEmployeesFromSearchBarByTwoElements(firstName, lastName);
+
+            } else{
+                employees = new ArrayList<>();
+            }
+
+        }
+
+        boolean searchPerformed = true;
+        boolean todays = false;
+
+        model.addAttribute("todays", todays);
+        model.addAttribute("searchPerformed", searchPerformed);
+        model.addAttribute("employees", employees);
+        model.addAttribute("searchData", searchData);
+
+
+        List<Position> positions = positionService.findAllPositions();
+        model.addAttribute("positions", positions);
+
+        List<Qualification> qualifications = qualificationService.findAllQualifications();
+        model.addAttribute("qualifications", qualifications);
+
+        List<Skill> skills = skillService.findAllSkills();
+        model.addAttribute("skills", skills);
+
+        LocalDate selectedDate = (date != null) ? LocalDate.parse(date) : LocalDate.now();
+        List<Shift> shifts = shiftService.getEntireDayScheduleByWorkDate(selectedDate);
+        model.addAttribute("shifts", shifts);
+
+        List<User> users = userService.findByRole("ROLE_LEADER");
+        model.addAttribute("users", users);
+
+
+        return "supervisor/management";
+    }
+
+    @GetMapping("/management")
+    public String getManagementPage(@RequestParam(value = "date", required = false) String date, Model model){
+
+        List<Employee> employees = employeeService.getAllEmployeesSortedByLastName();
+        model.addAttribute("employees", employees);
+
+        List<Position> positions = positionService.findAllPositions();
+        model.addAttribute("positions", positions);
+
+        List<Qualification> qualifications = qualificationService.findAllQualifications();
+        model.addAttribute("qualifications", qualifications);
+
+        List<Skill> skills = skillService.findAllSkills();
+        model.addAttribute("skills", skills);
+
+        LocalDate selectedDate = (date != null) ? LocalDate.parse(date) : LocalDate.now();
+        List<Shift> shifts = shiftService.getEntireDayScheduleByWorkDate(selectedDate);
+        model.addAttribute("shifts", shifts);
+
+        List<User> users = userService.findByRole("ROLE_LEADER");
+        model.addAttribute("users", users);
+
+        boolean searchPerformed = false;
+        model.addAttribute("searchPerformed", searchPerformed);
+
+        return "supervisor/management";
     }
 }
