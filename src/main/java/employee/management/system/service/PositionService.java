@@ -19,4 +19,5 @@ public interface PositionService {
     void removeEmployeeFromPositionByEmployeeId(int employeeId);
     void addTemporaryPosition(String positionName, String description);
     void processHistory(Employee employee, Position newPosition);
+    List<Position> getPositionsForManagement();
 }

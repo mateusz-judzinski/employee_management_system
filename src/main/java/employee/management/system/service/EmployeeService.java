@@ -1,6 +1,7 @@
 package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.EmployeeSkill;
 import employee.management.system.entity.Skill;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface EmployeeService {
     Employee findEmployeeById(int id);
     List<Employee> getAllEmployees();
-    void addEmployee(Employee employee);
+    Employee addEmployee(Employee employee);
     void updateEmployee(Employee employee);
     void deleteEmployeeById(int id);
     List<Employee> getShiftEmployees(LocalDate localDate);

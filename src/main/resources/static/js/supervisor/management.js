@@ -3,6 +3,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const contents = document.querySelectorAll(".tab-content");
     const datePickerContainer = document.querySelector(".date-picker-container");
     const searchForm = document.querySelector(".search-form");
+    const addForm = document.getElementById("add-form"); // Formularz dodawania nowego elementu
+
+    // Mapowanie data-tab do odpowiedniego endpointa
+    const tabRoutes = {
+        shifts: "/supervisor-panel/management/add-shift",
+        employees: "/supervisor-panel/management/add-employee",
+        positions: "/supervisor-panel/management/add-position",
+        users: "/supervisor-panel/management/add-user",
+        qualifications: "/supervisor-panel/management/add-qualification",
+        skills: "/supervisor-panel/management/add-skill",
+    };
 
     const searchPerformed = document.querySelector(".tab-button[data-tab='employees']").classList.contains("active");
 
@@ -30,5 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         datePickerContainer.style.display = activeTab === "shifts" ? "flex" : "none";
         searchForm.style.display = activeTab === "employees" ? "flex" : "none";
+
+        // Aktualizacja action formularza dodawania nowego elementu
+        if (addForm && tabRoutes[activeTab]) {
+            addForm.action = tabRoutes[activeTab];
+        }
     }
 });

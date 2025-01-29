@@ -20,7 +20,8 @@
 <div class="header-container">
     <div class="left-header">
         <button class="tab-button active" data-tab="shifts" th:classappend="${!searchPerformed} ? 'active' : ''">Grafik</button>
-        <button class="tab-button" data-tab="employees" th:classappend="${searchPerformed} ? 'active' : ''">Pracownicy</button>        <button class="tab-button" data-tab="positions">Stanowiska</button>
+        <button class="tab-button" data-tab="employees" th:classappend="${searchPerformed} ? 'active' : ''">Pracownicy</button>
+        <button class="tab-button" data-tab="positions">Stanowiska</button>
         <button class="tab-button" data-tab="users">Liderzy</button>
         <button class="tab-button" data-tab="qualifications">Kwalifikacje</button>
         <button class="tab-button" data-tab="skills">Umiejętności</button>
@@ -37,7 +38,7 @@
             <input type="text" name="searchData" placeholder="Szukaj pracownika..." class="search-input" th:value="${searchData}">
             <button type="submit" class="search-button">Szukaj</button>
         </form>
-        <form action="/supervisor-panel/management/add" method="get">
+        <form id="add-form" action="/supervisor-panel/management/add" method="get">
             <button type="submit" class="add-object-button">Dodaj nowy element</button>
         </form>
     </div>
@@ -47,16 +48,13 @@
 <div class="tabs-content">
     <div class="tab-content" id="employees" th:classappend="${searchPerformed} ? 'active' : ''">
         <div class="table-container">
-            <table class="employees-table">
+            <table class="common-table employees-table">
                 <thead>
                 <tr>
                     <th>Imię i nazwisko</th>
                     <th>Email</th>
                     <th>Numer telefonu</th>
                     <th>Numer przepustki</th>
-                    <th>Kwalifikacje</th>
-                    <th>Umiejętności</th>
-                    <th>Zmiany</th>
                     <th>Akcje</th>
                 </tr>
                 </thead>
@@ -69,33 +67,10 @@
                     <td th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}"></td>
 
                     <td>
-                        <span id="expand-qualifications" class="expand-text"
-                              onclick="openModal('Kwalifikacje', this.getAttribute('data-content'))"
-                              th:data-content="${#strings.listJoin(employee.qualifications.![name], ', ')}">
-                            pokaż
-                        </span>
-                    </td>
-
-                    <td>
-                        <span id="expand-skills" class="expand-text"
-                              onclick="openModal('Umiejętności', this.getAttribute('data-content'))"
-                              th:data-content="${#strings.listJoin(employee.skills.![skill.getSkillName() + ' - ' + getSkillProficiencyName()], ', ')}">
-                            pokaż
-                        </span>
-                    </td>
-
-                    <td>
-                        <span id="expand-shifts" class="expand-text"
-                              onclick="openModal('Zmiany', this.getAttribute('data-content'))"
-                              th:data-content="${#strings.listJoin(employee.incomingShifts.![workDate + ' (' + startTime + '-' + endTime + ')'], ', ')}">
-                            pokaż
-                        </span>
-                    </td>
-
-
-                    <td>
-                        <button class="edit-button" th:onclick="'editEmployee(' + ${employee.id} + ')'">Edytuj</button>
-                        <form th:action="@{/admin/employees/delete/{id}(id=${employee.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor/management/edit-employee/{id}(id=${employee.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="edit-button">Edytuj</button>
+                        </form>
+                        <form th:action="@{/supervisor/management/delete-employee/{id}(id=${employee.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -106,21 +81,11 @@
     </div>
 
 
-    <div id="infoModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal()">&times;</span>
-            <h2 id="modal-title"></h2>
-            <p id="modal-content"></p>
-        </div>
-    </div>
-
-
     <div class="tab-content" id="positions">
         <div class="table-container">
-            <table class="employees-table">
+            <table class="common-table positions-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Nazwa</th>
                     <th>Opis</th>
                     <th>Akcje</th>
@@ -128,12 +93,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="position : ${positions}">
-                    <td th:text="${position.id}"></td>
                     <td th:text="${position.positionName}"></td>
                     <td th:text="${position.description}"></td>
                     <td>
-                        <button class="edit-button" th:onclick="'editEmployee(' + ${position.id} + ')'">Edytuj</button>
-                        <form th:action="@{/admin/employees/delete/{id}(id=${position.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor/management/edit-position/{id}(id=${position.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="edit-button">Edytuj</button>
+                        </form>
+                        <form th:action="@{/supervisor/management/delete-position/{id}(id=${position.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -145,10 +111,9 @@
 
     <div class="tab-content" id="qualifications">
         <div class="table-container">
-            <table class="employees-table">
+            <table class="common-table qualifications-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Nazwa</th>
                     <th>Opis</th>
                     <th>Akcje</th>
@@ -156,12 +121,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="qualification : ${qualifications}">
-                    <td th:text="${qualification.id}"></td>
                     <td th:text="${qualification.name}"></td>
                     <td th:text="${qualification.description}"></td>
                     <td>
-                        <button class="edit-button" th:onclick="'editEmployee(' + ${qualification.id} + ')'">Edytuj</button>
-                        <form th:action="@{/admin/employees/delete/{id}(id=${qualification.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor/management/edit-qualification/{id}(id=${qualification.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="edit-button">Edytuj</button>
+                        </form>
+                        <form th:action="@{/supervisor/management/delete-qualification/{id}(id=${qualification.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -173,23 +139,27 @@
 
     <div class="tab-content" id="users">
         <div class="table-container">
-            <table class="employees-table">
+            <table class="common-table users-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Imie</th>
-                    <th>Nazwisko</th>
+                    <th>Imie i nazwisko</th>
+                    <th>Nazwa użytkownika</th>
+                    <th>Email</th>
+                    <th>Numer telefonu</th>
                     <th>Akcje</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="user : ${users}">
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.firstName}"></td>
-                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
                     <td>
-                        <button class="edit-button" th:onclick="'editEmployee(' + ${user.id} + ')'">Edytuj</button>
-                        <form th:action="@{/admin/employees/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor/management/edit-user/{id}(id=${user.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="edit-button">Edytuj</button>
+                        </form>
+                        <form th:action="@{/supervisor/management/delete-user/{id}(id=${user.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -202,7 +172,7 @@
 
     <div class="tab-content active" id="shifts" th:classappend="${!searchPerformed} ? 'active' : ''">
         <div class="table-container">
-            <table class="shifts-table">
+            <table class="common-table shifts-table">
                 <thead>
                 <tr>
                     <th>Pracownik</th>
@@ -219,8 +189,10 @@
                     <td th:text="${shift.startTime}"></td>
                     <td th:text="${shift.endTime}"></td>
                     <td>
-                        <button class="edit-button" th:onclick="'editEmployee(' + ${shift.id} + ')'">Edytuj</button>
-                        <form th:action="@{/admin/employees/delete/{id}(id=${shift.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor/management/edit-shift/{id}(id=${shift.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="edit-button">Edytuj</button>
+                        </form>
+                        <form th:action="@{/supervisor/management/delete-shift/{id}(id=${shift.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -232,23 +204,23 @@
 
     <div class="tab-content" id="skills">
         <div class="table-container">
-            <table class="employees-table">
+            <table class="common-table skills-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nazwa umiejętności</th>
+                    <th>Nazwa</th>
                     <th>Opis</th>
                     <th>Akcje</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="skill : ${skills}">
-                    <td th:text="${skill.id}"></td>
                     <td th:text="${skill.skillName}"></td>
                     <td th:text="${skill.description}"></td>
                     <td>
-                        <button class="edit-button" th:onclick="'editEmployee(' + ${skill.id} + ')'">Edytuj</button>
-                        <form th:action="@{/admin/employees/delete/{id}(id=${skill.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor/management/edit-skill/{id}(id=${skill.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="edit-button">Edytuj</button>
+                        </form>
+                        <form th:action="@{/supervisor/management/delete-skill/{id}(id=${skill.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -262,6 +234,6 @@
 
 <script defer src="/js/supervisor/management.js"></script>
 <script src="/js/user/hamburger-menu.js"></script>
-<script src="/js/supervisor/info-modal.js"></script>
+
 </body>
 </html>

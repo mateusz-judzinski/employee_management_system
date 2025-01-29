@@ -43,7 +43,7 @@
                 <tbody>
                 <tr th:each="skill : ${skills}" th:if="${skill.timeExperienceInMinutes != 0}">
                     <td th:text="${skill.skill.skillName}"></td>
-                    <td th:text="${skill.proficiencyLevel}"></td>
+                    <td th:text="${skill.getSkillProficiencyName()}"></td>
                     <td th:text="${T(java.lang.Math).round(skill.timeExperienceInMinutes / 60.0) + 'h'}"></td>
                 </tr>
                 </tbody>

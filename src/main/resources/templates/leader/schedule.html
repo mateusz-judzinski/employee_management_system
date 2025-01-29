@@ -51,7 +51,7 @@
         </tr>
 
         <tr th:each="shift : ${inactiveShifts}" th:class="'inactive-row'">
-            <td th:onclick="'window.location.href=\'/leader-panel/employees/details/' + ${shift.employee.id} + '\''">
+            <td>
                 <span th:text="${shift.employee.firstName} + ' ' + ${shift.employee.lastName}"></span>
             </td>
             <td th:text="${shift.startTime}"></td>

@@ -3,6 +3,7 @@ package employee.management.system.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employee_skill")
@@ -90,4 +91,14 @@ public class EmployeeSkill {
             return "błąd";
         }
     }
+
+    public void setTimeExperienceByProficiencyLevel(int proficiencyLevel){
+        switch (proficiencyLevel){
+            case 3 -> timeExperienceInMinutes = 9000;
+            case 2 -> timeExperienceInMinutes = 3600;
+            case 1 -> timeExperienceInMinutes = 1200;
+            default -> timeExperienceInMinutes = 0;
+        }
+    }
+
 }

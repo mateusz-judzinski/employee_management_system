@@ -64,34 +64,7 @@ h1 {
     margin-top: 20px;
 }
 
-.employees-table {
-    width: 90%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
 
-.employees-table th, .employees-table td {
-    padding: 20px;
-    text-align: left;
-    border: 1px solid #ddd;
-    font-size: 1em;
-}
-
-.employees-table thead {
-    background-color: #007BFF;
-    color: #fff;
-}
-
-.employees-table tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
-}
-
-.employees-table tbody tr:hover {
-    background-color: #e8f4ff;
-    transition: background-color 0.3s ease;
-}
 
 
 .object-form {
@@ -152,34 +125,6 @@ h1 {
 }
 
 
-.shifts-table {
-    width: 90%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
-
-.shifts-table th, .shifts-table td {
-    padding: 20px;
-    text-align: left;
-    border: 1px solid #ddd;
-    font-size: 1em;
-}
-
-.shifts-table thead {
-    background-color: #007BFF;
-    color: #fff;
-}
-
-.shifts-table tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
-}
-
-.shifts-table tbody tr:hover {
-    background-color: #e8f4ff;
-    transition: background-color 0.3s ease;
-}
 
 .shifts-table th:nth-child(1),
 .shifts-table td:nth-child(1) {
@@ -188,17 +133,17 @@ h1 {
 
 .shifts-table th:nth-child(2),
 .shifts-table td:nth-child(2) {
-    width: 21.75%;
+    width: 22.05%;
 }
 
 .shifts-table th:nth-child(3),
 .shifts-table td:nth-child(3) {
-    width: 21.75%;
+    width: 21.6%;
 }
 
 .shifts-table th:nth-child(4),
 .shifts-table td:nth-child(4) {
-    width: 21.75%;
+    width: 21.6%;
 }
 
 .shifts-table th:nth-child(5),
@@ -249,7 +194,7 @@ h1 {
 }
 
 .date-picker-container input[type="date"] {
-    padding: 10px;
+    padding: 9px;
     font-size: 1em;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -265,7 +210,7 @@ h1 {
     background-color: #007BFF;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 9px 20px;
     font-size: 1em;
     cursor: pointer;
     border-radius: 4px;
@@ -283,14 +228,14 @@ h1 {
 }
 
 .search-input {
-    padding: 10px 20px;
+    padding: 9px 20px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1em;
 }
 
 .search-button {
-    padding: 10px 20px;
+    padding: 9px 20px;
     border: none;
     background-color: #007BFF;
     color: white;
@@ -304,137 +249,145 @@ h1 {
     background-color: #0056b3;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 20%;
-    text-align: center;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.modal-content ol {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 10px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.modal-content ol li {
-    padding: 5px 0;
-    font-size: 1em;
-    color: #333;
-    width: 100%;
-    text-align: center;
-    display: list-item;
-}
-
-
-.modal-content h2 {
-    margin-left: 15px;
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #333;
-}
-
-
-
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.close-button {
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-button:hover {
-    color: red;
-}
-
-
-.expand-text {
-    color: #007BFF;
-    font-size: 1em;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-    display: inline-block;
-}
-
-.expand-text:hover {
-    color: #0056b3;
-}
 
 .employees-table th:nth-child(1),
 .employees-table td:nth-child(1) {
-    width: 22%;
+    width: 22.05%;
 }
 
 .employees-table th:nth-child(2),
 .employees-table td:nth-child(2) {
-    width: 22%;
+    width: 22.05%;
 }
 
 .employees-table th:nth-child(3),
 .employees-table td:nth-child(3) {
-    width: 12%;
+    width: 21.6%;
 }
 
 .employees-table th:nth-child(4),
 .employees-table td:nth-child(4) {
-    width: 12%;
+    width: 21.6%;
 }
 
 .employees-table th:nth-child(5),
 .employees-table td:nth-child(5) {
-    width: 6.2%;
-}
-.employees-table th:nth-child(6),
-.employees-table td:nth-child(6) {
-    width: 6.2%;
-}
-.employees-table th:nth-child(7),
-.employees-table td:nth-child(7) {
-    width: 6.2%;
-}
-.employees-table th:nth-child(8),
- .employees-table td:nth-child(8) {
-     width: 13.3%;
- }
-
-#expand-qualifications {
-    margin-left: 23px;
+    width: 12.7%;
 }
 
-#expand-skills {
-    margin-left: 25px;
+.import-button {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    margin-left: 15px;
 }
 
-#expand-shifts {
-    margin-left: 8px;
+.import-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.positions-table th:nth-child(1),
+.positions-table td:nth-child(1) {
+    width: 22.05%;
+}
+
+.positions-table th:nth-child(2),
+.positions-table td:nth-child(2) {
+    width: 65.25%;
+}
+
+.positions-table th:nth-child(3),
+.positions-table td:nth-child(3) {
+    width: 12.7%;
+}
+
+
+.users-table th:nth-child(1),
+.users-table td:nth-child(1) {
+    width: 22.05%;
+}
+
+.users-table th:nth-child(2),
+.users-table td:nth-child(2) {
+    width: 21.75%;
+}
+
+.users-table th:nth-child(3),
+.users-table td:nth-child(3) {
+    width: 21.75%;
+}
+
+.users-table th:nth-child(4),
+.users-table td:nth-child(4) {
+    width: 21.75%;
+}
+
+.users-table th:nth-child(5),
+.users-table td:nth-child(5) {
+    width: 12.7%;
+}
+
+
+
+.qualifications-table th:nth-child(1),
+.qualifications-table td:nth-child(1) {
+    width: 22.05%;
+}
+
+.qualifications-table th:nth-child(2),
+.qualifications-table td:nth-child(2) {
+    width: 65.25%;
+}
+
+.qualifications-table th:nth-child(3),
+.qualifications-table td:nth-child(3) {
+    width: 12.7%;
+}
+
+
+.skills-table th:nth-child(1),
+.skills-table td:nth-child(1) {
+    width: 22.05%;
+}
+
+.skills-table th:nth-child(2),
+.skills-table td:nth-child(2) {
+    width: 65.25%;
+}
+
+.skills-table th:nth-child(3),
+.skills-table td:nth-child(3) {
+    width: 12.7%;
+}
+
+
+.common-table {
+    width: 90%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.common-table th, .common-table td {
+    padding: 20px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: 1em;
+}
+
+.common-table thead {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.common-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.common-table tbody tr:hover {
+    background-color: #e8f4ff;
+    transition: background-color 0.3s ease;
 }

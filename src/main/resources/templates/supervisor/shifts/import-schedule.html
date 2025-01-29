@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import grafiku</title>
+    <link rel="stylesheet" href="/css/user/hamburger-menu.css">
+    <link rel="stylesheet" href="/css/supervisor/import-schedule.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/supervisor-menu :: menu}"></div>
+
+<h1>Import Schedule For Next Month</h1>
+<div id="drop-zone" class="drop-zone">
+    <p>Przeciągnij i upuść plik tutaj lub kliknij, aby go wybrać.</p>
+    <input type="file" id="file-input" name="file" class="file-input" hidden>
+</div>
+<form id="file-form" th:action="@{/supervisor-panel/management/import}" method="post" enctype="multipart/form-data" style="display: none;">
+    <input type="file" id="hidden-file-input" name="file" />
+</form>
+<div id="file-info"></div>
+
+<script src="/js/supervisor/import-schedule.js"></script>
+<script src="/js/user/hamburger-menu.js"></script>
+
+</body>
+</html>

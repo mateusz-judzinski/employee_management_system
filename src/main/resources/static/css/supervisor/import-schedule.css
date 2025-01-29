@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.drop-zone {
+    width: 100%;
+    max-width: 500px;
+    padding: 50px;
+    margin: auto;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.drop-zone.dragover {
+    border-color: #007bff;
+    background-color: #e0f7ff;
+}
+
+.file-input {
+    display: none;
+}
+
+#file-info {
+    margin-top: 20px;
+}

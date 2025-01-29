@@ -170,6 +170,11 @@ public class PositionServiceImpl implements PositionService {
         }
     }
 
+    @Override
+    public List<Position> getPositionsForManagement() {
+        return positionRepository.getPositionForManagement();
+    }
+
     private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime) {
 
         if (employee.getPosition().getSkill() != null) {

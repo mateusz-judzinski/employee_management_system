@@ -1,6 +1,7 @@
 package employee.management.system.service;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.EmployeeSkill;
 import employee.management.system.entity.PositionEmployeeHistory;
 import employee.management.system.entity.Shift;
 import employee.management.system.repository.EmployeeRepository;
@@ -44,8 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Transactional
     @Override
-    public void addEmployee(Employee employee) {
-        employeeRepository.save(employee);
+    public Employee addEmployee(Employee employee) {
+        return employeeRepository.save(employee);
     }
 
     @Transactional
@@ -83,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
 
-    @Scheduled(cron = "0 14/30 * * * *")
+    @Scheduled(cron = "0 1/30 * * * *")
     @Transactional
     @Override
     public void removePositionFromEmployeeAfterShift() {

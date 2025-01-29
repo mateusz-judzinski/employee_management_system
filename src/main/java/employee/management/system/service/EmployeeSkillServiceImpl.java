@@ -19,6 +19,11 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService{
     }
 
     @Override
+    public void saveAll(List<EmployeeSkill> skills) {
+        employeeSkillRepository.saveAll(skills);
+    }
+
+    @Override
     public EmployeeSkill findEmployeeSkillById(int id) {
         return employeeSkillRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("EmployeeSkill with id: " + id + " not found"));

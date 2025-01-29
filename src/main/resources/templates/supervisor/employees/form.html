@@ -1,30 +1,113 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add New Employee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Pracownika</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/user/hamburger-menu.css">
+    <link rel="stylesheet" href="/css/supervisor/form.css">
 </head>
 <body>
 
-<h3>Create new employee</h3>
-<form th:action="@{/supervisor-panel/employees}" th:object="${employee}" method="post">
+<div th:replace="~{fragments/supervisor-menu :: menu}"></div>
 
-    <br>
-    <label>First name:</label>
-    <input type="text" id="firstName" th:field="*{firstName}">
-    <br>
-    <label>Last name:</label>
-    <input type="text" id="lastName" th:field="*{lastName}">
-    <br>
-    <label>Email:</label>
-    <input type="email" id="email" th:field="*{email}">
-    <br>
-    <label>Phone number:</label>
-    <input type="tel" id="phoneNumber" th:field="*{phoneNumber}">
-    <br>
-    <button type="submit">Create</button>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-body">
 
-</form>
+                    <form id="employeeForm" th:action="@{/supervisor-panel/management/add-employee}"
+                          th:object="${newEmployee}" method="post">
+
+                        <div id="step1">
+                            <h2 class="card-title text-center mb-3">Dodaj pracownika</h2>
+
+                            <div class="form-group">
+                                <label for="firstName">Imię:</label>
+                                <input type="text" id="firstName" th:field="*{employee.firstName}" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lastName">Nazwisko:</label>
+                                <input type="text" id="lastName" th:field="*{employee.lastName}" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" th:field="*{employee.email}" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phoneNumber">Numer telefonu:</label>
+                                <input type="text" id="phoneNumber" th:field="*{employee.phoneNumber}" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="idCardNumber">Numer przepustki:</label>
+                                <input type="text" id="idCardNumber" th:field="*{employee.idCardNumber}" class="form-control" placeholder="W przypadku braku przepustki, zostaw puste pole.">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="qualifications-container">
+                                    <label>Kwalifikacje:</label>
+                                    <div class="card card-body mt-2">
+                                        <div th:each="qualification : ${newEmployee.qualifications}" class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   th:field="*{qualifications}"
+                                                   th:value="${qualification.id}">
+                                            <label class="form-check-label" th:text="${qualification.name}"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary btn-block mt-4" onclick="nextStep()">Dalej</button>
+                            <div class="text-center mt-3">
+                                <a href="/supervisor-panel/management" class="text-primary">Wróć do panelu zarządzania</a>
+                            </div>
+                        </div>
+
+                        <div id="step2" style="display: none;">
+                            <h2 class="text-center form-heading">Umiejętności</h2>
+
+                            <div class="skills-container mt-3">
+                                <div class="form-group" th:each="employeeSkill, employeeSkillStat : *{skills}">
+                                    <label th:text="${employeeSkill.skill.skillName}"></label>
+
+                                    <input type="hidden" th:field="*{skills[__${employeeSkillStat.index}__].skill.id}">
+
+                                    <select th:field="*{skills[__${employeeSkillStat.index}__].proficiencyLevel}" class="form-control">
+                                        <option value="0">Brak doświadczenia</option>
+                                        <option value="1">Początkujący</option>
+                                        <option value="2">Średnio zaawansowany</option>
+                                        <option value="3">Zaawansowany</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-success btn-block mt-4">Zapisz</button>
+                            <div class="text-center mt-3">
+                                <a class="custom-back-link" onclick="prevStep()">Wróć do poprzedniego etapu</a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/supervisor/form.js"></script>
+<script src="/js/user/hamburger-menu.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

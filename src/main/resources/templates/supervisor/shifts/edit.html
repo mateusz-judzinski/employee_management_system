@@ -1,19 +1,18 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add Leader Form</title>
+    <title>Edit Employee</title>
 </head>
 <body>
-<h3>Create new employee</h3>
-<form th:action="@{/supervisor-panel/users}" th:object="${user}" method="post">
 
-    <br>
-    <label>Username:</label>
-    <input type="text" id="username" th:field="*{username}">
-    <br>
-    <label>Password:</label>
-    <input type="text" id="password" th:field="*{password}">
+<h2>Edit user</h2>
+
+<form th:action="@{/supervisor-panel/employees/update}" th:object="${employee}" method="post">
+    <input type="hidden" id="id" th:field="*{id}">
+    <input type="hidden" id="position" th:field="*{position}">
+    <input type="hidden" id="shifts" th:field="*{shifts}">
+
     <br>
     <label>First name:</label>
     <input type="text" id="firstName" th:field="*{firstName}">
@@ -27,7 +26,8 @@
     <label>Phone number:</label>
     <input type="tel" id="phoneNumber" th:field="*{phoneNumber}">
     <br>
-    <button type="submit">Create</button>
+
+    <button type="submit">Update</button>
 
 </form>
 
