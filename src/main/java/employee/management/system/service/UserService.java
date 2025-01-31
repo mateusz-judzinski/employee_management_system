@@ -12,4 +12,6 @@ public interface UserService {
     void deleteUserById(int id);
     boolean processLogin(String username, String password);
     List<User> findByRole(String role);
+    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
 }

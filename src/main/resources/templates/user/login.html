@@ -22,13 +22,14 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Zaloguj się</button>
                     </form>
-                    <a href="/" class="btn btn-link btn-block mt-3">Wróć do głównej</a>
-                    <p th:if="${error}" th:text="${error}" class="text-danger text-center mt-3">Błędna nazwa użytkownika lub hasło</p>
+                    <a href="/" class="btn btn-link btn-block mt-3">Wróć do strony głównej</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<p th:if="${error}" th:text="${error}" class="text-danger text-center mt-3">Błędna nazwa użytkownika lub hasło</p>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>

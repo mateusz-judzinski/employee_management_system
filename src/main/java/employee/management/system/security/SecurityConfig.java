@@ -25,6 +25,7 @@ public class SecurityConfig {
                                 .loginPage("/login")
                                 .loginProcessingUrl("/process-login")
                                 .successHandler(customAuthenticationSuccessHandler())
+                                .failureUrl("/login?error=true")
                                 .permitAll()
                 )
                 .logout(logout ->

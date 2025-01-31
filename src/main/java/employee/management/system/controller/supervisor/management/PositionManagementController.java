@@ -8,10 +8,7 @@ import employee.management.system.service.QualificationService;
 import employee.management.system.service.SkillService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ public class PositionManagementController {
     }
 
     @GetMapping("/add-position")
-    public String showPositionForm(Model model){
+    public String showPositionForm(Model model, @RequestParam(value = "errorMessage", required = false) String errorMessage){
 
         Position position = new Position();
         model.addAttribute("position", position);
@@ -45,6 +42,10 @@ public class PositionManagementController {
         qualifications.remove(noIdCardQualification);
         model.addAttribute("qualifications", qualifications);
 
+        if(errorMessage != null){
+            model.addAttribute("errorMessage", errorMessage);
+        }
+
         return "supervisor/positions/form";
     }
 
@@ -55,8 +56,8 @@ public class PositionManagementController {
         boolean positionExists = positionService.existsByPositionName(position.getPositionName());
 
         if (positionExists) {
-            redirectAttributes.addAttribute("errorMessage", "Stanowisko o tej nazwie już istnieje.");
-            return "redirect:/add-position";
+            redirectAttributes.addFlashAttribute("errorMessage", "Stanowisko o podanej nazwie już istnieje.");
+            return "redirect:/supervisor-panel/management/add-position";
         }
 
         Skill skill = skillService.findSkillById(position.getSkill().getId());
