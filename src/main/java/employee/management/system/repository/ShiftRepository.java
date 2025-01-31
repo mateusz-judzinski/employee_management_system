@@ -35,4 +35,6 @@ public interface ShiftRepository extends JpaRepository<Shift, Integer> {
     @Query("SELECT s FROM Shift s WHERE s.employee.id = :employeeId AND MONTH(s.workDate) = :month AND YEAR(s.workDate) = :year ORDER BY s.workDate ASC")
     List<Shift> getMonthScheduleForEmployeeById(@Param("employeeId") int employeeId, @Param("month") int month, @Param("year") int year);
 
+    @Query("SELECT COUNT(s) > 0 FROM Shift s WHERE s.employee = :employee AND s.workDate = :localDate")
+    boolean doesEmployeeHaveShiftInProvidedDay(LocalDate localDate, Employee employee);
 }

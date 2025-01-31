@@ -14,3 +14,14 @@
     padding: 1px 0;
 }
 
+.card-body {
+    padding-bottom: 8px !important;
+    padding-top: 4px !important;
+}
+
+.form-check-input {
+    margin-top: 7px;
+}
+
+
+

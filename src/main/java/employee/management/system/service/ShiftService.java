@@ -1,5 +1,6 @@
 package employee.management.system.service;
 
+import employee.management.system.entity.Employee;
 import employee.management.system.entity.Shift;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,4 +21,5 @@ public interface ShiftService {
     void updateEmployeesWithCurrentShift();
     List<List<Shift>> splitOnActiveAndInactive(List<Shift> shifts);
     List<Shift> getMonthShiftForEmployeeById(int employeeId, int month, int year);
+    boolean doesEmployeeAlreadyHaveShiftInProvidedDay(LocalDate localDate, Employee employee);
 }

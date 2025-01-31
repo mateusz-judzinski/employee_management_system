@@ -32,9 +32,9 @@ public class Shift {
     public Shift() {
     }
 
-    public Shift(LocalDate workDate, String shiftName, LocalTime startTime, LocalTime endTime) {
+    public Shift(LocalDate workDate, LocalTime startTime, LocalTime endTime) {
         this.workDate = workDate;
-        this.shiftName = shiftName;
+        this.shiftName = getShiftNameByShiftStartTime(startTime);
         this.startTime = startTime;
         this.endTime = endTime;
         this.isActive = true;
@@ -94,5 +94,17 @@ public class Shift {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getShiftNameByShiftStartTime(LocalTime shiftStartTime){
+        String shiftName;
+        if(shiftStartTime.getHour() <= 9){
+            shiftName = "Zmiana poranna";
+        } else if(shiftStartTime.getHour() <= 13){
+            shiftName = "Zmiana popołudniowa";
+        } else{
+            shiftName = "Zmiana nocna";
+        }
+        return shiftName;
     }
 }

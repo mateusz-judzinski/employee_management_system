@@ -23,7 +23,7 @@
                           th:object="${newEmployee}" method="post">
 
                         <div id="step1">
-                            <h2 class="card-title text-center mb-3">Dodaj pracownika</h2>
+                            <h2 class="card-title text-center mb-3 mt-3">Dodaj pracownika</h2>
 
                             <div class="form-group">
                                 <label for="firstName">Imię:</label>
@@ -53,10 +53,9 @@
                             <div class="form-group">
                                 <div class="qualifications-container">
                                     <label>Kwalifikacje:</label>
-                                    <div class="card card-body mt-2">
+                                    <div class="card card-body">
                                         <div th:each="qualification : ${newEmployee.qualifications}" class="form-check">
-                                            <input class="form-check-input"
-                                                   type="checkbox"
+                                            <input class="form-check-input" type="checkbox"
                                                    th:field="*{qualifications}"
                                                    th:value="${qualification.id}">
                                             <label class="form-check-label" th:text="${qualification.name}"></label>
@@ -66,13 +65,13 @@
                             </div>
 
                             <button type="button" class="btn btn-primary btn-block mt-4" onclick="nextStep()">Dalej</button>
-                            <div class="text-center mt-3">
+                            <div class="text-center mt-2 mb-2">
                                 <a href="/supervisor-panel/management" class="text-primary">Wróć do panelu zarządzania</a>
                             </div>
                         </div>
 
                         <div id="step2" style="display: none;">
-                            <h2 class="text-center form-heading">Umiejętności</h2>
+                            <h2 class="text-center form-heading mt-3">Umiejętności</h2>
 
                             <div class="skills-container mt-3">
                                 <div class="form-group" th:each="employeeSkill, employeeSkillStat : *{skills}">
@@ -91,7 +90,7 @@
 
 
                             <button type="submit" class="btn btn-success btn-block mt-4">Zapisz</button>
-                            <div class="text-center mt-3">
+                            <div class="text-center mt-2 mb-2">
                                 <a class="custom-back-link" onclick="prevStep()">Wróć do poprzedniego etapu</a>
                             </div>
                         </div>

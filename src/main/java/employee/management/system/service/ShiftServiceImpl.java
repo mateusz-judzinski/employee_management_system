@@ -144,9 +144,7 @@ public class ShiftServiceImpl implements ShiftService {
                                         int day = j + 1;
                                         LocalDate shiftDate = LocalDate.of(year, month, day);
 
-                                        String shiftName = calculateShiftName(shiftStartLocalTime);
-
-                                        Shift shift = new Shift(shiftDate, shiftName, shiftStartLocalTime, shiftEndLocalTime);
+                                        Shift shift = new Shift(shiftDate, shiftStartLocalTime, shiftEndLocalTime);
                                         shift.setEmployee(employee);
                                         employee.addShift(shift);
                                         shiftRepository.save(shift);
@@ -265,6 +263,11 @@ public class ShiftServiceImpl implements ShiftService {
         return shiftRepository.getMonthScheduleForEmployeeById(employeeId, month, year);
     }
 
+    @Override
+    public boolean doesEmployeeAlreadyHaveShiftInProvidedDay(LocalDate localDate, Employee employee) {
+        return shiftRepository.doesEmployeeHaveShiftInProvidedDay(localDate, employee);
+    }
+
     private boolean wasAlreadyActiveToday(Shift shift, List<PositionEmployeeHistory> latestHistories){
         boolean result = false;
         if(latestHistories == null || latestHistories.isEmpty()){
@@ -290,18 +293,6 @@ public class ShiftServiceImpl implements ShiftService {
 
             shiftRepository.deleteAll(shiftsToDelete);
         }
-    }
-
-    private String calculateShiftName(LocalTime shiftStartTime){
-        String shiftName;
-        if(shiftStartTime.getHour() <= 9){
-            shiftName = "Zmiana poranna";
-        } else if(shiftStartTime.getHour() <= 13){
-            shiftName = "Zmiana popołudniowa";
-        } else{
-            shiftName = "Zmiana nocna";
-        }
-        return shiftName;
     }
 
     private boolean isCorrectCellColor(Cell shiftStartCell) {

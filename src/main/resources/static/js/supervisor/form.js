@@ -20,3 +20,26 @@ function prevStep() {
 }
 
 
+ document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.form-check-input').forEach(input => {
+            input.checked = false;
+        });
+    });
+
+
+
+ document.addEventListener("DOMContentLoaded", function() {
+     const select = document.getElementById("employee");
+
+     select.addEventListener("click", function() {
+         this.size = 5;
+     });
+
+     select.addEventListener("blur", function() {
+         this.size = 1;
+     });
+ });
+
+
+
+
