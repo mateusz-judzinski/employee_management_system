@@ -32,6 +32,15 @@ public class Shift {
     public Shift() {
     }
 
+    public Shift(Shift shift){
+        this.workDate = shift.getWorkDate();
+        this.shiftName = shift.getShiftName();
+        this.startTime = shift.getStartTime();
+        this.endTime = shift.getEndTime();
+        this.employee = shift.getEmployee();
+        this.isActive = shift.isActive();
+    }
+
     public Shift(LocalDate workDate, LocalTime startTime, LocalTime endTime) {
         this.workDate = workDate;
         this.shiftName = getShiftNameByShiftStartTime(startTime);

@@ -28,20 +28,31 @@ public class ShiftManagementController {
     }
 
     @GetMapping("/import-schedule")
-    public String importSchedulePage() {
+    public String importSchedulePage(Model model, @RequestParam(value = "message", required = false) String message) {
+
+        if(message != null){
+            model.addAttribute("message", message);
+        }
+
         return "supervisor/shifts/import-schedule";
     }
 
     @PostMapping("/import-schedule")
-    public String importSchedule(@RequestParam("file") MultipartFile file, Model model) {
+    public String importSchedule(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+
+        int month = LocalDate.now().plusMonths(1).getMonthValue();
+        int year = LocalDate.now().plusMonths(1).getYear();
+        List<Shift> backUpShifts = shiftService.getShiftsForMonthAndYear(month, year);
+
         try {
             shiftService.importSchedule(file);
-        } catch (IOException e) {
-            String error = "An error occurred: " + e.getMessage();
-            model.addAttribute("error", error);
-            return "user/error";
+            redirectAttributes.addFlashAttribute("message", "Grafik został pomyślnie zaimportowany!");
+        } catch (Exception e) {
+            shiftService.saveAll(backUpShifts);
+            redirectAttributes.addFlashAttribute("message",
+                    "Wystąpił błąd podczas importowania pliku. Upewnij się, że plik jest prawidłowy, jego zawartość dobrze sformatowana i spróbuj ponownie.");
         }
-        return "redirect:/supervisor-panel/management/import";
+        return "redirect:/supervisor-panel/management/import-schedule";
     }
 
     @GetMapping("/add-shift")

@@ -37,4 +37,6 @@ public interface ShiftRepository extends JpaRepository<Shift, Integer> {
 
     @Query("SELECT COUNT(s) > 0 FROM Shift s WHERE s.employee = :employee AND s.workDate = :localDate")
     boolean doesEmployeeHaveShiftInProvidedDay(LocalDate localDate, Employee employee);
+
+    
 }

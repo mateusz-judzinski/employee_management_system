@@ -27,9 +27,11 @@
         <button class="tab-button" data-tab="skills">Umiejętności</button>
     </div>
     <div class="right-header">
+        <a href="/supervisor-panel/management/import-schedule" class="import-button" id="import-icon">
+            <img src="/images/import.png" alt="import" class="import-image" title="Importuj grafik na następny miesiąc">
+        </a>
         <div class="date-picker-container">
             <form action="/supervisor-panel/management" method="get">
-                <label for="selectedDate">Wybierz dzień:</label>
                 <input type="date" id="selectedDate" name="date" required>
                 <button type="submit">Wyświetl grafik</button>
             </form>
@@ -39,7 +41,7 @@
             <button type="submit" class="search-button">Szukaj</button>
         </form>
         <form id="add-form" action="/supervisor-panel/management/add" method="get">
-            <button type="submit" class="add-object-button">Dodaj nowy element</button>
+            <button type="submit" class="add-object-button" id="add-button">Dodaj nowy element</button>
         </form>
     </div>
 </div>

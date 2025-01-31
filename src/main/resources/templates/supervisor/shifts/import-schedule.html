@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +11,35 @@
 
 <div th:replace="~{fragments/supervisor-menu :: menu}"></div>
 
-<h1>Import Schedule For Next Month</h1>
-<div id="drop-zone" class="drop-zone">
-    <p>Przeciągnij i upuść plik tutaj lub kliknij, aby go wybrać.</p>
-    <input type="file" id="file-input" name="file" class="file-input" hidden>
+<div class="container">
+    <h1 class="page-title text-center">Import grafiku</h1>
+
+
+    <div class="drop-zone-container">
+        <div id="drop-zone" class="drop-zone">
+            <p>Przeciągnij i upuść plik tutaj lub kliknij, aby go wybrać.</p>
+            <input type="file" id="file-input" name="file" class="file-input" hidden>
+        </div>
+    </div>
+
+    <form id="file-form" th:action="@{/supervisor-panel/management/import-schedule}" method="post" enctype="multipart/form-data" style="display: none;">
+        <input type="file" id="hidden-file-input" name="file" />
+    </form>
+
+    <div class="import-info text-center">
+        <p><strong>Uwaga:</strong> Grafik zostanie zaimportowany na <b>następny miesiąc</b>. Jeśli grafik na ten okres już istnieje, <b>zostanie całkowicie usunięty</b> przed importem.</p>
+    </div>
+
+    <div th:if="${message}" class="text-center" style="margin-top: 35px;">
+        <p th:text="${message}"></p>
+    </div>
+
 </div>
-<form id="file-form" th:action="@{/supervisor-panel/management/import}" method="post" enctype="multipart/form-data" style="display: none;">
-    <input type="file" id="hidden-file-input" name="file" />
-</form>
-<div id="file-info"></div>
+
+<div style="text-align: center;">
+    <a href="/supervisor-panel/management" class="custom-back-link">Wróć do panelu zarządzania</a>
+</div>
+
 
 <script src="/js/supervisor/import-schedule.js"></script>
 <script src="/js/user/hamburger-menu.js"></script>

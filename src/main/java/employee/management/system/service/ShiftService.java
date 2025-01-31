@@ -22,4 +22,6 @@ public interface ShiftService {
     List<List<Shift>> splitOnActiveAndInactive(List<Shift> shifts);
     List<Shift> getMonthShiftForEmployeeById(int employeeId, int month, int year);
     boolean doesEmployeeAlreadyHaveShiftInProvidedDay(LocalDate localDate, Employee employee);
+    void saveAll (List<Shift> shifts);
+    List<Shift> getShiftsForMonthAndYear(int month, int year);
 }

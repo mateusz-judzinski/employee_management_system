@@ -34,9 +34,6 @@
     });
 
     function handleFile(file) {
-        fileInfo.innerHTML = `<p><strong>Nazwa pliku:</strong> ${file.name}</p>
-                              <p><strong>Rozmiar:</strong> ${(file.size / 1024).toFixed(2)} KB</p>`;
-
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
         hiddenFileInput.files = dataTransfer.files;

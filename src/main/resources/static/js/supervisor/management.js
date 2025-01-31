@@ -3,9 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const contents = document.querySelectorAll(".tab-content");
     const datePickerContainer = document.querySelector(".date-picker-container");
     const searchForm = document.querySelector(".search-form");
-    const addForm = document.getElementById("add-form"); // Formularz dodawania nowego elementu
+    const addForm = document.getElementById("add-form");
+    const addButton = document.getElementById("add-button");
+    const importIcon = document.getElementById("import-icon");
 
-    // Mapowanie data-tab do odpowiedniego endpointa
     const tabRoutes = {
         shifts: "/supervisor-panel/management/add-shift",
         employees: "/supervisor-panel/management/add-employee",
@@ -13,6 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
         users: "/supervisor-panel/management/add-user",
         qualifications: "/supervisor-panel/management/add-qualification",
         skills: "/supervisor-panel/management/add-skill",
+    };
+
+    const tabTexts = {
+        shifts: "Dodaj nową zmianę",
+        employees: "Dodaj nowego pracownika",
+        positions: "Dodaj nowe stanowisko",
+        users: "Dodaj nowego lidera",
+        qualifications: "Dodaj nową kwalifikację",
+        skills: "Dodaj nową umiejętność",
     };
 
     const searchPerformed = document.querySelector(".tab-button[data-tab='employees']").classList.contains("active");
@@ -42,9 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
         datePickerContainer.style.display = activeTab === "shifts" ? "flex" : "none";
         searchForm.style.display = activeTab === "employees" ? "flex" : "none";
 
-        // Aktualizacja action formularza dodawania nowego elementu
-        if (addForm && tabRoutes[activeTab]) {
-            addForm.action = tabRoutes[activeTab];
+        if (addForm && addButton) {
+            addForm.action = tabRoutes[activeTab] || "#";
+            addButton.textContent = tabTexts[activeTab] || "Dodaj nowy element";
+        }
+
+        if (importIcon) {
+            importIcon.style.display = activeTab === "shifts" ? "inline-block" : "none";
         }
     }
 });

@@ -13,11 +13,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserManagementController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserManagementController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserManagementController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/add-user")

@@ -88,8 +88,8 @@ public class ShiftServiceImpl implements ShiftService {
     @Transactional
     public void importSchedule(MultipartFile file) throws IOException {
 
-        int month = LocalDate.now().getMonthValue() + 1;
-        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().plusMonths(1).getMonthValue();
+        int year = LocalDate.now().plusMonths(1).getYear();
 
         deleteScheduleIfExists(month, year);
 
@@ -266,6 +266,20 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public boolean doesEmployeeAlreadyHaveShiftInProvidedDay(LocalDate localDate, Employee employee) {
         return shiftRepository.doesEmployeeHaveShiftInProvidedDay(localDate, employee);
+    }
+
+    @Override
+    public List<Shift> getShiftsForMonthAndYear(int month, int year) {
+        return shiftRepository.getShiftsByMonthAndYear(month, year);
+    }
+
+    @Transactional
+    @Override
+    public void saveAll(List<Shift> shifts) {
+        for (Shift shift:shifts) {
+            Shift detachedShift = new Shift(shift);
+            shiftRepository.save(detachedShift);
+        }
     }
 
     private boolean wasAlreadyActiveToday(Shift shift, List<PositionEmployeeHistory> latestHistories){
