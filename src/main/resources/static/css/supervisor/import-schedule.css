@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+    background-color: #f7f9fc;
     color: #222;
     margin: 20px;
 }
@@ -19,17 +19,17 @@ body {
 
 .page-title {
     font-size: 1.8em;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     color: #333;
 }
 
 .import-info {
-    background: #f1f1f1;
+    background: #e9f2ff;
     padding: 10px;
     border-radius: 5px;
     font-size: 1em;
     margin-bottom: 20px;
-    color: #444;
+    color: #004085;
 }
 
 .drop-zone-container {
@@ -41,23 +41,23 @@ body {
 .drop-zone {
     width: 100%;
     padding: 30px;
-    border: 2px dashed #bbb;
-    background-color: #fafafa;
+    border: 2px dashed #007bff;
+    background-color: #f1f8ff;
     text-align: center;
     font-size: 1em;
-    color: #666;
+    color: #0056b3;
     cursor: pointer;
     border-radius: 5px;
     transition: all 0.2s ease-in-out;
 }
 
 .drop-zone:hover {
-    background-color: #f0f0f0;
-    border-color: #999;
+    background-color: #e0f0ff;
+    border-color: #004aad;
 }
 
 .import-button {
-    background-color: #444;
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 10px 18px;
@@ -69,17 +69,17 @@ body {
 }
 
 .import-button:hover {
-    background-color: #333;
+    background-color: #0056b3;
 }
 
 .file-info {
     font-size: 0.9em;
     margin-top: 10px;
-    color: #666;
+    color: #004085;
 }
 
 .custom-back-link {
-    color: #333;
+    color: #007bff;
     text-decoration: none;
     cursor: pointer;
     display: inline-block;
@@ -87,5 +87,5 @@ body {
 
 .custom-back-link:hover {
     text-decoration: underline;
-    color: #333;
+    color: #0056b3;
 }
