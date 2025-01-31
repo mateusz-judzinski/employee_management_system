@@ -20,4 +20,6 @@ public interface PositionService {
     void addTemporaryPosition(String positionName, String description);
     void processHistory(Employee employee, Position newPosition);
     List<Position> getPositionsForManagement();
+    boolean existsByPositionName(String positionName);
+
 }

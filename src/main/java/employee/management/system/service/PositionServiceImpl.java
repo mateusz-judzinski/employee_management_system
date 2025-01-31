@@ -175,6 +175,11 @@ public class PositionServiceImpl implements PositionService {
         return positionRepository.getPositionForManagement();
     }
 
+    @Override
+    public boolean existsByPositionName(String positionName) {
+        return positionRepository.existsByPositionName(positionName);
+    }
+
     private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime) {
 
         if (employee.getPosition().getSkill() != null) {

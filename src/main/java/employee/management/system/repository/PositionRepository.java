@@ -11,7 +11,7 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
     Position findPositionByPositionName(String name);
     @Query("SELECT p FROM Position p WHERE p.positionName != 'przerwa' AND p.isTemporary = FALSE")
     List<Position> findAllPositionsForCalculations();
-
     @Query("SELECT p FROM Position p WHERE p.positionName != 'przerwa' AND p.positionName != 'inne' AND p.isTemporary = FALSE")
     List<Position> getPositionForManagement();
+    boolean existsByPositionName(String positionName);
 }
