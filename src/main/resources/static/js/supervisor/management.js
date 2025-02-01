@@ -25,17 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
         skills: "Dodaj nową umiejętność",
     };
 
-    const searchPerformed = document.querySelector(".tab-button[data-tab='employees']").classList.contains("active");
-
-    if (searchPerformed) {
-        setActiveTab("employees");
-    } else {
-        setActiveTab("shifts");
-    }
+    const savedTab = localStorage.getItem("activeTab") || "shifts";
+    setActiveTab(savedTab);
 
     tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
-            setActiveTab(tab.dataset.tab);
+            const activeTab = tab.dataset.tab;
+            localStorage.setItem("activeTab", activeTab);
+            setActiveTab(activeTab);
         });
     });
 
