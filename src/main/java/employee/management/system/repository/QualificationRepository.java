@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface QualificationRepository extends JpaRepository<Qualification, Integer> {
 
     Qualification findQualificationByName(String name);
+    boolean existsByName(String name);
 }

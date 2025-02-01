@@ -45,4 +45,9 @@ public class QualificationServiceImpl implements QualificationService{
     public void deleteQualificationById(int id) {
         qualificationRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return qualificationRepository.existsByName(name);
+    }
 }

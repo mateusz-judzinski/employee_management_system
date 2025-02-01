@@ -12,4 +12,5 @@ public interface QualificationService {
     void addQualification(Qualification qualification);
     void updateQualification(Qualification qualification);
     void deleteQualificationById(int id);
+    boolean existsByName(String name);
 }

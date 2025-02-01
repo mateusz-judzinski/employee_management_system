@@ -2,11 +2,76 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add Leader Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj kwalifikację</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/user/hamburger-menu.css">
+    <link rel="stylesheet" href="/css/supervisor/form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 </head>
 <body>
-<h3>Create new employee</h3>
 
+<div th:replace="~{fragments/supervisor-menu :: menu}"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-body">
+
+                    <form id="qualificationForm" th:action="@{/supervisor-panel/management/add-qualification}" th:object="${qualification}" method="post">
+                        <h2 class="card-title text-center mb-3 mt-3">Dodaj kwalifikację</h2>
+
+                        <div class="form-group">
+                            <label for="qualificationName">Nazwa kwalifikacji:</label>
+                            <input type="text" id="qualificationName" th:field="*{name}" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Opis:</label>
+                            <textarea id="description" th:field="*{description}" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="employees">Przypisz do pracowników:</label>
+                            <select id="employees" th:field="*{employees}" class="form-control select2" multiple>
+                                <option th:each="employee : ${employees}" th:value="${employee.id}"
+                                        th:text="${employee.firstName} + ' ' + ${employee.lastName}"></option>
+                                <option value="add-new-employee">Dodaj nowego pracownika</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="positions">Przypisz do stanowisk:</label>
+                            <select id="positions" th:field="*{positions}" class="form-control select2" multiple>
+                                <option th:each="position : ${positions}" th:value="${position.id}"
+                                        th:text="${position.positionName}"></option>
+                            </select>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success btn-block mt-4">Zapisz</button>
+                        <div class="text-center mt-2 mb-2">
+                            <a href="/supervisor-panel/management" class="custom-back-link">Wróć do panelu zarządzania</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:if="${errorMessage}" style="color: red; text-align: center; margin-top: 10px;">
+    <p th:text="${errorMessage}" style="margin: 0; padding: 0;"></p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="/js/supervisor/dropdown.js"></script>
+<script src="/js/supervisor/form.js"></script>
+<script src="/js/user/hamburger-menu.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
