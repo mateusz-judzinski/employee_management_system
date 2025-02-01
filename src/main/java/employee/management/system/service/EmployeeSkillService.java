@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface EmployeeSkillService {
 
+    void addEmployeeSkill(EmployeeSkill employeeSkill);
     void saveAll(List<EmployeeSkill> skills);
     EmployeeSkill findEmployeeSkillById(int id);
     List<EmployeeSkill> findAllEmployeeSkills();

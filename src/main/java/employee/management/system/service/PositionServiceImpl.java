@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -178,6 +179,16 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public boolean existsByPositionName(String positionName) {
         return positionRepository.existsByPositionName(positionName);
+    }
+
+    @Override
+    public List<Position> getPositionForAddForm() {
+        return positionRepository.getPositionForAddForm();
+    }
+
+    @Override
+    public List<Position> getPositionsByIds(List<Integer> ids) {
+        return positionRepository.findAllById(ids);
     }
 
     private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime) {

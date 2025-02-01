@@ -19,6 +19,11 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService{
     }
 
     @Override
+    public void addEmployeeSkill(EmployeeSkill employeeSkill) {
+        employeeSkillRepository.save(employeeSkill);
+    }
+
+    @Override
     public void saveAll(List<EmployeeSkill> skills) {
         employeeSkillRepository.saveAll(skills);
     }

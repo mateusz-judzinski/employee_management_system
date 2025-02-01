@@ -3,6 +3,7 @@ package employee.management.system.service;
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Position;
 import jakarta.transaction.Transactional;
+import org.apache.poi.ss.formula.functions.Poisson;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -21,5 +22,6 @@ public interface PositionService {
     void processHistory(Employee employee, Position newPosition);
     List<Position> getPositionsForManagement();
     boolean existsByPositionName(String positionName);
-
+    List<Position> getPositionForAddForm();
+    List<Position> getPositionsByIds(List<Integer> ids);
 }

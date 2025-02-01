@@ -35,6 +35,7 @@
                             <label for="skill">Wymagana umiejętność:</label>
                             <select id="skill" th:field="*{skill}" class="form-control" required>
                                 <option value="" disabled selected>Wybierz umiejętność</option>
+                                <option value="" selected>Brak wymaganej umiejętności</option>
                                 <option th:each="sk : ${skills}" th:value="${sk.id}" th:text="${sk.skillName}"></option>
                             </select>
                         </div>

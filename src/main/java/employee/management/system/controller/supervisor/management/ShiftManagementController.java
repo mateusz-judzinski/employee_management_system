@@ -46,11 +46,11 @@ public class ShiftManagementController {
 
         try {
             shiftService.importSchedule(file);
-            redirectAttributes.addFlashAttribute("message", "Grafik został pomyślnie zaimportowany!");
+            return "redirect:/supervisor-panel/management";
         } catch (Exception e) {
             shiftService.saveAll(backUpShifts);
             redirectAttributes.addFlashAttribute("message",
-                    "Wystąpił błąd podczas importowania pliku. Upewnij się, że plik jest prawidłowy, jego zawartość dobrze sformatowana i spróbuj ponownie.");
+                    "Wystąpił błąd podczas importowania pliku. Upewnij się, że plik jest prawidłowy, jego zawartość dobrze sformatowana i spróbuj ponownie");
         }
         return "redirect:/supervisor-panel/management/import-schedule";
     }

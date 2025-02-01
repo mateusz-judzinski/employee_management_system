@@ -58,4 +58,9 @@ public class SkillServiceImpl implements SkillService{
     public List<Skill> findSkillsByEmployeeId(int employeeId) {
         return skillRepository.findSkillsByEmployeeId(employeeId);
     }
+
+    @Override
+    public boolean existsBySkillName(String skillName) {
+        return skillRepository.existsBySkillName(skillName);
+    }
 }

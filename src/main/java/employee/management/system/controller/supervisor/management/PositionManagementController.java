@@ -60,8 +60,10 @@ public class PositionManagementController {
             return "redirect:/supervisor-panel/management/add-position";
         }
 
-        Skill skill = skillService.findSkillById(position.getSkill().getId());
-        position.setSkill(skill);
+        if(position.getSkill() != null){
+            Skill skill = skillService.findSkillById(position.getSkill().getId());
+            position.setSkill(skill);
+        }
 
         List<Qualification> selectedQualifications = new ArrayList<>();
 
