@@ -186,7 +186,7 @@ public class SupervisorController {
         List<Position> positions = positionService.getPositionsForManagement();
         model.addAttribute("positions", positions);
 
-        List<Qualification> qualifications = qualificationService.findAllQualifications();
+        List<Qualification> qualifications = qualificationService.getQualificationsForManagement();
         model.addAttribute("qualifications", qualifications);
 
         List<Skill> skills = skillService.findAllSkills();

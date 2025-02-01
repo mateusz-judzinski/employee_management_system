@@ -50,4 +50,9 @@ public class QualificationServiceImpl implements QualificationService{
     public boolean existsByName(String name) {
         return qualificationRepository.existsByName(name);
     }
+
+    @Override
+    public List<Qualification> getQualificationsForManagement() {
+        return qualificationRepository.getQualificationsForManagement();
+    }
 }
