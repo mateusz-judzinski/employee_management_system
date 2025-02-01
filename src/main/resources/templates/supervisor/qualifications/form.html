@@ -37,7 +37,6 @@
                             <select id="employees" th:field="*{employees}" class="form-control select2" multiple>
                                 <option th:each="employee : ${employees}" th:value="${employee.id}"
                                         th:text="${employee.firstName} + ' ' + ${employee.lastName}"></option>
-                                <option value="add-new-employee">Dodaj nowego pracownika</option>
                             </select>
                         </div>
 
