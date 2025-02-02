@@ -94,7 +94,7 @@ public class EmployeeManagementController {
 
         if(employee == null){
             redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono pracownika o ID: " + id);
-            return "redirect:/error";
+            return "redirect:/error-handler";
         }
 
         model.addAttribute("employee", employee);
@@ -124,8 +124,9 @@ public class EmployeeManagementController {
         Employee employeeBeforeUpdate = employeeService.findEmployeeById(employee.getId());
 
         if(employeeBeforeUpdate == null){
+            redirectAttributes.addAttribute("id", employee.getId());
             redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono pracownika o ID: " + employee.getId());
-            return "redirect:/error";
+            return "redirect:/supervisor-panel/management/edit-employee/{id}";
         }
 
         List<Qualification> qualifications = new ArrayList<>();

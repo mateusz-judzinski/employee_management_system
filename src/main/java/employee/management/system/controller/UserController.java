@@ -37,11 +37,13 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/error")
+    @GetMapping("/error-handler")
     public String getErrorPage(@RequestParam(value = "errorMessage", required = false) String errorMessage, Model model){
 
         if(errorMessage != null){
             model.addAttribute("errorMessage", errorMessage);
+        } else {
+            model.addAttribute("errorMessage", "Coś poszło nie tak. Spróbuj ponownie później.");
         }
 
         return "user/error";

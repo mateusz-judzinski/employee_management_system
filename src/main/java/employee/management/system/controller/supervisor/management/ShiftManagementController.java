@@ -115,7 +115,7 @@ public class ShiftManagementController {
 
         if (shift == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono zmiany o ID: " + id);
-            return "redirect:/error";
+            return "redirect:/error-handler";
         }
 
         List<Employee> employees = employeeService.getAllEmployees();
