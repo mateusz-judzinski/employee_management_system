@@ -40,8 +40,6 @@ public class PositionManagementController {
         model.addAttribute("skills", skill);
 
         List<Qualification> qualifications = qualificationService.findAllQualifications();
-        Qualification noIdCardQualification = qualificationService.findQualificationByName("brak stałej przepustki");
-        qualifications.remove(noIdCardQualification);
         model.addAttribute("qualifications", qualifications);
 
         if(errorMessage != null){
@@ -58,36 +56,39 @@ public class PositionManagementController {
         boolean positionExists = positionService.existsByPositionName(position.getPositionName());
 
         if (positionExists) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Stanowisko o podanej nazwie już istnieje.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Stanowisko o podanej nazwie już istnieje");
             return "redirect:/supervisor-panel/management/add-position";
         }
 
-        if(position.getSkill() != null){
+        if (position.getSkill() != null) {
             Skill skill = skillService.findSkillById(position.getSkill().getId());
             position.setSkill(skill);
         }
 
         List<Qualification> selectedQualifications = new ArrayList<>();
-
-        if(position.getNeededQualifications().isEmpty() || position.getNeededQualifications() == null){
-            Qualification noIdCardQualification = qualificationService.findQualificationByName("brak stałej przepustki");
-            selectedQualifications.add(noIdCardQualification);
-            position.setNeededQualifications(selectedQualifications);
+        List<Integer> qualificationIds = new ArrayList<>();
+        for (Qualification qualification : position.getNeededQualifications()) {
+            qualificationIds.add(qualification.getId());
         }
 
-        else{
-            List<Integer> qualificationIds = new ArrayList<>();
-            for (Qualification qualification : position.getNeededQualifications()) {
-                qualificationIds.add(qualification.getId());
-            }
+        Qualification noIdCardQualification = qualificationService.findQualificationByName("brak stałej przepustki");
+        Qualification idCardQualification = qualificationService.findQualificationByName("stała przepustka");
 
-            for (Integer id:qualificationIds){
-                Qualification nextQualification = qualificationService.findQualificationById(id);
-                selectedQualifications.add(nextQualification);
+        int count = 0;
+        for (Integer id : qualificationIds) {
+            Qualification nextQualification = qualificationService.findQualificationById(id);
+            if(Objects.equals(nextQualification.getName(), noIdCardQualification.getName()) || Objects.equals(nextQualification.getName(), idCardQualification.getName())){
+                count++;
             }
-
-            position.setNeededQualifications(selectedQualifications);
+            selectedQualifications.add(nextQualification);
         }
+
+        if(count == 2){
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie można jednocześnie wybrać opcji 'stała przepustka' i 'brak stałej przepustki'");
+            return "redirect:/supervisor-panel/management/add-position";
+        }
+
+        position.setNeededQualifications(selectedQualifications);
 
         position.setIsActive(false);
         position.setTemporary(false);
@@ -113,8 +114,6 @@ public class PositionManagementController {
         model.addAttribute("skills", skills);
 
         List<Qualification> qualifications = qualificationService.findAllQualifications();
-        Qualification noIdCard = qualificationService.findQualificationByName("brak stałej przepustki");
-        qualifications.remove(noIdCard);
         model.addAttribute("qualifications", qualifications);
 
         if(errorMessage != null){
@@ -132,7 +131,7 @@ public class PositionManagementController {
         if(positionBeforeUpdate == null){
             redirectAttributes.addAttribute("id", position.getId());
             redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono stanowiska o ID: " + position.getId());
-            return "redirect:/supervisor-panel/management/edit-employee/{id}";
+            return "redirect:/supervisor-panel/management/edit-position/{id}";
         }
 
         position.setIsActive(positionBeforeUpdate.getIsActive());
@@ -150,7 +149,10 @@ public class PositionManagementController {
             }
         }
 
-        boolean containsIdCardQualification = false;
+        int count = 0;
+
+        Qualification noIdCardQualification = qualificationService.findQualificationByName("brak stałej przepustki");
+        Qualification idCardQualification = qualificationService.findQualificationByName("stała przepustka");
 
         List<Qualification> qualifications = new ArrayList<>();
         List<Integer> qualificationsIds = new ArrayList<>();
@@ -159,15 +161,16 @@ public class PositionManagementController {
         }
         for (Integer id:qualificationsIds) {
             Qualification nextQualification = qualificationService.findQualificationById(id);
-            if(Objects.equals(nextQualification.getName(), "stała przepustka")){
-                containsIdCardQualification = true;
+            if(Objects.equals(nextQualification.getName(), noIdCardQualification.getName()) || Objects.equals(nextQualification.getName(), idCardQualification.getName())){
+                count++;
             }
             qualifications.add(nextQualification);
         }
 
-        if(!containsIdCardQualification){
-            Qualification noIdCardQualification = qualificationService.findQualificationByName("brak stałej przepustki");
-            qualifications.add(noIdCardQualification);
+        if(count == 2){
+            redirectAttributes.addAttribute("id", position.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie można jednocześnie wybrać opcji 'stała przepustka' i 'brak stałej przepustki'");
+            return "redirect:/supervisor-panel/management/edit-position/{id}";
         }
 
         position.setNeededQualifications(qualifications);
