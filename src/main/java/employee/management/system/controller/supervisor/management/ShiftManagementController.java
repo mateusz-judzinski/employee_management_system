@@ -1,10 +1,12 @@
 package employee.management.system.controller.supervisor.management;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.Position;
 import employee.management.system.entity.PositionEmployeeHistory;
 import employee.management.system.entity.Shift;
 import employee.management.system.service.EmployeeService;
 import employee.management.system.service.PositionEmployeeHistoryService;
+import employee.management.system.service.PositionService;
 import employee.management.system.service.ShiftService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +25,13 @@ public class ShiftManagementController {
     private final ShiftService shiftService;
     private final EmployeeService employeeService;
     private final PositionEmployeeHistoryService historyService;
+    private final PositionService positionService;
 
-    public ShiftManagementController(ShiftService shiftService, EmployeeService employeeService, PositionEmployeeHistoryService historyService) {
+    public ShiftManagementController(ShiftService shiftService, EmployeeService employeeService, PositionEmployeeHistoryService historyService, PositionService positionService) {
         this.shiftService = shiftService;
         this.employeeService = employeeService;
         this.historyService = historyService;
+        this.positionService = positionService;
     }
 
     @GetMapping("/import-schedule")
@@ -164,17 +168,29 @@ public class ShiftManagementController {
         Employee oldEmployee = shiftBeforeUpdate.getEmployee();
         Employee newEmployee = employeeService.findEmployeeById(shift.getEmployee().getId());
         if(newEmployee.getId() != oldEmployee.getId()){
-            if(shiftIsActive){
-                redirectAttributes.addAttribute("id", shift.getId());
-                redirectAttributes.addFlashAttribute("errorMessage", "Brak możliwości edycji pracownika gdy zmiana jest aktywna");
-                return "redirect:/supervisor-panel/management/edit-shift/{id}";
-            }
+
             boolean alreadyHaveShiftThatDay = shiftService.doesEmployeeAlreadyHaveShiftInProvidedDay(shift.getWorkDate(), newEmployee);
             if(alreadyHaveShiftThatDay){
                 redirectAttributes.addAttribute("id", shift.getId());
                 redirectAttributes.addAttribute("errorMessage", "Pracownik posiada już przypisaną zmianę w ten dzień");
                 return "redirect:/supervisor-panel/management/edit-shift/{id}";
             }
+
+            if(shiftIsActive){
+                oldEmployee.setPosition(null);
+                List<PositionEmployeeHistory> histories = historyService.findTodaysActivityByEmployeeId(oldEmployee.getId());
+                for(PositionEmployeeHistory history:histories){
+                    historyService.deleteHistoryById(history.getId());
+                }
+                if(LocalTime.now().isBefore(shift.getEndTime()) || LocalTime.now().isAfter(shift.getEndTime()) && (shift.getEndTime().isBefore(shift.getStartTime()))){
+                    Position breakPosition = positionService.findPositionByName("przerwa");
+                    PositionEmployeeHistory firstTodaysHistory = new PositionEmployeeHistory(newEmployee, breakPosition);
+                    historyService.addHistory(firstTodaysHistory);
+
+                    newEmployee.setPosition(breakPosition);
+                }
+            }
+
             oldEmployee.getShifts().remove(shiftBeforeUpdate);
             employeeService.updateEmployee(oldEmployee);
 
