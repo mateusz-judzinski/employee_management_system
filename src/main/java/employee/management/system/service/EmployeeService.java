@@ -24,4 +24,5 @@ public interface EmployeeService {
     List<Employee> getEmployeesFromSearchBarByOneElement(String firstOrLastName, String lastOrFirstName);
     List<Employee> getEmployeesFromSearchBarByTwoElements(String firstName, String lastName);
     List<Employee> findEmployeesWithCurrentShift();
+    boolean existsByIdCardNumber(Integer idCardNumber);
 }

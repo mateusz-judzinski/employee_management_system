@@ -31,14 +31,32 @@ function prevStep() {
  document.addEventListener("DOMContentLoaded", function() {
      const select = document.getElementById("employee");
 
-     select.addEventListener("click", function() {
-         this.size = 5;
+     select.addEventListener("mousedown", function(event) {
+         event.preventDefault();
+         this.size = 10;
+         this.focus();
+     });
+
+     select.addEventListener("change", function() {
+         this.size = 1;
+         setTimeout(() => this.blur(), 100);
      });
 
      select.addEventListener("blur", function() {
          this.size = 1;
      });
+
+     document.querySelectorAll("#employee option").forEach(option => {
+         option.addEventListener("click", function() {
+             select.value = this.value;
+             select.dispatchEvent(new Event("change"));
+         });
+     });
  });
+
+
+
+
 
 
 

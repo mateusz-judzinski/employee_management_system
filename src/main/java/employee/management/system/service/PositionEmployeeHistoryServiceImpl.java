@@ -27,6 +27,11 @@ public class PositionEmployeeHistoryServiceImpl implements PositionEmployeeHisto
     }
 
     @Override
+    public PositionEmployeeHistory findByEmployeeIdAndIsActiveTrue(int employeeId) {
+        return positionEmployeeHistoryRepository.findByEmployeeIdAndIsActiveTrue(employeeId);
+    }
+
+    @Override
     public List<PositionEmployeeHistory> findByEmployeeId(int employeeId) {
         return positionEmployeeHistoryRepository.findByEmployeeId(employeeId);
     }

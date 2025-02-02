@@ -37,4 +37,14 @@ public class UserController {
         return "redirect:/login";
     }
 
+    @GetMapping("/error")
+    public String getErrorPage(@RequestParam(value = "errorMessage", required = false) String errorMessage, Model model){
+
+        if(errorMessage != null){
+            model.addAttribute("errorMessage", errorMessage);
+        }
+
+        return "user/error";
+    }
+
 }

@@ -1,35 +1,84 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Employee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj pracownika</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/user/hamburger-menu.css">
+    <link rel="stylesheet" href="/css/supervisor/form.css">
 </head>
 <body>
 
-<h2>Edit user</h2>
+<div th:replace="~{fragments/supervisor-menu :: menu}"></div>
 
-<form th:action="@{/supervisor-panel/employees/update}" th:object="${employee}" method="post">
-    <input type="hidden" id="id" th:field="*{id}">
-    <input type="hidden" id="position" th:field="*{position}">
-    <input type="hidden" id="shifts" th:field="*{shifts}">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-body">
 
-    <br>
-    <label>First name:</label>
-    <input type="text" id="firstName" th:field="*{firstName}">
-    <br>
-    <label>Last name:</label>
-    <input type="text" id="lastName" th:field="*{lastName}">
-    <br>
-    <label>Email:</label>
-    <input type="email" id="email" th:field="*{email}">
-    <br>
-    <label>Phone number:</label>
-    <input type="tel" id="phoneNumber" th:field="*{phoneNumber}">
-    <br>
+                    <form id="employeeForm" th:action="@{/supervisor-panel/management/edit-employee}" th:object="${employee}" method="post">
+                        <input type="hidden" th:field="*{id}">
 
-    <button type="submit">Update</button>
+                        <h2 class="card-title text-center mb-3 mt-3">Edytuj pracownika</h2>
 
-</form>
+                        <div class="form-group">
+                            <label for="firstName">Imię:</label>
+                            <input type="text" id="firstName" th:field="*{firstName}" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Nazwisko:</label>
+                            <input type="text" id="lastName" th:field="*{lastName}" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phoneNumber">Numer telefonu:</label>
+                            <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="idCardNumber">Numer przepustki:</label>
+                            <input type="text" id="idCardNumber" th:field="*{idCardNumber}" class="form-control" placeholder="W przypadku braku przepustki, zostaw puste pole.">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kwalifikacje:</label>
+                            <div class="card card-body">
+                                <div th:each="qualification : ${qualifications}" class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:field="*{qualifications}" th:value="${qualification.id}">
+                                    <label class="form-check-label" th:text="${qualification.name}"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block mt-4">Zapisz zmiany</button>
+                        <div class="text-center mt-2 mb-2">
+                            <a href="/supervisor-panel/management" class="custom-back-link">Wróć do panelu zarządzania</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:if="${errorMessage}" style="color: red; text-align: center; margin-top: 10px;">
+    <p th:text="${errorMessage}" style="margin: 0; padding: 0;"></p>
+</div>
+
+<script src="/js/user/hamburger-menu.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

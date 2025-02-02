@@ -145,4 +145,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         return employeeRepository.findEmployeesWithCurrentShifts(today, yesterday);
     }
+
+    @Override
+    public boolean existsByIdCardNumber(Integer idCardNumber) {
+        return employeeRepository.existsByIdCardNumber(idCardNumber);
+    }
 }

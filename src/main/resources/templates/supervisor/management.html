@@ -69,10 +69,10 @@
                     <td th:text="${employee.idCardNumber != null ? employee.idCardNumber : 'brak'}"></td>
 
                     <td>
-                        <form th:action="@{/supervisor/management/edit-employee/{id}(id=${employee.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/edit-employee/{id}(id=${employee.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor/management/delete-employee/{id}(id=${employee.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-employee/{id}(id=${employee.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -98,10 +98,10 @@
                     <td th:text="${position.positionName}"></td>
                     <td th:text="${position.description}"></td>
                     <td>
-                        <form th:action="@{/supervisor/management/edit-position/{id}(id=${position.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/edit-position/{id}(id=${position.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor/management/delete-position/{id}(id=${position.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-position/{id}(id=${position.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -126,10 +126,10 @@
                     <td th:text="${qualification.name}"></td>
                     <td th:text="${qualification.description}"></td>
                     <td>
-                        <form th:action="@{/supervisor/management/edit-qualification/{id}(id=${qualification.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/edit-qualification/{id}(id=${qualification.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor/management/delete-qualification/{id}(id=${qualification.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-qualification/{id}(id=${qualification.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -158,10 +158,10 @@
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.phoneNumber}"></td>
                     <td>
-                        <form th:action="@{/supervisor/management/edit-user/{id}(id=${user.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/edit-user/{id}(id=${user.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor/management/delete-user/{id}(id=${user.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-user/{id}(id=${user.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -191,10 +191,10 @@
                     <td th:text="${shift.startTime}"></td>
                     <td th:text="${shift.endTime}"></td>
                     <td>
-                        <form th:action="@{/supervisor/management/edit-shift/{id}(id=${shift.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/edit-shift/{id}(id=${shift.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor/management/delete-shift/{id}(id=${shift.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-shift/{id}(id=${shift.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -219,10 +219,10 @@
                     <td th:text="${skill.skillName}"></td>
                     <td th:text="${skill.description}"></td>
                     <td>
-                        <form th:action="@{/supervisor/management/edit-skill/{id}(id=${skill.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/edit-skill/{id}(id=${skill.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor/management/delete-skill/{id}(id=${skill.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-skill/{id}(id=${skill.id})}" method="post" style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>

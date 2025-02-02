@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface PositionEmployeeHistoryService {
+    PositionEmployeeHistory findByEmployeeIdAndIsActiveTrue(int employeeId);
     List<PositionEmployeeHistory> findByEmployeeId(int employeeId);
     List<PositionEmployeeHistory> getAllHistories();
     PositionEmployeeHistory findById(int id);
