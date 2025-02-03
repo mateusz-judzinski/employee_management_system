@@ -8,6 +8,7 @@ public interface EmployeeSkillService {
 
     void addEmployeeSkill(EmployeeSkill employeeSkill);
     void saveAll(List<EmployeeSkill> skills);
+    void update(EmployeeSkill employeeSkill);
     EmployeeSkill findEmployeeSkillById(int id);
     List<EmployeeSkill> findAllEmployeeSkills();
     void updateSkillLevel();

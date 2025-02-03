@@ -24,4 +24,6 @@ public interface PositionService {
     boolean existsByPositionName(String positionName);
     List<Position> getPositionForAddForm();
     List<Position> getPositionsByIds(List<Integer> ids);
+    List<Position> getPositionForEditForm(int skillId);
+    List<Position> findPositionBySkillId(int skillId);
 }

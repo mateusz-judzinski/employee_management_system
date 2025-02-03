@@ -191,6 +191,16 @@ public class PositionServiceImpl implements PositionService {
         return positionRepository.findAllById(ids);
     }
 
+    @Override
+    public List<Position> getPositionForEditForm(int skillId) {
+        return positionRepository.getPositionForEditForm(skillId);
+    }
+
+    @Override
+    public List<Position> findPositionBySkillId(int skillId) {
+        return positionRepository.findPositionBySkillId(skillId);
+    }
+
     private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime) {
 
         if (employee.getPosition().getSkill() != null) {

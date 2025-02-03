@@ -16,4 +16,7 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
     boolean existsByPositionName(String positionName);
     @Query("SELECT p FROM Position p WHERE p.positionName != 'przerwa' AND p.positionName != 'inne' AND p.isTemporary = FALSE AND p.skill IS null")
     List<Position> getPositionForAddForm();
+    @Query("SELECT p FROM Position p WHERE p.positionName != 'przerwa' AND p.positionName != 'inne' AND p.isTemporary = FALSE AND (p.skill IS null OR p.skill.id = :skillId)")
+    List<Position> getPositionForEditForm(int skillId);
+    List<Position> findPositionBySkillId(int skillId);
 }

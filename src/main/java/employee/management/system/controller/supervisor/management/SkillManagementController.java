@@ -21,6 +21,7 @@ public class SkillManagementController {
     private final SkillService skillService;
     private final EmployeeService employeeService;
     private final EmployeeSkillService employeeSkillService;
+
     public SkillManagementController(PositionService positionService, SkillService skillService, EmployeeService employeeService, EmployeeSkillService employeeSkillService) {
         this.positionService = positionService;
         this.skillService = skillService;
@@ -29,7 +30,7 @@ public class SkillManagementController {
     }
 
     @GetMapping("/add-skill")
-    public String showSkillForm(Model model, @RequestParam(value = "errorMessage", required = false) String errorMessage){
+    public String showSkillForm(Model model, @RequestParam(value = "errorMessage", required = false) String errorMessage) {
 
         Skill skill = new Skill();
         model.addAttribute("skill", skill);
@@ -37,7 +38,7 @@ public class SkillManagementController {
         List<Position> positions = positionService.getPositionForAddForm();
         model.addAttribute("positions", positions);
 
-        if(errorMessage != null){
+        if (errorMessage != null) {
             model.addAttribute("errorMessage", errorMessage);
         }
 
@@ -49,7 +50,7 @@ public class SkillManagementController {
                            RedirectAttributes redirectAttributes) {
 
         boolean skillExist = skillService.existsBySkillName(skill.getSkillName());
-        if(skillExist){
+        if (skillExist) {
             redirectAttributes.addFlashAttribute("errorMessage", "Umiejętność o podanej nazwie już istnieje");
             return "redirect:/supervisor-panel/management/add-skill";
         }
@@ -62,7 +63,7 @@ public class SkillManagementController {
             positionIds.add(position.getId());
         }
 
-        for (Integer id:positionIds){
+        for (Integer id : positionIds) {
             Position nextPosition = positionService.findPositionById(id);
             selectedPositions.add(nextPosition);
             nextPosition.setSkill(skill);
@@ -73,7 +74,7 @@ public class SkillManagementController {
 
 
         List<Employee> employees = employeeService.getAllEmployees();
-        for (Employee employee:employees) {
+        for (Employee employee : employees) {
             EmployeeSkill employeeSkill = new EmployeeSkill(employee, skill);
             employeeSkillService.addEmployeeSkill(employeeSkill);
         }
@@ -82,4 +83,70 @@ public class SkillManagementController {
         return "redirect:/supervisor-panel/management";
     }
 
+    @GetMapping("/edit-skill/{id}")
+    public String showSkillEditForm(@PathVariable("id") int id, Model model, @RequestParam(value = "errorMessage", required = false) String errorMessage, RedirectAttributes redirectAttributes) {
+
+        Skill skill = skillService.findSkillById(id);
+
+        if (skill == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono umiejętności o ID: " + id);
+            return "redirect:/error-handler";
+        }
+
+        model.addAttribute("skill", skill);
+
+        List<Position> positions = positionService.getPositionForEditForm(id);
+        model.addAttribute("positions", positions);
+
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+        }
+
+        return "supervisor/skills/edit";
+    }
+
+
+    @PostMapping("/edit-skill")
+    public String updateSkill(@ModelAttribute("skill") Skill skill, RedirectAttributes redirectAttributes) {
+
+        Skill skillBeforeUpdate = skillService.findSkillById(skill.getId());
+
+        if (skillBeforeUpdate == null) {
+            redirectAttributes.addAttribute("id", skill.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono umiejętności o ID: " + skill.getId());
+            return "redirect:/supervisor-panel/management/edit-skill/{id}";
+        }
+
+        skill.setEmployees(skillBeforeUpdate.getEmployees());
+
+        List<Position> previousPositions = positionService.findPositionBySkillId(skill.getId());
+        if (skill.getPositions() != null) {
+            List<Position> positions = new ArrayList<>();
+            List<Integer> positionIds = new ArrayList<>();
+            for (Position position : skill.getPositions()) {
+                positionIds.add(position.getId());
+            }
+            for (Integer id : positionIds) {
+                Position nextPosition = positionService.findPositionById(id);
+                previousPositions.remove(nextPosition);
+                positions.add(nextPosition);
+                nextPosition.setSkill(skill);
+            }
+            skill.setPositions(positions);
+        }
+
+        else {
+            skill.setPositions(null);
+        }
+
+        if (!previousPositions.isEmpty()) {
+            for (Position previousPosition : previousPositions) {
+                previousPosition.setSkill(null);
+            }
+        }
+
+        skillService.updateSkill(skill);
+
+        return "redirect:/supervisor-panel/management";
+    }
 }
