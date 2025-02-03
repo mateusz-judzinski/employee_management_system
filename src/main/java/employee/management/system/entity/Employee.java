@@ -37,7 +37,7 @@ public class Employee {
     @Pattern(regexp = "\\d{9}", message = "Numer telefonu musi zawierać dokładnie 9 cyfr")
     @Column(name = "phone_number")
     private String phoneNumber;
-    @Digits(integer = 6, fraction = 0, message = "Numer przepustki może zawierać tylko cyfry i musi mieć 6 cyfr")
+
     @Column(name = "id_card_number")
     private Integer idCardNumber;
     @ManyToOne

@@ -3,11 +3,12 @@ package employee.management.system.dto;
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.EmployeeSkill;
 import employee.management.system.entity.Qualification;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
 public class NewEmployeeDTO {
-
+    @Valid
     private Employee employee;
     private List<EmployeeSkill> skills;
 

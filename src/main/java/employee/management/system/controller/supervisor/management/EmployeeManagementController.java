@@ -3,6 +3,7 @@ package employee.management.system.controller.supervisor.management;
 import employee.management.system.dto.NewEmployeeDTO;
 import employee.management.system.entity.*;
 import employee.management.system.service.*;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,8 +66,15 @@ public class EmployeeManagementController {
     }
 
     @PostMapping("/add-employee")
-    public String addEmployee(@ModelAttribute NewEmployeeDTO newEmployee, RedirectAttributes redirectAttributes,
-                              BindingResult bindingResult) {
+    public String addEmployee(@ModelAttribute @Valid NewEmployeeDTO newEmployee,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/add-employee";
+        }
 
         if(newEmployee.getEmployee().getIdCardNumber() != null){
             boolean idCardExists = employeeService.existsByIdCardNumber(newEmployee.getEmployee().getIdCardNumber());
@@ -75,8 +83,6 @@ public class EmployeeManagementController {
                 return "redirect:/supervisor-panel/management/add-employee";
             }
         }
-
-
 
         if(newEmployee.getEmployee().getIdCardNumber() == null){
             Qualification noIdCardQualification = qualificationService.findQualificationByName("brak stałej przepustki");
@@ -123,7 +129,14 @@ public class EmployeeManagementController {
     }
 
     @PostMapping("/edit-employee")
-    public String updateEmployee(@ModelAttribute("employee") Employee employee, RedirectAttributes redirectAttributes) {
+    public String updateEmployee(@ModelAttribute("employee") Employee employee,
+                                 RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addAttribute("id", employee.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            return "redirect:/supervisor-panel/management/edit-employee/{id}";
+        }
 
         if(employee.getIdCardNumber() != null){
             boolean isIdCardOccupied = employeeService.isIdCardOccupied(employee);
