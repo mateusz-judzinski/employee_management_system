@@ -1,6 +1,8 @@
 package employee.management.system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +14,12 @@ public class Qualification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "Nazwa kwalifikacji nie może być pusta.")
+    @Size(min = 3, max = 30, message = "Nazwa kwalifikacji musi mieć od 3 do 30 znaków.")
     @Column(name = "qualification_name")
     private String name;
+    @NotBlank(message = "Opis kwalifikacji nie może być pusty.")
+    @Size(min = 10, max = 250, message = "Opis kwalifikacji może mieć od 10 do 250 znaków.")
     @Column(name = "description")
     private String description;
     @ManyToMany(mappedBy = "qualifications",

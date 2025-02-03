@@ -2,9 +2,11 @@ package employee.management.system.controller.supervisor.management;
 
 import employee.management.system.entity.*;
 import employee.management.system.service.*;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -53,8 +55,15 @@ public class QualificationManagementController {
     }
 
     @PostMapping("/add-qualification")
-    public String addQualification(@ModelAttribute("qualification") Qualification qualification,
+    public String addQualification(@ModelAttribute @Valid Qualification qualification,
+                                   BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/add-qualification";
+        }
 
         boolean qualificationExists = qualificationService.existsByName(qualification.getName());
         if (qualificationExists) {
@@ -124,8 +133,16 @@ public class QualificationManagementController {
     }
 
     @PostMapping("/edit-qualification")
-    public String updateQualification(@ModelAttribute("qualification") Qualification qualification,
+    public String updateQualification(@ModelAttribute @Valid Qualification qualification,
+                                      BindingResult bindingResult,
                                       RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addAttribute("id", qualification.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/edit-qualification/{id}";
+        }
 
         Qualification managedQualification = qualificationService.findQualificationById(qualification.getId());
 

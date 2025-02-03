@@ -37,9 +37,10 @@ public class Employee {
     @Pattern(regexp = "\\d{9}", message = "Numer telefonu musi zawierać dokładnie 9 cyfr")
     @Column(name = "phone_number")
     private String phoneNumber;
-
+    @Digits(integer = 10, fraction = 0, message = "Numer przepustki może zawierać tylko cyfry i mieć maksymalnie 10 znaków.")
+    @Pattern(regexp = "\\d*", message = "Numer przepustki może zawierać tylko cyfry.")
     @Column(name = "id_card_number")
-    private Integer idCardNumber;
+    private String idCardNumber;
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
@@ -111,11 +112,11 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
-    public Integer getIdCardNumber() {
+    public String getIdCardNumber() {
         return idCardNumber;
     }
 
-    public void setIdCardNumber(Integer idCardNumber) {
+    public void setIdCardNumber(String idCardNumber) {
         this.idCardNumber = idCardNumber;
     }
 

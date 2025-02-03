@@ -2,9 +2,11 @@ package employee.management.system.controller.supervisor.management;
 
 import employee.management.system.entity.*;
 import employee.management.system.service.*;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -56,8 +58,15 @@ public class PositionManagementController {
     }
 
     @PostMapping("/add-position")
-    public String addPosition(@ModelAttribute("position") Position position,
+    public String addPosition(@ModelAttribute @Valid Position position,
+                              BindingResult bindingResult,
                               RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/add-position";
+        }
 
         boolean positionExists = positionService.existsByPositionName(position.getPositionName());
 
@@ -130,7 +139,16 @@ public class PositionManagementController {
     }
 
     @PostMapping("/edit-position")
-    public String updatePosition(@ModelAttribute("position") Position position, RedirectAttributes redirectAttributes) {
+    public String updatePosition(@ModelAttribute @Valid Position position,
+                                 BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addAttribute("id", position.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/edit-position/{id}";
+        }
 
         Position positionBeforeUpdate = positionService.findPositionById(position.getId());
 

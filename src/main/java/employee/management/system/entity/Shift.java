@@ -1,6 +1,8 @@
 package employee.management.system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,14 +16,19 @@ public class Shift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @NotNull(message = "Data zmiany nie może być pusta.")
+    @FutureOrPresent(message = "Data zmiany nie może być w przeszłości.")
     @Column(name = "work_date")
     private LocalDate workDate;
     @Column(name = "shift_name")
     private String shiftName;
+    @NotNull(message = "Godzina rozpoczęcia zmiany nie może być pusta.")
     @Column(name = "start_time")
     private LocalTime startTime;
+    @NotNull(message = "Godzina zakończenia zmiany nie może być pusta.")
     @Column(name = "end_time")
     private LocalTime endTime;
+    @NotNull(message = "Zmiana musi być przypisana do pracownika.")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "employee_id")

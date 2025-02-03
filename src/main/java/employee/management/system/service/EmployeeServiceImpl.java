@@ -147,7 +147,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public boolean existsByIdCardNumber(Integer idCardNumber) {
+    public boolean existsByIdCardNumber(String idCardNumber) {
         return employeeRepository.existsByIdCardNumber(idCardNumber);
     }
 

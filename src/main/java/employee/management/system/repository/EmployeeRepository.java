@@ -47,8 +47,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
             "(s.endTime > CURRENT_TIME OR s.endTime < s.startTime)) " +
             "OR (s.workDate = :yesterday AND s.startTime > s.endTime AND s.endTime > CURRENT_TIME))")
     List<Employee> findEmployeesWithCurrentShifts(@Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
-    boolean existsByIdCardNumber(Integer idCardNumber);
+    boolean existsByIdCardNumber(String idCardNumber);
     @Query("SELECT e FROM Employee e JOIN e.qualifications q WHERE q.id = :qualificationId")
     List<Employee> findEmployeesByQualificationId(int qualificationId);
-    Employee findEmployeeByIdCardNumber(Integer idCardNumber);
+    Employee findEmployeeByIdCardNumber(String idCardNumber);
 }

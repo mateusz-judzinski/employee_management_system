@@ -129,12 +129,14 @@ public class EmployeeManagementController {
     }
 
     @PostMapping("/edit-employee")
-    public String updateEmployee(@ModelAttribute("employee") Employee employee,
-                                 RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+    public String updateEmployee(@ModelAttribute @Valid Employee employee,
+                                 BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
             redirectAttributes.addAttribute("id", employee.getId());
-            redirectAttributes.addFlashAttribute("errorMessage", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
             return "redirect:/supervisor-panel/management/edit-employee/{id}";
         }
 

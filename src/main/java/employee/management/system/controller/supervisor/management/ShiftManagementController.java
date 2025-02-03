@@ -2,9 +2,11 @@ package employee.management.system.controller.supervisor.management;
 
 import employee.management.system.entity.*;
 import employee.management.system.service.*;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -78,7 +80,15 @@ public class ShiftManagementController {
     }
 
     @PostMapping("/add-shift")
-    public String addShift(@ModelAttribute("shift") Shift shift, RedirectAttributes redirectAttributes) {
+    public String addShift(@ModelAttribute @Valid Shift shift,
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/add-shift";
+        }
 
         LocalDate shiftDate = shift.getWorkDate();
         LocalDate now = LocalDate.now();
@@ -133,7 +143,16 @@ public class ShiftManagementController {
     }
 
     @PostMapping("/edit-shift")
-    public String updateShift(@ModelAttribute("shift") Shift shift, RedirectAttributes redirectAttributes) {
+    public String updateShift(@ModelAttribute @Valid Shift shift,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addAttribute("id", shift.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/edit-shift/{id}";
+        }
 
         Shift shiftBeforeUpdate = shiftService.findShiftById(shift.getId());
 

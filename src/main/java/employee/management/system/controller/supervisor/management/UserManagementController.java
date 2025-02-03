@@ -2,9 +2,11 @@ package employee.management.system.controller.supervisor.management;
 
 import employee.management.system.entity.User;
 import employee.management.system.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,7 +39,15 @@ public class UserManagementController {
 
 
     @PostMapping("/add-user")
-    public String addUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+    public String addUser(@ModelAttribute @Valid User user,
+                          BindingResult bindingResult,
+                          RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/add-user";
+        }
 
         boolean userExists = userService.existsByUsername(user.getUsername());
 
@@ -103,7 +113,16 @@ public class UserManagementController {
     }
 
     @PostMapping("/edit-user")
-    public String updateUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+    public String updateUser(@ModelAttribute @Valid User user,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addAttribute("id", user.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/edit-user/{id}";
+        }
 
         User existingUser = userService.findUserById(user.getId());
 
@@ -128,6 +147,11 @@ public class UserManagementController {
         }
 
         if (!user.getNewPassword().isBlank()) {
+            if (!isValidPassword(user.getNewPassword())) {
+                redirectAttributes.addAttribute("id", user.getId());
+                redirectAttributes.addFlashAttribute("errorMessage", "Nowe hasło musi mieć od 8 do 64 znaków, w tym wielką i małą literę, cyfrę oraz znak specjalny.");
+                return "redirect:/supervisor-panel/management/edit-user/{id}";
+            }
             existingUser.setPassword(passwordEncoder.encode(user.getNewPassword()));
         } else {
             existingUser.setPassword(user.getPassword());
@@ -142,6 +166,11 @@ public class UserManagementController {
         userService.updateUser(existingUser);
 
         return "redirect:/supervisor-panel/management";
+    }
+
+    private boolean isValidPassword(String password) {
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,64}$";
+        return password.matches(passwordRegex);
     }
 
 }

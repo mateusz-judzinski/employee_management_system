@@ -1,6 +1,8 @@
 package employee.management.system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,12 @@ public class Skill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @NotBlank(message = "Nazwa umiejętności nie może być pusta.")
+    @Size(min = 3, max = 30, message = "Nazwa umiejętności musi mieć od 3 do 30 znaków.")
     @Column(name = "skill_name")
     private String skillName;
+    @NotBlank(message = "Opis umiejętności nie może być pusty.")
+    @Size(min = 10, max = 250, message = "Opis umiejętności może mieć od 10 do 250 znaków.")
     @Column(name = "description")
     private String description;
     @OneToMany(mappedBy = "skill",

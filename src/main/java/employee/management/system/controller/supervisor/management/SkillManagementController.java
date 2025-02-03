@@ -2,9 +2,11 @@ package employee.management.system.controller.supervisor.management;
 
 import employee.management.system.entity.*;
 import employee.management.system.service.*;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -49,8 +51,15 @@ public class SkillManagementController {
     }
 
     @PostMapping("/add-skill")
-    public String addSkill(@ModelAttribute("skill") Skill skill,
+    public String addSkill(@ModelAttribute @Valid Skill skill,
+                           BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/add-skill";
+        }
 
         boolean skillExist = skillService.existsBySkillName(skill.getSkillName());
         if (skillExist) {
@@ -110,7 +119,16 @@ public class SkillManagementController {
 
 
     @PostMapping("/edit-skill")
-    public String updateSkill(@ModelAttribute("skill") Skill skill, RedirectAttributes redirectAttributes) {
+    public String updateSkill(@ModelAttribute @Valid Skill skill,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            String firstErrorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            redirectAttributes.addAttribute("id", skill.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", firstErrorMessage);
+            return "redirect:/supervisor-panel/management/edit-skill/{id}";
+        }
 
         Skill skillBeforeUpdate = skillService.findSkillById(skill.getId());
 

@@ -1,6 +1,8 @@
 package employee.management.system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,12 @@ public class Position {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @NotBlank(message = "Nazwa stanowiska nie może być pusta.")
+    @Size(min = 3, max = 30, message = "Nazwa stanowiska musi mieć od 3 do 30 znaków.")
     @Column(name = "position_name")
     private String positionName;
+    @NotBlank(message = "Opis stanowiska nie może być pusty.")
+    @Size(min = 10, max = 250, message = "Opis stanowiska może mieć od 10 do 250 znaków.")
     @Column(name = "description")
     private String description;
     @Column(name = "is_active")
