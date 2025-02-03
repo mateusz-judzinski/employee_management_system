@@ -116,19 +116,19 @@
 </table>
 </div>
 
-
-
 <div id="temp-position-form-overlay" style="display: none;">
     <div id="temp-position-form-popup">
         <span id="close-popup-btn">&times;</span>
         <form th:action="@{/leader-panel/position/add-temporary}" method="post">
             <div>
                 <label for="positionName">Nazwa stanowiska:</label>
-                <input type="text" id="positionName" name="positionName" required>
+                <input type="text" id="positionName" name="positionName"
+                       placeholder="Musi zawierać od 3 do 30 znaków" required minlength="3" maxlength="30">
             </div>
             <div>
                 <label for="description">Opis stanowiska:</label>
-                <textarea id="description" name="description" rows="5" required></textarea>
+                <textarea id="description" name="description" rows="5"
+                          placeholder="Musi zawierać od 10 do 250 znaków" required minlength="10" maxlength="250"></textarea>
             </div>
             <button type="submit" class="popup-submit-btn">Dodaj stanowisko</button>
         </form>

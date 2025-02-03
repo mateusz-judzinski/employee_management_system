@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,15 +39,12 @@ public class UserController {
     }
 
     @GetMapping("/error-handler")
-    public String getErrorPage(@RequestParam(value = "errorMessage", required = false) String errorMessage, Model model){
-
-        if(errorMessage != null){
-            model.addAttribute("errorMessage", errorMessage);
-        } else {
+    public String getErrorPage(Model model, @ModelAttribute("errorMessage") String errorMessage) {
+        if (errorMessage == null || errorMessage.isBlank()) {
             model.addAttribute("errorMessage", "Coś poszło nie tak. Spróbuj ponownie później.");
         }
-
         return "user/error";
     }
+
 
 }

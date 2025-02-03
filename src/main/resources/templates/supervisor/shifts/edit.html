@@ -21,6 +21,7 @@
 
                     <form id="shiftForm" th:action="@{/supervisor-panel/management/edit-shift}" th:object="${shift}" method="post">
                         <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{workDate}">
 
                         <h2 class="card-title text-center mb-3 mt-3">Edytuj zmianę</h2>
 
