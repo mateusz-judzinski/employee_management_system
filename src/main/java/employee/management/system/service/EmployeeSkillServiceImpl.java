@@ -68,6 +68,16 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService{
         return skills;
     }
 
+    @Override
+    public List<EmployeeSkill> findAllEmployeeSkillBySkillId(int skillId) {
+        return employeeSkillRepository.findAllEmployeeSkillBySkillId(skillId);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        employeeSkillRepository.deleteById(id);
+    }
+
     private int calculateSkillProficiency(int timeExperienceInMinutes){
         if(timeExperienceInMinutes >= 9000){
             return 3;

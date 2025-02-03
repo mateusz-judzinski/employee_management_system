@@ -15,4 +15,6 @@ public interface UserService {
     List<User> findByRole(String role);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+    boolean isUsernameOccupied(User user);
+    boolean isEmailOccupied(User user);
 }

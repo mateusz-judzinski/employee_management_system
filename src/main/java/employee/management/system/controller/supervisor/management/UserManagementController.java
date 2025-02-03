@@ -8,14 +8,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/supervisor-panel/management")
 public class UserManagementController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserManagementController(UserService userService) {
+    public UserManagementController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/add-user")
@@ -54,5 +58,90 @@ public class UserManagementController {
         return "redirect:/supervisor-panel/management";
     }
 
+    @PostMapping("/delete-user/{id}")
+    public String deleteUser(@PathVariable("id") int id,
+                             @RequestParam("password") String password,
+                             Principal principal,
+                             RedirectAttributes redirectAttributes) {
+
+        String username = principal.getName();
+        User currentUser = userService.findUserByUsername(username);
+
+        if (currentUser == null || !passwordEncoder.matches(password, currentUser.getPassword())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Podane hasło jest nieprawidłowe. Usunięcie nie zostało wykonane.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+        User user = userService.findUserById(id);
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono użytkownika.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+        userService.deleteUserById(id);
+        return "redirect:/supervisor-panel/management";
+    }
+
+    @GetMapping("/edit-user/{id}")
+    public String showEditUserForm(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes,
+                                   @RequestParam(value = "errorMessage", required = false) String errorMessage) {
+
+        User user = userService.findUserById(id);
+
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono użytkownika o ID: " + id);
+            return "redirect:/error-handler";
+        }
+
+        model.addAttribute("user", user);
+
+        if(errorMessage != null){
+            model.addAttribute("errorMessage", errorMessage);
+        }
+
+        return "supervisor/users/edit";
+    }
+
+    @PostMapping("/edit-user")
+    public String updateUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+
+        User existingUser = userService.findUserById(user.getId());
+
+        if (existingUser == null) {
+            redirectAttributes.addAttribute("id", user.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono użytkownika o ID: " + user.getId());
+            return "redirect:/supervisor-panel/management/edit-user/{id}";
+        }
+
+        boolean isUsernameOccupied = userService.isUsernameOccupied(user);
+        if (isUsernameOccupied) {
+            redirectAttributes.addAttribute("id", user.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", "Podana nazwa użytkownika jest już zajęta.");
+            return "redirect:/supervisor-panel/management/edit-user/{id}";
+        }
+
+        boolean isEmailOccupied = userService.isEmailOccupied(user);
+        if (isEmailOccupied) {
+            redirectAttributes.addAttribute("id", user.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", "Podany adres e-mail jest już zajęty.");
+            return "redirect:/supervisor-panel/management/edit-user/{id}";
+        }
+
+        if (!user.getNewPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getNewPassword()));
+        } else {
+            existingUser.setPassword(user.getPassword());
+        }
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPhoneNumber(user.getPhoneNumber());
+
+        userService.updateUser(existingUser);
+
+        return "redirect:/supervisor-panel/management";
+    }
 
 }

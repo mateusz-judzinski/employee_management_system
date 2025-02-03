@@ -16,4 +16,6 @@ public interface SkillService {
     void deleteSkillById(int id);
     List<Skill> findSkillsByEmployeeId(int employeeId);
     boolean existsBySkillName(String skillName);
+
+    boolean isSkillNameOccupied(Skill skill);
 }

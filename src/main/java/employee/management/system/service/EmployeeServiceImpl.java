@@ -155,4 +155,17 @@ public class EmployeeServiceImpl implements EmployeeService{
     public List<Employee> findEmployeesByQualificationId(int qualificationId) {
         return employeeRepository.findEmployeesByQualificationId(qualificationId);
     }
+
+    @Override
+    public boolean isIdCardOccupied(Employee employee) {
+
+        Employee idCardOwner = employeeRepository.findEmployeeByIdCardNumber(employee.getIdCardNumber());
+
+        if(idCardOwner == null){
+            return false;
+        }
+        else{
+            return idCardOwner.getId() != employee.getId();
+        }
+    }
 }

@@ -27,4 +27,5 @@ public interface PositionService {
     List<Position> getPositionForEditForm(int skillId);
     List<Position> findPositionBySkillId(int skillId);
     List<Position> findPositionByQualificationId(int qualificationId);
+    boolean isPositionNameOccupied(Position position);
 }

@@ -23,4 +23,5 @@ public interface PositionEmployeeHistoryService {
     LocalTime getTimeSpentOnPositionByEmployeeAndPositionIds(int employeeId, int positionId);
     List<AveragePositionTime> calculateEmployeePositionRatioPercentage(int employeeId);
     List<PositionEmployeeHistory> findTodaysActivityByEmployeeId(int employeeId);
+    List<PositionEmployeeHistory> findAllByPositionId(int positionId);
 }

@@ -1,18 +1,14 @@
 package employee.management.system.controller.supervisor.management;
 
-import employee.management.system.entity.Employee;
-import employee.management.system.entity.Position;
-import employee.management.system.entity.PositionEmployeeHistory;
-import employee.management.system.entity.Qualification;
-import employee.management.system.service.EmployeeService;
-import employee.management.system.service.PositionEmployeeHistoryService;
-import employee.management.system.service.PositionService;
-import employee.management.system.service.QualificationService;
+import employee.management.system.entity.*;
+import employee.management.system.service.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +21,16 @@ public class QualificationManagementController {
     final private PositionService positionService;
     final private QualificationService qualificationService;
     final private PositionEmployeeHistoryService historyService;
+    final private UserService userService;
+    final private PasswordEncoder passwordEncoder;
 
-    public QualificationManagementController(EmployeeService employeeService, PositionService positionService, QualificationService qualificationService, PositionEmployeeHistoryService historyService) {
+    public QualificationManagementController(EmployeeService employeeService, PositionService positionService, QualificationService qualificationService, PositionEmployeeHistoryService historyService, UserService userService, PasswordEncoder passwordEncoder) {
         this.employeeService = employeeService;
         this.positionService = positionService;
         this.qualificationService = qualificationService;
         this.historyService = historyService;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/add-qualification")
@@ -113,7 +113,7 @@ public class QualificationManagementController {
         List<Employee> allEmployees = employeeService.getAllEmployeesSortedByLastName();
         model.addAttribute("allEmployees", allEmployees);
 
-        List<Position> allPositions = positionService.findAllPositions();
+        List<Position> allPositions = positionService.getPositionsForManagement();
         model.addAttribute("allPositions", allPositions);
 
         if (errorMessage != null) {
@@ -129,11 +129,21 @@ public class QualificationManagementController {
 
         Qualification managedQualification = qualificationService.findQualificationById(qualification.getId());
 
+        boolean isQualificationNameOccupied = qualificationService.isQualificationNameOccupied(qualification);
+        if (isQualificationNameOccupied) {
+            redirectAttributes.addAttribute("id", qualification.getId());
+            redirectAttributes.addFlashAttribute("errorMessage", "Kwalifikacja o podanej nazwie już istnieje.");
+            return "redirect:/supervisor-panel/management/edit-qualification/{id}";
+        }
+
         if (managedQualification == null) {
             redirectAttributes.addAttribute("id", qualification.getId());
             redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono kwalifikacji o ID: " + qualification.getId());
             return "redirect:/supervisor-panel/management/edit-qualification/{id}";
         }
+
+        managedQualification.setName(qualification.getName());
+        managedQualification.setDescription(qualification.getDescription());
 
         List<Employee> previousEmployees = employeeService.findEmployeesByQualificationId(qualification.getId());
 
@@ -200,6 +210,46 @@ public class QualificationManagementController {
         return "redirect:/supervisor-panel/management";
     }
 
+
+    @PostMapping("/delete-qualification/{id}")
+    public String deleteQualification(@PathVariable("id") int id,
+                                      @RequestParam("password") String password,
+                                      Principal principal,
+                                      RedirectAttributes redirectAttributes) {
+
+        String username = principal.getName();
+        User currentUser = userService.findUserByUsername(username);
+
+        if (currentUser == null || !passwordEncoder.matches(password, currentUser.getPassword())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Podane hasło jest nieprawidłowe. Usunięcie nie zostało wykonane.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+        Qualification qualification = qualificationService.findQualificationById(id);
+        if (qualification == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono kwalifikacji.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+
+        if(!qualification.getPositions().isEmpty()){
+            for(Position position:qualification.getPositions()){
+                position.getNeededQualifications().remove(qualification);
+                positionService.updatePosition(position);
+            }
+        }
+
+        if(!qualification.getEmployees().isEmpty()){
+            for(Employee employee:qualification.getEmployees()){
+                employee.getQualifications().remove(qualification);
+                employeeService.updateEmployee(employee);
+            }
+        }
+
+
+        qualificationService.deleteQualificationById(id);
+        return "redirect:/supervisor-panel/management";
+    }
 
 
 }

@@ -23,4 +23,5 @@ public interface PositionEmployeeHistoryRepository extends JpaRepository<Positio
     List<PositionEmployeeHistory> findTodaysActivityByEmployeeId(@Param("employeeId") int employeeId, @Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
     @Query("SELECT h FROM PositionEmployeeHistory h WHERE h.employee.id = :employeeId ORDER BY h.startDate DESC, h.startTime DESC")
     List<PositionEmployeeHistory> findLatestHistoryByEmployeeId(@Param("employeeId") int employeeId);
+    List<PositionEmployeeHistory> findAllPositionEmployeeHistoryByPositionId(int positionId);
 }

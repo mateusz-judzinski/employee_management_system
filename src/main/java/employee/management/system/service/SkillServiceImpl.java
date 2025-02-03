@@ -63,4 +63,15 @@ public class SkillServiceImpl implements SkillService{
     public boolean existsBySkillName(String skillName) {
         return skillRepository.existsBySkillName(skillName);
     }
+
+    @Override
+    public boolean isSkillNameOccupied(Skill skill) {
+        Skill nameOwner = skillRepository.findSkillBySkillName(skill.getSkillName());
+
+        if (nameOwner == null) {
+            return false;
+        } else {
+            return nameOwner.getId() != skill.getId();
+        }
+    }
 }

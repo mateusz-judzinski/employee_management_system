@@ -1,6 +1,7 @@
 package employee.management.system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Duration;
@@ -20,14 +21,23 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @NotBlank(message = "Imię nie może być puste")
+    @Size(min = 2, max = 20, message = "Imię musi mieć od 2 do 20 znaków")
     @Column(name = "first_name")
     private String firstName;
+    @NotBlank(message = "Nazwisko nie może być puste")
+    @Size(min = 2, max = 35, message = "Nazwisko musi mieć od 2 do 35 znaków")
     @Column(name = "last_name")
     private String lastName;
+    @NotBlank(message = "Email nie może być pusty")
+    @Email(message = "Nieprawidłowy format adresu email")
+    @Size(max = 100, message = "Email nie może przekraczać 100 znaków")
     @Column(name = "email")
     private String email;
+    @Pattern(regexp = "\\d{9}", message = "Numer telefonu musi zawierać dokładnie 9 cyfr")
     @Column(name = "phone_number")
     private String phoneNumber;
+    @Digits(integer = 6, fraction = 0, message = "Numer przepustki może zawierać tylko cyfry i musi mieć 6 cyfr")
     @Column(name = "id_card_number")
     private Integer idCardNumber;
     @ManyToOne

@@ -1,6 +1,7 @@
 package employee.management.system.repository;
 
 import employee.management.system.entity.Employee;
+import employee.management.system.entity.EmployeeSkill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -49,4 +50,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     boolean existsByIdCardNumber(Integer idCardNumber);
     @Query("SELECT e FROM Employee e JOIN e.qualifications q WHERE q.id = :qualificationId")
     List<Employee> findEmployeesByQualificationId(int qualificationId);
+    Employee findEmployeeByIdCardNumber(Integer idCardNumber);
 }

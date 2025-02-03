@@ -26,4 +26,5 @@ public interface EmployeeService {
     List<Employee> findEmployeesWithCurrentShift();
     boolean existsByIdCardNumber(Integer idCardNumber);
     List<Employee> findEmployeesByQualificationId(int qualificationId);
+    boolean isIdCardOccupied(Employee employee);
 }

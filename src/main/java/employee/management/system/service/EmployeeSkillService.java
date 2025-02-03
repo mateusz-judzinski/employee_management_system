@@ -13,4 +13,6 @@ public interface EmployeeSkillService {
     List<EmployeeSkill> findAllEmployeeSkills();
     void updateSkillLevel();
     List<EmployeeSkill> findAllEmployeeSkillByEmployeeId(int employeeId);
+    List<EmployeeSkill> findAllEmployeeSkillBySkillId(int skillId);
+    void deleteById(int id);
 }

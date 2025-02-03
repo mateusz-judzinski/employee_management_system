@@ -62,6 +62,9 @@ public class User {
     }
 
     public String getNewPassword() {
+        if(newPassword == null){
+            return "";
+        }
         return newPassword;
     }
 

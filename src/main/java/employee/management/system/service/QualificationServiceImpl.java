@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class QualificationServiceImpl implements QualificationService{
+public class QualificationServiceImpl implements QualificationService {
 
     private final QualificationRepository qualificationRepository;
 
@@ -54,5 +54,16 @@ public class QualificationServiceImpl implements QualificationService{
     @Override
     public List<Qualification> getQualificationsForManagement() {
         return qualificationRepository.getQualificationsForManagement();
+    }
+
+    @Override
+    public boolean isQualificationNameOccupied(Qualification qualification) {
+        Qualification nameOwner = qualificationRepository.findQualificationByName(qualification.getName());
+
+        if (nameOwner == null) {
+            return false;
+        } else {
+            return nameOwner.getId() != qualification.getId();
+        }
     }
 }

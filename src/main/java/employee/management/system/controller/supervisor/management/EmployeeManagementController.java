@@ -6,6 +6,7 @@ import employee.management.system.service.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,14 +24,16 @@ public class EmployeeManagementController {
     private final QualificationService qualificationService;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final PositionEmployeeHistoryService historyService;
 
-    public EmployeeManagementController(SkillService skillService, EmployeeService employeeService, EmployeeSkillService employeeSkillService, QualificationService qualificationService, PasswordEncoder passwordEncoder, UserService userService) {
+    public EmployeeManagementController(SkillService skillService, EmployeeService employeeService, EmployeeSkillService employeeSkillService, QualificationService qualificationService, PasswordEncoder passwordEncoder, UserService userService, PositionEmployeeHistoryService historyService) {
         this.skillService = skillService;
         this.employeeService = employeeService;
         this.employeeSkillService = employeeSkillService;
         this.qualificationService = qualificationService;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+        this.historyService = historyService;
     }
 
     @GetMapping("/add-employee")
@@ -62,7 +65,8 @@ public class EmployeeManagementController {
     }
 
     @PostMapping("/add-employee")
-    public String addEmployee(@ModelAttribute NewEmployeeDTO newEmployee, RedirectAttributes redirectAttributes) {
+    public String addEmployee(@ModelAttribute NewEmployeeDTO newEmployee, RedirectAttributes redirectAttributes,
+                              BindingResult bindingResult) {
 
         if(newEmployee.getEmployee().getIdCardNumber() != null){
             boolean idCardExists = employeeService.existsByIdCardNumber(newEmployee.getEmployee().getIdCardNumber());
@@ -71,6 +75,8 @@ public class EmployeeManagementController {
                 return "redirect:/supervisor-panel/management/add-employee";
             }
         }
+
+
 
         if(newEmployee.getEmployee().getIdCardNumber() == null){
             Qualification noIdCardQualification = qualificationService.findQualificationByName("brak stałej przepustki");
@@ -94,7 +100,8 @@ public class EmployeeManagementController {
     }
 
     @GetMapping("/edit-employee/{id}")
-    public String showEditEmployeeForm(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes, @RequestParam(value = "errorMessage", required = false) String errorMessage){
+    public String showEditEmployeeForm(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes,
+                                       @RequestParam(value = "errorMessage", required = false) String errorMessage){
 
         Employee employee = employeeService.findEmployeeById(id);
 
@@ -119,8 +126,8 @@ public class EmployeeManagementController {
     public String updateEmployee(@ModelAttribute("employee") Employee employee, RedirectAttributes redirectAttributes) {
 
         if(employee.getIdCardNumber() != null){
-            boolean idCardExists = employeeService.existsByIdCardNumber(employee.getIdCardNumber());
-            if(idCardExists){
+            boolean isIdCardOccupied = employeeService.isIdCardOccupied(employee);
+            if(isIdCardOccupied){
                 redirectAttributes.addAttribute("id", employee.getId());
                 redirectAttributes.addFlashAttribute("errorMessage", "Stała przepustka o podanym numerze już istnieje");
                 return "redirect:/supervisor-panel/management/edit-employee/{id}";
@@ -185,6 +192,11 @@ public class EmployeeManagementController {
         if (employee == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono pracownika.");
             return "redirect:/supervisor-panel/management";
+        }
+
+        List<PositionEmployeeHistory> historyToRemove = historyService.findByEmployeeId(employee.getId());
+        for(PositionEmployeeHistory history:historyToRemove){
+            historyService.deleteHistoryById(history.getId());
         }
 
         employeeService.deleteEmployeeById(id);

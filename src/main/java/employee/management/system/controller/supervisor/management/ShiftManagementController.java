@@ -1,19 +1,15 @@
 package employee.management.system.controller.supervisor.management;
 
-import employee.management.system.entity.Employee;
-import employee.management.system.entity.Position;
-import employee.management.system.entity.PositionEmployeeHistory;
-import employee.management.system.entity.Shift;
-import employee.management.system.service.EmployeeService;
-import employee.management.system.service.PositionEmployeeHistoryService;
-import employee.management.system.service.PositionService;
-import employee.management.system.service.ShiftService;
+import employee.management.system.entity.*;
+import employee.management.system.service.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,12 +22,15 @@ public class ShiftManagementController {
     private final EmployeeService employeeService;
     private final PositionEmployeeHistoryService historyService;
     private final PositionService positionService;
-
-    public ShiftManagementController(ShiftService shiftService, EmployeeService employeeService, PositionEmployeeHistoryService historyService, PositionService positionService) {
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    public ShiftManagementController(ShiftService shiftService, EmployeeService employeeService, PositionEmployeeHistoryService historyService, PositionService positionService, UserService userService, PasswordEncoder passwordEncoder) {
         this.shiftService = shiftService;
         this.employeeService = employeeService;
         this.historyService = historyService;
         this.positionService = positionService;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/import-schedule")
@@ -230,6 +229,42 @@ public class ShiftManagementController {
 
         return "redirect:/supervisor-panel/management";
     }
+
+    @PostMapping("/delete-shift/{id}")
+    public String deleteShift(@PathVariable("id") int id,
+                              @RequestParam("password") String password,
+                              Principal principal,
+                              RedirectAttributes redirectAttributes) {
+
+        String username = principal.getName();
+        User currentUser = userService.findUserByUsername(username);
+
+        if (currentUser == null || !passwordEncoder.matches(password, currentUser.getPassword())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Podane hasło jest nieprawidłowe. Usunięcie nie zostało wykonane.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+        Shift shift = shiftService.findShiftById(id);
+        if (shift == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono zmiany.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+        if(isShiftIsActive(shift)){
+            Employee activeEmployee = shift.getEmployee();
+            activeEmployee.setPosition(null);
+            employeeService.updateEmployee(activeEmployee);
+
+            PositionEmployeeHistory activeHistory = historyService.findByEmployeeIdAndIsActiveTrue(activeEmployee.getId());
+            activeHistory.setActive(false);
+            activeHistory.setEndTime(LocalTime.now());
+            historyService.updateHistory(activeHistory);
+        }
+
+        shiftService.deleteShiftById(id);
+        return "redirect:/supervisor-panel/management";
+    }
+
 
     private static boolean isShiftIsActive(Shift shiftBeforeUpdate) {
         LocalDateTime now = LocalDateTime.now();

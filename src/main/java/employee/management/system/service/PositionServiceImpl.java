@@ -206,6 +206,19 @@ public class PositionServiceImpl implements PositionService {
         return positionRepository.findPositionByQualificationId(qualificationId);
     }
 
+    @Override
+    public boolean isPositionNameOccupied(Position position) {
+
+        Position nameOwner = positionRepository.findPositionByPositionName(position.getPositionName());
+
+        if(nameOwner == null){
+            return false;
+        }
+        else{
+            return nameOwner.getId() != position.getId();
+        }
+    }
+
     private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime) {
 
         if (employee.getPosition().getSkill() != null) {

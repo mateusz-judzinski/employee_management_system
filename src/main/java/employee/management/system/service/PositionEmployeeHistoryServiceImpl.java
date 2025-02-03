@@ -151,5 +151,10 @@ public class PositionEmployeeHistoryServiceImpl implements PositionEmployeeHisto
         return positionEmployeeHistoryRepository.findTodaysActivityByEmployeeId(employeeId, today, yesterday);
     }
 
+    @Override
+    public List<PositionEmployeeHistory> findAllByPositionId(int positionId) {
+        return positionEmployeeHistoryRepository.findAllPositionEmployeeHistoryByPositionId(positionId);
+    }
+
 
 }

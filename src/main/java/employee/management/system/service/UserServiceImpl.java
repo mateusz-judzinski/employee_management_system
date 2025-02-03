@@ -89,4 +89,26 @@ public class UserServiceImpl implements UserService{
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
+
+    @Override
+    public boolean isUsernameOccupied(User user) {
+        User usernameOwner = userRepository.findUserByUsername(user.getUsername());
+
+        if (usernameOwner == null) {
+            return false;
+        } else {
+            return usernameOwner.getId() != user.getId();
+        }
+    }
+
+    @Override
+    public boolean isEmailOccupied(User user) {
+        User emailOwner = userRepository.findUserByEmail(user.getEmail());
+
+        if (emailOwner == null) {
+            return false;
+        } else {
+            return emailOwner.getId() != user.getId();
+        }
+    }
 }
