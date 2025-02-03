@@ -167,17 +167,23 @@ public class SupervisorController {
 
         loadManagementModel(model, date);
 
+
         return "supervisor/management";
     }
 
     @GetMapping("/management")
-    public String getManagementPage(@RequestParam(value = "date", required = false) String date, Model model) {
+    public String getManagementPage(@RequestParam(value = "date", required = false) String date, Model model,
+                                    @RequestParam(value = "errorMessage", required = false) String errorMessage) {
 
         List<Employee> employees = employeeService.getAllEmployeesSortedByLastName();
         model.addAttribute("employees", employees);
         model.addAttribute("searchPerformed", false);
 
         loadManagementModel(model, date);
+
+        if(errorMessage != null){
+            model.addAttribute("errorMessage", errorMessage);
+        }
 
         return "supervisor/management";
     }

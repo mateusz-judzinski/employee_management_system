@@ -150,4 +150,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     public boolean existsByIdCardNumber(Integer idCardNumber) {
         return employeeRepository.existsByIdCardNumber(idCardNumber);
     }
+
+    @Override
+    public List<Employee> findEmployeesByQualificationId(int qualificationId) {
+        return employeeRepository.findEmployeesByQualificationId(qualificationId);
+    }
 }

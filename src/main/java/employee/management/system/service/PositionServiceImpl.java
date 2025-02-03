@@ -201,6 +201,11 @@ public class PositionServiceImpl implements PositionService {
         return positionRepository.findPositionBySkillId(skillId);
     }
 
+    @Override
+    public List<Position> findPositionByQualificationId(int qualificationId) {
+        return positionRepository.findPositionByQualificationId(qualificationId);
+    }
+
     private void updateEmployeeSkillTimeExperience(Employee employee, LocalTime startTime) {
 
         if (employee.getPosition().getSkill() != null) {

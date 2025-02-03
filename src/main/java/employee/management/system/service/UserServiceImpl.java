@@ -22,6 +22,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
+    @Override
     public User findUserById(int id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("User with id: " + id + "not found"));

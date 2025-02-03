@@ -72,7 +72,11 @@
                         <form th:action="@{/supervisor-panel/management/edit-employee/{id}(id=${employee.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor-panel/management/delete-employee/{id}(id=${employee.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-employee/{id}(id=${employee.id})}"
+                              method="post"
+                              class="delete-form"
+                              data-entity-type="employee"
+                              style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -101,7 +105,11 @@
                         <form th:action="@{/supervisor-panel/management/edit-position/{id}(id=${position.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor-panel/management/delete-position/{id}(id=${position.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-position/{id}(id=${position.id})}"
+                              method="post"
+                              class="delete-form"
+                              data-entity-type="position"
+                              style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -129,7 +137,11 @@
                         <form th:action="@{/supervisor-panel/management/edit-qualification/{id}(id=${qualification.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor-panel/management/delete-qualification/{id}(id=${qualification.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-qualification/{id}(id=${qualification.id})}"
+                              method="post"
+                              class="delete-form"
+                              data-entity-type="qualification"
+                              style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -161,7 +173,11 @@
                         <form th:action="@{/supervisor-panel/management/edit-user/{id}(id=${user.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor-panel/management/delete-user/{id}(id=${user.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-user/{id}(id=${user.id})}"
+                              method="post"
+                              class="delete-form"
+                              data-entity-type="user"
+                              style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -194,7 +210,11 @@
                         <form th:action="@{/supervisor-panel/management/edit-shift/{id}(id=${shift.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor-panel/management/delete-shift/{id}(id=${shift.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-shift/{id}(id=${shift.id})}"
+                              method="post"
+                              class="delete-form"
+                              data-entity-type="shift"
+                              style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -222,7 +242,11 @@
                         <form th:action="@{/supervisor-panel/management/edit-skill/{id}(id=${skill.id})}" method="get" style="display:inline;">
                             <button type="submit" class="edit-button">Edytuj</button>
                         </form>
-                        <form th:action="@{/supervisor-panel/management/delete-skill/{id}(id=${skill.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/supervisor-panel/management/delete-skill/{id}(id=${skill.id})}"
+                              method="post"
+                              class="delete-form"
+                              data-entity-type="skill"
+                              style="display:inline;">
                             <button type="submit" class="delete-button">Usuń</button>
                         </form>
                     </td>
@@ -231,9 +255,34 @@
             </table>
         </div>
     </div>
-
 </div>
 
+<div id="deleteConfirmModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close-button">&times;</span>
+        <h3>Potwierdź usunięcie</h3>
+        <p id="deleteWarningMessage" class="warning-message" style="color: orange; font-weight: bold; margin-bottom: 20px;"></p>
+        <p>Wpisz swoje hasło, aby potwierdzić usunięcie:</p>
+        <input type="password" id="deletePassword" class="password-input" placeholder="Wpisz hasło" required>
+        <div class="modal-buttons">
+            <button id="confirmDelete" class="confirm-button">Potwierdź</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="errorModal" class="modal">
+    <div class="modal-content">
+        <span id="closeErrorModal" class="close-button">&times;</span>
+        <h3>Wystąpił nieoczekiwany błąd</h3>
+        <p id="errorMessageText"></p>
+        <p id="deleteErrorMessage" class="error-message" style="color: red; display: none;"></p>
+        <div id="errorMessageContainer" th:if="${errorMessage}" th:text="${errorMessage}" style="display: none;"></div>
+    </div>
+</div>
+
+
+<script defer src="/js/supervisor/delete-pop-up.js"></script>
 <script defer src="/js/supervisor/management.js"></script>
 <script src="/js/user/hamburger-menu.js"></script>
 

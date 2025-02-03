@@ -3,11 +3,13 @@ package employee.management.system.controller.supervisor.management;
 import employee.management.system.dto.NewEmployeeDTO;
 import employee.management.system.entity.*;
 import employee.management.system.service.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +21,16 @@ public class EmployeeManagementController {
     private final EmployeeService employeeService;
     private final EmployeeSkillService employeeSkillService;
     private final QualificationService qualificationService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-    public EmployeeManagementController(SkillService skillService, EmployeeService employeeService, EmployeeSkillService employeeSkillService, QualificationService qualificationService) {
+    public EmployeeManagementController(SkillService skillService, EmployeeService employeeService, EmployeeSkillService employeeSkillService, QualificationService qualificationService, PasswordEncoder passwordEncoder, UserService userService) {
         this.skillService = skillService;
         this.employeeService = employeeService;
         this.employeeSkillService = employeeSkillService;
         this.qualificationService = qualificationService;
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     @GetMapping("/add-employee")
@@ -157,6 +163,31 @@ public class EmployeeManagementController {
 
         employeeService.updateEmployee(employee);
 
+        return "redirect:/supervisor-panel/management";
+    }
+
+
+    @PostMapping("/delete-employee/{id}")
+    public String deleteEmployee(@PathVariable("id") int id,
+                                      @RequestParam("password") String password,
+                                      Principal principal,
+                                      RedirectAttributes redirectAttributes) {
+
+        String username = principal.getName();
+        User currentUser = userService.findUserByUsername(username);
+
+        if (currentUser == null || !passwordEncoder.matches(password, currentUser.getPassword())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Podane hasło jest nieprawidłowe. Usunięcie nie zostało wykonane.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+        Employee employee = employeeService.findEmployeeById(id);
+        if (employee == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono pracownika.");
+            return "redirect:/supervisor-panel/management";
+        }
+
+        employeeService.deleteEmployeeById(id);
         return "redirect:/supervisor-panel/management";
     }
 
