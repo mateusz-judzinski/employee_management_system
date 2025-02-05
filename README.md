@@ -1,6 +1,6 @@
 # 🏢 Employee Management System
 
-🚀 **Employee Management System** is a modern application designed to streamline workforce management, automate task assignments, and monitor employee activities in real-time. By structuring and organizing employee data, the system improves **precision, communication, and training**, ultimately leading to greater job satisfaction.
+🚀 **Employee Management System** is a supportive application designed to streamline workforce management, automate task assignments, and monitor employee activities in real-time. By structuring and organizing employee data, the system improves **precision, communication, and training**, ultimately leading to greater job satisfaction.
 
 ## ✨ Key Features
 
