@@ -7,7 +7,7 @@
 ✓ &nbsp;  **Real-time employee management** – track location, skills, qualifications, and working hours at a glance.  
 ✓ &nbsp;  **Data import for schedules** – automatically fetch employee new schedules and updates from Excel files.  
 ✓ &nbsp;  **Customization options** – personalize workplace rules, skill sets, and qualifications to fit the organization’s needs.  
-✓ &nbsp;  **Historical data and analytics** – the system stores past employee activity data, allowing analysis, and creating statistics.  
+✓ &nbsp;  **Historical data and analytics** – the system stores past employee activity data for analysis, and statistics.  
 
 ✓ &nbsp;  **Two user roles**:  
 &nbsp;&nbsp;&nbsp;&nbsp;👨‍💼 **Leader** – manage employees, access work statistics, and optimize team efficiency.  
