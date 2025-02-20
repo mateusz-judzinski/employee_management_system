@@ -102,12 +102,7 @@ public class EmployeeServiceImpl implements EmployeeService{
                 }
             }
         }
-        List<Shift> shiftsToDeactivate = shiftRepository.findFinishedShiftsWithActiveOnTrue(today, yesterday);
-        if(shiftsToDeactivate != null){
-            for(Shift shift: shiftsToDeactivate){
-                shift.setActive(false);
-            }
-        }
+        shiftRepository.deactivateFinishedShifts(today, yesterday);
     }
     @PostConstruct
     @Override

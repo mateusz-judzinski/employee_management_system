@@ -2,8 +2,10 @@ package employee.management.system.repository;
 
 import employee.management.system.entity.Employee;
 import employee.management.system.entity.Shift;
+import jakarta.transaction.Transactional;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -38,5 +40,14 @@ public interface ShiftRepository extends JpaRepository<Shift, Integer> {
     @Query("SELECT COUNT(s) > 0 FROM Shift s WHERE s.employee = :employee AND s.workDate = :localDate")
     boolean doesEmployeeHaveShiftInProvidedDay(LocalDate localDate, Employee employee);
 
-    
+    @Modifying
+    @Transactional
+    @Query("UPDATE Shift s SET s.isActive = false " +
+            "WHERE s.isActive = true " +
+            "AND ((s.workDate < :yesterday) " +
+            "OR (s.workDate = :yesterday AND s.startTime < s.endTime) " +
+            "OR (s.workDate = :yesterday AND s.startTime > s.endTime AND CURRENT_TIME > s.endTime) " +
+            "OR (s.workDate = :today AND s.startTime < s.endTime AND CURRENT_TIME > s.endTime))")
+    void deactivateFinishedShifts(@Param("today") LocalDate today, @Param("yesterday") LocalDate yesterday);
+
 }
